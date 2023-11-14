@@ -1,3 +1,3 @@
 export default function joinRoom() {
-	return <main>room.page</main>;
+  return <main>room.page</main>;
 }
