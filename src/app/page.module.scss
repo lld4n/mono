@@ -1,1 +1,61 @@
+.main {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--background);
+  font-size: 20px;
+}
 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.link {
+  padding: 13px 10px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  &:hover {
+    background: var(--hover-button);
+  }
+}
+
+.account {
+  display: flex;
+  background: var(--hover-button);
+  gap: 10px;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.photo {
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.name {
+  font-weight: bold;
+}
+
+.loading {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  background: var(--background);
+  font-weight: bold;
+  user-select: none;
+}
