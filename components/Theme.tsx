@@ -1,25 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { ThemeContext, themes } from '../utils/ThemeContext';
 import Toggle from './Toggle/Toggle';
 
 export default function Theme() {
+  const themeContext = useContext(ThemeContext);
   return (
-    <ThemeContext.Consumer>
-      {({ theme, setTheme }) => (
-        <Toggle
-          onChange={() => {
-            if (theme === themes.light)
-              if (setTheme) {
-                setTheme(themes.dark);
-              }
-            if (theme === themes.dark)
-              if (setTheme) {
-                setTheme(themes.light);
-              }
-          }}
-          value={theme === themes.dark}
-        />
-      )}
-    </ThemeContext.Consumer>
+    <Toggle
+      onChange={() => {
+        if (themeContext.theme === themes.light)
+          if (themeContext.setTheme) {
+            themeContext.setTheme(themes.dark);
+          }
+        if (themeContext.theme === themes.dark)
+          if (themeContext.setTheme) {
+            themeContext.setTheme(themes.light);
+          }
+      }}
+      value={themeContext.theme === themes.dark}
+    />
   );
 }
