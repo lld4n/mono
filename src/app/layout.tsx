@@ -3,21 +3,21 @@ import './reset.scss';
 import React from 'react';
 
 export const metadata: Metadata = {
-	title: 'mono',
-	description: 'Бесплатная монополия онлайн',
+  title: 'mono',
+  description: 'Бесплатная монополия онлайн',
 };
 
 export default function RootLayout({
-	children,
+  children,
 }: {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-	return (
-		<html lang="en">
-			<body>
-				{children}
-				root.layout
-			</body>
-		</html>
-	);
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        root.layout
+      </body>
+    </html>
+  );
 }
