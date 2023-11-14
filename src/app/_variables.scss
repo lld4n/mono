@@ -1,0 +1,21 @@
+:root[data-theme='light']{
+  --background: #ffffff;
+  --color: #000000;
+  --color-title: rgba(0, 0, 0, 0.20);
+  --color-subtitle: #838388;
+  --color-input: #6A6A6A;
+  --background-input: #CBCBD0;
+  --background-button: #E1E1E7;
+  --hover-button: #F1F1F1;
+}
+
+:root[data-theme='dark']{
+  --background: #1A1A1C;
+  --color: #FFFFFF;
+  --color-title: rgba(255, 255, 255, 0.20);
+  --color-subtitle: #838388;
+  --color-input: #6A6A6A;
+  --background-input: #272729;
+  --background-button: #272729;
+  --hover-button: #F1F1F1; //этот значение нужно изменить
+}

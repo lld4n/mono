@@ -1,5 +1,9 @@
 import React from 'react';
 
-export default function Input() {
-	return <input type="text" placeholder="placeholder" />;
+type Input = {
+  type: string;
+  placeholder: string;
+};
+export default function Input({ type, placeholder }: Input) {
+  return <input type={type} placeholder={placeholder} />;
 }

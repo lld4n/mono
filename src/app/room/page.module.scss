@@ -1,0 +1,85 @@
+.main{
+  background: var(--background); //этот стиль для теста
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  max-width: 1200px;
+  padding: 0 15px;
+  margin: 0 auto;
+  min-height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.left-side{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.room__title{
+  color: var(--color-title);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.room__persons{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.room__subtitle{
+  color: var(--color-subtitle);
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.room__key{
+
+}
+
+.room__link{
+  display: flex;
+  gap: 20px;
+  padding: 13px;
+}
+
+.room__link-text{
+  color: #000;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+
+.right-side{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.room__characters{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.room__character{
+  cursor: pointer;
+  background: var(--background-button);
+  width: 47px;
+  height: 47px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover{
+    background: #c7c7c7;
+  }
+}
+
+
+.room__character:disabled{
+  opacity: 0.6;
+}
