@@ -6,7 +6,6 @@ import './_variables.scss';
 import styles from './page.module.scss';
 
 import React, { useEffect } from 'react';
-import { ThemeContext } from '../../utils/ThemeContext';
 import ThemeProvider from '../../utils/ThemeProvider';
 import Theme from '../../components/Theme';
 
