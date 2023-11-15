@@ -1,20 +1,15 @@
-'use client';
-
 import type { Metadata } from 'next';
 import './reset.scss';
 import './_variables.scss';
 import './global.scss';
 
-import React, { useEffect } from 'react';
-import ThemeProvider from '../../utils/ThemeProvider';
-import Theme from '../../components/Theme';
+import React from 'react';
+import { Wrapper } from '@/app/Wrapper';
 
-// я это закомментировал, потому что при 'use client' ошибка
-
-// export const metadata: Metadata = {
-//   title: 'mono',
-//   description: 'Бесплатная монополия онлайн',
-// };
+export const metadata: Metadata = {
+  title: 'mono',
+  description: 'Бесплатная монополия онлайн',
+};
 
 export default function RootLayout({
   children,
@@ -22,13 +17,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ThemeProvider>
-      <html lang="en">
-        <body className="body">
-          {children}
-          <Theme />
-        </body>
-      </html>
-    </ThemeProvider>
+    <html lang="en">
+      <body className="body">
+        <Wrapper>{children}</Wrapper>
+      </body>
+    </html>
   );
 }
