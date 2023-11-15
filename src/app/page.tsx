@@ -11,8 +11,6 @@ import { userType } from '../../types/userType';
 import { useRouter } from 'next/navigation';
 import { doc, getDoc, setDoc } from '@firebase/firestore';
 import { InternationalizationContext } from '../../providers/InternationalizationProvider/InternationalizationProvider';
-import { types } from 'sass';
-import Boolean = types.Boolean;
 const cookies = new Cookies();
 export default function Home() {
   const [sign, setSign] = React.useState<string>(cookies.get('auth-token'));
@@ -127,7 +125,7 @@ export default function Home() {
                 </div>
               </div>
             </main>
-          )}{' '}
+          )}
         </>
       )}
       <footer></footer>

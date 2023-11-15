@@ -23,6 +23,7 @@
   font-weight: bold;
   cursor: pointer;
   border-radius: 5px;
+  color: var(--color);
   &:hover {
     background: var(--hover-button);
   }

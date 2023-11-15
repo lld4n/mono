@@ -1,8 +1,13 @@
-body, html{
+body,
+html {
   height: 100%;
 }
 
-.body{
-  background: var(--background);
+* {
+  //transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.body {
+  background-color: var(--background);
   color: var(--color);
 }
