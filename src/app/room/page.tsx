@@ -5,14 +5,14 @@ import React, { useEffect, useState } from 'react';
 import styles from './page.module.scss';
 import Image from 'next/image';
 
-import duck from '../../../assets/duck.svg';
-import bone from '../../../assets/bone.svg';
-import lightning from '../../../assets/lightning.svg';
-import github from '../../../assets/github.svg';
-import cactus from '../../../assets/cactus.svg';
-import cat from '../../../assets/cat.svg';
-import music from '../../../assets/music.svg';
-import like from '../../../assets/like.svg';
+import cat from '../../../assets/characters/cat.svg';
+import music from '../../../assets/characters/music.svg';
+import octocat from '../../../assets/characters/octocat.svg';
+import bone from '../../../assets/characters/bone.svg';
+import cactus from '../../../assets/characters/cactus.svg';
+import duck from '../../../assets/characters/duck.svg';
+import heart from '../../../assets/characters/heart.svg';
+import zip from '../../../assets/characters/zip.svg';
 import rocket from '../../../assets/rocket.png';
 import { db } from '../../../utils/firebase';
 import {
@@ -30,7 +30,7 @@ import formatData from '../../../utils/formatData';
 
 export default function joinRoom() {
   const router = useRouter();
-  const characters = [duck, bone, cactus, cat, github, lightning, music, like];
+  const characters = [duck, bone, cactus, cat, octocat, heart, music, zip];
   const [messages, setMessages] = useState<any>([]);
   const [message, setMessage] = useState('');
   const [chat, setChat] = useState(localStorage.getItem('chat-key'));
