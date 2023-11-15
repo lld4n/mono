@@ -9,10 +9,11 @@
   border-radius: 5px;
   align-items: center;
   cursor: pointer;
-  background: var(--background-button);
-  color: var(--color);
+  background: var(--highlight);
+  color: var(--opposite);
   user-select: none;
+  font-weight: bold;
   &:hover{
-    background: var(--hover-button);
+    background: var(--highlight-hover);
   }
 }

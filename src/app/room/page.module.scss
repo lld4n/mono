@@ -1,4 +1,4 @@
-.main{
+.main {
   display: grid;
   grid-template-columns: 1fr 2fr;
   max-width: 1200px;
@@ -10,179 +10,166 @@
   gap: 100px;
 }
 
-.left-side{
+.left-side {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.room__title{
-  color: var(--color-title);
+.room__title {
+  color: var(--opposite);
   text-align: center;
   font-size: 20px;
   font-weight: 700;
 }
 
-.room__persons{
+.room__persons {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
-.room__person{
+.room__person {
   display: flex;
   width: 100%;
   align-items: center;
   gap: 10px;
 }
 
-.person-image{
+.person-image {
   border-radius: 5px;
-  border: 1px solid var(--color);
+  border: 1px solid var(--opposite);
 }
 
-.person-nickname{
-  color: var(--color);
+.person-nickname {
+  color: var(--opposite);
   font-size: 20px;
   font-weight: 500;
 }
 
-.room__subtitle{
-  color: var(--color-subtitle);
+.room__subtitle {
+  color: var(--additive);
   text-align: center;
   font-size: 16px;
   font-weight: 500;
 }
 
-
-
-.right-side{
+.right-side {
   display: flex;
   flex-direction: column;
   gap: 20px;
   align-items: center;
 }
 
-.room__characters{
+.room__characters {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 20px;
 }
 
-.room__character{
+.room__character {
   cursor: pointer;
-  background: var(--background-button);
+  background: var(--board);
   width: 47px;
   height: 47px;
   border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
-  &:hover{
-    background: var(--hover-button);
-  }
 }
 
-
-.room__character:disabled{
+.room__character:disabled {
   opacity: 0.3;
 }
 
-.room__chat{
+.room__chat {
   width: 100%;
   border-radius: 5px;
   padding: 10px;
-  border: 1px solid var(--color);
+  border: 1px solid var(--opposite);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   gap: 10px;
   height: 500px;
   word-wrap: anywhere;
-
 }
 
-.room__messages{
+.room__messages {
   display: flex;
   flex-direction: column;
   gap: 5px;
   overflow-y: scroll;
-  &::-webkit-scrollbar{
+  &::-webkit-scrollbar {
     width: 0;
     height: 0;
   }
 }
 
-
-
-.room__message{
-  //display: flex;
-  //gap: 10px;
-  //align-items: center;
-  color: var(--color);
+.room__message {
+  color: var(--opposite);
   font-size: 16px;
   font-weight: 500;
   line-height: 26px;
   padding: 3px 0;
-  .message-date{
+  .message-date {
     word-wrap: normal;
-    color: var(--color-subtitle);
+    color: var(--additive);
     width: 40px;
     margin-right: 10px;
   }
-  .message-author{
+  .message-author {
     margin-right: 10px;
     white-space: nowrap;
     padding: 2px 5px;
     border-radius: 3px;
-    background: var(--color);
-    color: var(--background);
+    background: var(--opposite);
+    color: var(--bg);
     font-size: 16px;
     font-weight: 500;
   }
-  .message-text{
+  .message-text {
     word-wrap: anywhere;
-    //float: right;
   }
 }
 
-.room__info{
+.room__info {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.room__link{
+.room__link {
   cursor: pointer;
   display: flex;
   gap: 20px;
   justify-content: center;
-  background: var(--background-button);
+  background: var(--highlight);
   padding: 13px 10px;
   border-radius: 5px;
 }
 
-.room__link-text{
-  color: var(--color);
+.room__link-text {
+  color: var(--opposite);
   font-size: 20px;
   font-weight: 500;
 }
 
 .room__link-icon {
-  svg path{
-    fill: var(--color)
+  svg path {
+    fill: var(--opposite);
   }
 }
 
-.input{
-  background: var(--background-input);
+.input {
+  background: var(--input);
   padding: 13px 20px;
   border-radius: 5px;
-  color: var(--color);
+  color: var(--opposite);
   font-size: 20px;
   font-weight: 500;
   width: 100%;
 }
 
-.input::placeholder{
-  color: var(--color-input);
+.input::placeholder {
+  color: var(--additive);
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import './reset.scss';
+import './_reset.scss';
 import './_variables.scss';
-import './global.scss';
+import './_global.scss';
 
 import React from 'react';
 import { Wrapper } from '@/app/Wrapper';

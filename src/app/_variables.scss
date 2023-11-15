@@ -1,22 +1,25 @@
-
-:root[data-theme='light']{
-  --background: #ffffff;
-  --color: #000000;
-  --color-title: rgba(0, 0, 0, 0.20);
-  --color-subtitle: #838388;
-  --color-input: #6A6A6A;
-  --background-input: #CBCBD0;
-  --background-button: #E1E1E7;
-  --hover-button: #c4c4c4;
+:root[data-theme='light'] {
+  --accent: #f01e24;
+  --hover: #f1f1f1;
+  --input: #cbcbd0;
+  --highlight: #e1e1e7;
+  --money: #00ffa3;
+  --bg: #ffffff;
+  --opposite: #000000;
+  --board: #576574;
+  --additive: #838388;
+  --highlight-hover: #ccccd3;
 }
 
-:root[data-theme='dark']{
-  --background: #1A1A1C;
-  --color: #FFFFFF;
-  --color-title: rgba(255, 255, 255, 0.20);
-  --color-subtitle: #838388;
-  --color-input: #6A6A6A;
-  --background-input: #272729;
-  --background-button: #272729;
-  --hover-button: #313131;
+:root[data-theme='dark'] {
+  --accent: #f01e24;
+  --hover: #202020;
+  --input: #272729;
+  --highlight: #272729;
+  --money: #00ffa3;
+  --bg: #1a1a1c;
+  --opposite: #ffffff;
+  --board: #576574;
+  --additive: #838388;
+  --highlight-hover: #3a3a3e;
 }
