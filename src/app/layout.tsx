@@ -21,15 +21,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  useEffect(() => {
-    function getTheme() {
-      const theme = localStorage.getItem('theme');
-      if (!theme) {
-        localStorage.setItem('theme', 'light');
-      }
-    }
-    getTheme();
-  }, []);
   return (
     <ThemeProvider>
       <html lang="en">
