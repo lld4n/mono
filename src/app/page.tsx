@@ -10,18 +10,22 @@ import React from 'react';
 import { userType } from '../../types/userType';
 import { useRouter } from 'next/navigation';
 import { doc, getDoc, setDoc } from '@firebase/firestore';
+import { InternationalizationContext } from '../../providers/InternationalizationProvider/InternationalizationProvider';
+import { types } from 'sass';
+import Boolean = types.Boolean;
 const cookies = new Cookies();
 export default function Home() {
   const [sign, setSign] = React.useState<string>(cookies.get('auth-token'));
   const [user, setUser] = React.useState<userType | null>(null);
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const router = useRouter();
-
+  const i18n = React.useContext(InternationalizationContext);
   React.useEffect(() => {
     const userBuffer = localStorage.getItem('user');
     if (userBuffer) {
       setUser(JSON.parse(userBuffer));
     }
+    setLoading(false);
   }, []);
 
   const signOutApp = React.useCallback(async () => {
@@ -74,52 +78,57 @@ export default function Home() {
   return (
     <>
       <header></header>
-      {loading ? <div className={styles.loading}>Идет загрузка...</div> : <></>}
-      {sign && auth.currentUser ? (
-        <main className={styles.main}>
-          <div className={styles.wrapper}>
-            {user ? (
-              <div className={styles.account}>
-                {user.photoUrl ? (
-                  <img src={user.photoUrl} className={styles.photo} />
+      {loading ? (
+        <div className={styles.loading}>Идет загрузка...</div>
+      ) : (
+        <>
+          {sign && user ? (
+            <main className={styles.main}>
+              <div className={styles.wrapper}>
+                {user ? (
+                  <div className={styles.account}>
+                    {user.photoUrl ? (
+                      <img src={user.photoUrl} className={styles.photo} />
+                    ) : (
+                      <></>
+                    )}
+                    <span className={styles.name}>{user.displayName}</span>
+                  </div>
                 ) : (
                   <></>
                 )}
-                <span className={styles.name}>{user.displayName}</span>
-              </div>
-            ) : (
-              <></>
-            )}
 
-            <Link href="/rules" className={styles.link}>
-              Правила
-            </Link>
-            <Link href="/joinRoom" className={styles.link}>
-              Войти в комнату
-            </Link>
-            <Link href="/createRoom" className={styles.link}>
-              Создать комнату
-            </Link>
-            <Link href="/openRooms" className={styles.link}>
-              Открытые комнаты
-            </Link>
-            <div className={styles.link} onClick={signOutApp}>
-              Выйти
-            </div>
-          </div>
-        </main>
-      ) : (
-        <main className={styles.main}>
-          <div className={styles.wrapper}>
-            <Link href="/rules" className={styles.link}>
-              Правила
-            </Link>
-            <div className={styles.link} onClick={signInApp}>
-              <Image src={google} alt="google" width={24} height={24} />
-              <span>Войти с помощью Google</span>
-            </div>
-          </div>
-        </main>
+                <Link href="/rules" className={styles.link}>
+                  {i18n.root.rules}
+                </Link>
+                <Link href="/joinRoom" className={styles.link}>
+                  {i18n.root.join}
+                </Link>
+                <Link href="/createRoom" className={styles.link}>
+                  {i18n.root.create}
+                </Link>
+                <Link href="/openRooms" className={styles.link}>
+                  {i18n.root.open}
+                </Link>
+                <div className={styles.link} onClick={signOutApp}>
+                  {i18n.root.exit}
+                </div>
+              </div>
+            </main>
+          ) : (
+            <main className={styles.main}>
+              <div className={styles.wrapper}>
+                <Link href="/rules" className={styles.link}>
+                  {i18n.root.rules}
+                </Link>
+                <div className={styles.link} onClick={signInApp}>
+                  <Image src={google} alt="google" width={24} height={24} />
+                  <span>{i18n.root.google}</span>
+                </div>
+              </div>
+            </main>
+          )}{' '}
+        </>
       )}
       <footer></footer>
     </>

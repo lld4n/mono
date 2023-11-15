@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import sun from '../../assets/sun.svg';
 import moon from '../../assets/moon.svg';
