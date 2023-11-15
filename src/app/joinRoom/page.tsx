@@ -1,4 +1,4 @@
-import Input from '../../../components/Input';
+import Input from '../../../components/Input/Input';
 import styles from './page.module.scss';
 
 export default function joinRoom() {

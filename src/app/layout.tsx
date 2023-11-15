@@ -3,7 +3,7 @@
 import type { Metadata } from 'next';
 import './reset.scss';
 import './_variables.scss';
-import styles from './page.module.scss';
+import './global.scss';
 
 import React, { useEffect } from 'react';
 import ThemeProvider from '../../utils/ThemeProvider';
@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <ThemeProvider>
       <html lang="en">
-        <body className={styles.body}>
+        <body className="body">
           {children}
           <Theme />
         </body>

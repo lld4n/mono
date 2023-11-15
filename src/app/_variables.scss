@@ -6,7 +6,7 @@
   --color-input: #6A6A6A;
   --background-input: #CBCBD0;
   --background-button: #E1E1E7;
-  --hover-button: #F1F1F1;
+  --hover-button: #c4c4c4;
 }
 
 :root[data-theme='dark']{
@@ -17,5 +17,5 @@
   --color-input: #6A6A6A;
   --background-input: #272729;
   --background-button: #272729;
-  --hover-button: #F1F1F1; //этот значение нужно изменить
+  --hover-button: #313131;
 }
