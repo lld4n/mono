@@ -1,0 +1,152 @@
+.main{
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  max-width: 1200px;
+  padding: 0 15px;
+  margin: 0 auto;
+  min-height: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 100px;
+}
+
+.left-side{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.room__title{
+  color: var(--color-title);
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.room__persons{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.room__person{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+}
+
+.person-image{
+  border-radius: 5px;
+  border: 1px solid var(--color);
+}
+
+.person-nickname{
+  color: var(--color);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.room__subtitle{
+  color: var(--color-subtitle);
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+
+
+.right-side{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.room__characters{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.room__character{
+  cursor: pointer;
+  background: var(--background-button);
+  width: 47px;
+  height: 47px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover{
+    background: var(--hover-button);
+  }
+}
+
+
+.room__character:disabled{
+  opacity: 0.3;
+}
+
+.room__chat{
+  width: 100%;
+  border-radius: 5px;
+  padding: 10px;
+  border: 1px solid var(--color);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+  height: 600px;
+}
+
+.room__messages{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+.room__message{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  color: var(--color);
+  font-size: 16px;
+  font-weight: 500;
+  .message-author{
+    padding: 2px 5px;
+    border-radius: 3px;
+    background: var(--color);
+    color: var(--background);
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+.room__info{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.room__link{
+  cursor: pointer;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  background: var(--background-button);
+  padding: 13px 10px;
+  border-radius: 5px;
+}
+
+.room__link-text{
+  color: var(--color);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.room__link-icon {
+  svg path{
+    fill: var(--color)
+  }
+}

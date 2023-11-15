@@ -1,14 +1,14 @@
 import React from 'react';
 
 export default function joinRoomLayout({
-	children,
+  children,
 }: {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-	return (
-		<section>
-			{children}
-			openRooms.layout
-		</section>
-	);
+  return (
+    <section>
+      {children}
+      openRooms.layout
+    </section>
+  );
 }

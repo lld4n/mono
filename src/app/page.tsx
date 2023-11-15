@@ -73,7 +73,7 @@ export default function Home() {
   }, []);
   return (
     <>
-      <header>header</header>
+      <header></header>
       {loading ? <div className={styles.loading}>Идет загрузка...</div> : <></>}
       {sign && auth.currentUser ? (
         <main className={styles.main}>
@@ -121,7 +121,7 @@ export default function Home() {
           </div>
         </main>
       )}
-      <footer>footer</footer>
+      <footer></footer>
     </>
   );
 }
