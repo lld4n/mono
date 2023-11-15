@@ -1,6 +1,5 @@
 import React from 'react';
 import { ThemeContext, themes } from './ThemeContext';
-
 const getTheme = () => {
   const theme = localStorage?.getItem('theme');
   if (theme) {
@@ -10,14 +9,12 @@ const getTheme = () => {
   if (userMedia.matches) return themes.light;
   return themes.dark;
 };
-
 const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = React.useState(getTheme);
   React.useEffect(() => {
     document.documentElement.dataset.theme = theme;
     localStorage.setItem('theme', theme);
   }, [theme]);
-
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
       {children}
