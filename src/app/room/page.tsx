@@ -151,15 +151,15 @@ export default function joinRoom() {
         <div className={styles['room__chat']}>
           <div className={styles['room__messages']}>
             {messages.map((message: any, index: number) => (
-              <div className={styles['room__message']} key={index}>
-                <div className={styles['message-date']}>
+              <span className={styles['room__message']} key={index}>
+                <span className={styles['message-date']}>
                   {formatData(message.date)}
-                </div>
-                <div className={styles['message-author']}>
+                </span>
+                <span className={styles['message-author']}>
                   {message.displayName}
-                </div>
-                <div className={styles['message-text']}>{message.text}</div>
-              </div>
+                </span>
+                <span className={styles['message-text']}>{message.text}</span>
+              </span>
             ))}
           </div>
           <div className={styles['room__input']}>
