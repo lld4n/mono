@@ -9,7 +9,7 @@ import rocket from '../../../assets/rocket.png';
 import formatData from '../../../utils/formatData';
 import { useRoom } from '../../../hooks/useRoom';
 
-export default function joinRoom() {
+export default function Room() {
   const {
     messages,
     message,
