@@ -47,7 +47,7 @@ export function useRoom() {
   }, []);
   useEffect(() => {
     if (chat) {
-      const docSnap = onSnapshot(doc(db, 'chats', chat), (doc) => {
+      const unsubscribe = onSnapshot(doc(db, 'chats', chat), (doc) => {
         setMessages(doc.data()?.messages);
       });
     }

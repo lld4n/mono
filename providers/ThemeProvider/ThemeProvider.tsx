@@ -4,29 +4,23 @@ import styles from './ThemeProvider.module.scss';
 import moon from '../../assets/moon.svg';
 import sun from '../../assets/sun.svg';
 import Image from 'next/image';
-
+import { fstore } from '../../utils/firestore';
+import { auth } from '../../utils/firebase';
+export const ThemeContext = React.createContext<number>(0);
 const themeList = ['dark', 'light'];
 export default function ThemeProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [themeIndex, setThemeIndex] = React.useState<number>(
-    Number(localStorage.getItem('theme')),
-  );
-  React.useEffect(() => {
-    if (Number.isNaN(themeIndex)) {
-      setThemeIndex(0);
-    }
-  }, [themeIndex]);
+  const [themeIndex, setThemeIndex] = React.useState<number>(0);
 
   React.useEffect(() => {
-    localStorage.setItem('theme', String(themeIndex));
     document.documentElement.dataset.theme = themeList[themeIndex];
   }, [themeIndex]);
 
   return (
-    <>
+    <ThemeContext.Provider value={themeIndex}>
       {children}
       <button
         className={styles.button}
@@ -40,6 +34,6 @@ export default function ThemeProvider({
           <Image src={moon} alt={'moon'} width={18} height={18} />
         )}
       </button>
-    </>
+    </ThemeContext.Provider>
   );
 }
