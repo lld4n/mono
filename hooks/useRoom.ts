@@ -19,7 +19,7 @@ import heart from '../assets/characters/heart.svg';
 import music from '../assets/characters/music.svg';
 import zip from '../assets/characters/zip.svg';
 import { InternationalizationContext } from '../providers/InternationalizationProvider/InternationalizationProvider';
-import { findNameByImage } from '../utils/findNameByImage';
+import { findCharacterNameByImage } from '../utils/findCharacterNameByImage';
 
 export function useRoom() {
   const i18n = React.useContext(InternationalizationContext);
@@ -83,7 +83,7 @@ export function useRoom() {
         }
       }
 
-      const characterName = findNameByImage(event.currentTarget.value);
+      const characterName = findCharacterNameByImage(event.currentTarget.value);
       userObject = {
         ...userObject,
         characterUrlImage: event.currentTarget.value,
