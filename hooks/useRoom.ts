@@ -19,6 +19,7 @@ import heart from '../assets/characters/heart.svg';
 import music from '../assets/characters/music.svg';
 import zip from '../assets/characters/zip.svg';
 import { InternationalizationContext } from '../providers/InternationalizationProvider/InternationalizationProvider';
+import { findNameByImage } from '../utils/findNameByImage';
 
 export function useRoom() {
   const i18n = React.useContext(InternationalizationContext);
@@ -51,8 +52,48 @@ export function useRoom() {
       });
     }
   }, [chat]);
+
+  function compareCharacter(
+    userCharacterUrlImage: string,
+    currentCharacterUrlImage: string,
+  ): boolean {
+    if (userCharacterUrlImage === currentCharacterUrlImage) {
+      return true;
+    }
+    return false;
+  }
+
   function clickCharacter(event: any) {
-    event.currentTarget.setAttribute('disabled', 'disabled');
+    const userBuffer = localStorage.getItem('user');
+    if (userBuffer) {
+      let userObject = JSON.parse(userBuffer);
+      if (userObject.characterUrlImage) {
+        if (
+          compareCharacter(
+            userObject.characterUrlImage,
+            event.currentTarget.value,
+          )
+        ) {
+          return;
+        } else {
+          const currentCharacter = characters.filter(
+            (character) =>
+              JSON.stringify(character) === userObject.characterUrlImage,
+          );
+        }
+      }
+
+      const characterName = findNameByImage(event.currentTarget.value);
+      userObject = {
+        ...userObject,
+        characterUrlImage: event.currentTarget.value,
+        characterName,
+      };
+      setUser(userObject);
+      localStorage.setItem('user', JSON.stringify(userObject));
+    } else {
+      router.push('/error');
+    }
   }
   function writeMessage(event: any) {
     setMessage(event.target.value);
@@ -82,5 +123,6 @@ export function useRoom() {
     writeMessage,
     chat,
     i18n,
+    user,
   };
 }

@@ -38,12 +38,16 @@
 .person-image {
   border-radius: 5px;
   border: 1px solid var(--opposite);
+  path{
+    fill: var(--opposite)
+  }
 }
 
 .person-nickname {
   color: var(--opposite);
   font-size: 20px;
   font-weight: 500;
+  flex: 1 1 auto;
 }
 
 .room__subtitle {
@@ -172,4 +176,15 @@
 
 .input::placeholder {
   color: var(--additive);
+}
+
+
+.person-character{
+  background: var(--board);
+  width: 43px;
+  height: 43px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

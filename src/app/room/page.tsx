@@ -5,9 +5,10 @@ import React from 'react';
 import styles from './page.module.scss';
 import Image from 'next/image';
 
-import rocket from '../../../assets/rocket.png';
 import formatData from '../../../utils/formatData';
 import { useRoom } from '../../../hooks/useRoom';
+
+import { COLORS_CHARACTERS } from '../../../constants/colors';
 
 export default function joinRoom() {
   const {
@@ -19,6 +20,7 @@ export default function joinRoom() {
     clickCharacter,
     chat,
     i18n,
+    user,
   } = useRoom();
 
   return (
@@ -27,24 +29,48 @@ export default function joinRoom() {
         <div className={styles['room__title']}>{i18n.room.title}</div>
         <div className={styles['room__persons']}>
           <div className={styles['room__person']}>
-            <Image
-              src={rocket}
-              alt=""
-              width={40}
-              height={40}
-              className={styles['person-image']}
-            />
-            <div className={styles['person-nickname']}>lldan</div>
-          </div>
-          <div className={styles['room__person']}>
-            <Image
-              src={rocket}
-              alt=""
-              width={40}
-              height={40}
-              className={styles['person-image']}
-            />
-            <div className={styles['person-nickname']}>lldan</div>
+            {user?.photoUrl ? (
+              <img
+                src={user?.photoUrl}
+                alt=""
+                width={40}
+                height={40}
+                className={styles['person-image']}
+              />
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="40"
+                height="40"
+                fill="none"
+                viewBox="0 0 24 24"
+                id="user"
+                className={styles['person-image']}
+              >
+                <path
+                  fill="#fff"
+                  fillRule="evenodd"
+                  d="M12 3C10.3431 3 9 4.34315 9 6C9 7.65685 10.3431 9 12 9C13.6569 9 15 7.65685 15 6C15 4.34315 13.6569 3 12 3ZM7 6C7 3.23858 9.23858 1 12 1C14.7614 1 17 3.23858 17 6C17 8.76142 14.7614 11 12 11C9.23858 11 7 8.76142 7 6Z"
+                  clipRule="evenodd"
+                ></path>
+                <path
+                  fill="#fff"
+                  fillRule="evenodd"
+                  d="M3 20C3 16.134 6.13401 13 10 13H14C17.866 13 21 16.134 21 20C21 21.6569 19.6569 23 18 23H6C4.34315 23 3 21.6569 3 20ZM10 15C7.23858 15 5 17.2386 5 20C5 20.5523 5.44772 21 6 21H18C18.5523 21 19 20.5523 19 20C19 17.2386 16.7614 15 14 15H10Z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+            )}
+            <div className={styles['person-nickname']}>{user?.displayName}</div>
+            <div className={styles['person-character']}>
+              {user?.characterUrlImage ? (
+                <>
+                  <img src={JSON.parse(user?.characterUrlImage).src} alt="" />
+                </>
+              ) : (
+                ''
+              )}
+            </div>
           </div>
         </div>
         <div className={styles['room__info']}>
@@ -73,27 +99,70 @@ export default function joinRoom() {
       <div className={styles['right-side']}>
         <div className={styles['room__subtitle']}>{i18n.room.character}</div>
         <div className={styles['room__characters']}>
-          {characters.map((elem, index) => (
-            <button
-              className={styles['room__character']}
-              onClick={(event) => clickCharacter(event)}
-              key={index}
-            >
-              <Image src={elem} alt="" width={25} height={25} />
-            </button>
-          ))}
+          {characters.map((elem, index) => {
+            if (
+              user?.characterUrlImage &&
+              JSON.stringify(elem) === user?.characterUrlImage
+            ) {
+              return (
+                <button
+                  value={JSON.stringify(elem)}
+                  className={styles['room__character']}
+                  onClick={(event) => clickCharacter(event)}
+                  key={index}
+                  disabled={true}
+                >
+                  <Image src={elem} alt="" width={25} height={25} />
+                </button>
+              );
+            } else {
+              return (
+                <button
+                  value={JSON.stringify(elem)}
+                  className={styles['room__character']}
+                  onClick={(event) => clickCharacter(event)}
+                  key={index}
+                >
+                  <Image src={elem} alt="" width={25} height={25} />
+                </button>
+              );
+            }
+          })}
         </div>
         <div className={styles['room__chat']}>
           <div className={styles['room__messages']}>
             {messages.map((message: any, index: number) => (
               <span className={styles['room__message']} key={index}>
-                <span className={styles['message-date']}>
-                  {formatData(message.date)}
-                </span>
-                <span className={styles['message-author']}>
-                  {message.displayName}
-                </span>
-                <span className={styles['message-text']}>{message.text}</span>
+                {user?.email === message.email ? (
+                  <>
+                    <span className={styles['message-date']}>
+                      {formatData(message.date)}
+                    </span>
+                    <span
+                      className={styles['message-author']}
+                      style={{
+                        background: COLORS_CHARACTERS[user?.characterName],
+                      }}
+                    >
+                      {message.displayName}
+                    </span>
+                    <span className={styles['message-text']}>
+                      {message.text}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className={styles['message-date']}>
+                      {formatData(message.date)}
+                    </span>
+                    <span className={styles['message-author']}>
+                      {message.displayName}
+                    </span>
+                    <span className={styles['message-text']}>
+                      {message.text}
+                    </span>
+                  </>
+                )}
               </span>
             ))}
           </div>
