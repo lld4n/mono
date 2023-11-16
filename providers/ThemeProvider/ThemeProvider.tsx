@@ -11,17 +11,14 @@ export default function ThemeProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [themeIndex, setThemeIndex] = React.useState<number>(0);
+  const [themeIndex, setThemeIndex] = React.useState<number>(
+    Number(localStorage.getItem('theme')),
+  );
   React.useEffect(() => {
-    if (localStorage.getItem('theme')) {
-      setThemeIndex(Number(localStorage.getItem('theme')));
-      document.documentElement.dataset.theme = themeList[themeIndex];
-    } else {
+    if (Number.isNaN(themeIndex)) {
       setThemeIndex(0);
-      document.documentElement.dataset.theme = themeList[themeIndex];
-      localStorage.setItem('theme', String(themeIndex));
     }
-  }, []);
+  }, [themeIndex]);
 
   React.useEffect(() => {
     localStorage.setItem('theme', String(themeIndex));
