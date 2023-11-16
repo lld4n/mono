@@ -9,6 +9,13 @@ const en: InternationalizationType = {
     open: 'Open Rooms',
     exit: 'Exit',
   },
+  room: {
+    title: 'Start Game',
+    subtitle:
+      'Invite more participants. To do this, copy the code above and send it to your friends',
+    character: 'Choose a character to play as',
+    input: 'Enter message',
+  },
 };
 
 export default en;

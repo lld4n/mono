@@ -7,4 +7,10 @@ export interface InternationalizationType {
     open: string;
     exit: string;
   };
+  room: {
+    title: string;
+    subtitle: string;
+    character: string;
+    input: string;
+  };
 }
