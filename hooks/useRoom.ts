@@ -30,6 +30,8 @@ export function useRoom() {
   const [message, setMessage] = useState('');
   const [chat, setChat] = useState(localStorage.getItem('chat-key'));
   const [user, setUser] = useState<userType | null>(null);
+
+  const [copy, setCopy] = useState(false);
   useEffect(() => {
     const userBuffer = localStorage.getItem('user');
     if (userBuffer) {
@@ -52,6 +54,20 @@ export function useRoom() {
       });
     }
   }, [chat]);
+
+  function copyKey(event: any) {
+    navigator.clipboard.writeText(event.currentTarget.value).then(
+      () => {
+        setCopy(true);
+      },
+      (err) => {
+        setCopy(false);
+      },
+    );
+    setTimeout(() => {
+      setCopy(false);
+    }, 500);
+  }
 
   function compareCharacter(
     userCharacterUrlImage: string,
@@ -121,8 +137,10 @@ export function useRoom() {
     clickCharacter,
     sendMessage,
     writeMessage,
+    copyKey,
     chat,
     i18n,
     user,
+    copy,
   };
 }

@@ -17,9 +17,11 @@ export default function Room() {
     writeMessage,
     sendMessage,
     clickCharacter,
+    copyKey,
     chat,
     i18n,
     user,
+    copy,
   } = useRoom();
 
   return (
@@ -73,7 +75,15 @@ export default function Room() {
           </div>
         </div>
         <div className={styles['room__info']}>
-          <div className={styles['room__link']}>
+          <button
+            value={chat ? chat : ''}
+            className={
+              !copy
+                ? styles['room__link']
+                : [styles['room__link'], styles['change-color']].join(' ')
+            }
+            onClick={(event) => copyKey(event)}
+          >
             <div className={styles['room__link-text']}>{chat}</div>
             <div className={styles['room__link-icon']}>
               <svg
@@ -91,7 +101,7 @@ export default function Room() {
                 />
               </svg>
             </div>
-          </div>
+          </button>
           <div className={styles['room__subtitle']}>{i18n.room.subtitle}</div>
         </div>
       </div>
