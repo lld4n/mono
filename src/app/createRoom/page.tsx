@@ -1,3 +1,5 @@
-export default function joinRoom() {
-  return <main>createRoom.page</main>;
+import Loading from '../../../components/Loading/Loading';
+
+export default function CreateRoom() {
+  return <Loading />;
 }

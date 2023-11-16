@@ -1,0 +1,13 @@
+.loading {
+  z-index: 10;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: var(--bg);
+}

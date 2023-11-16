@@ -28,7 +28,6 @@ export default function ThemeProvider({
     document.documentElement.dataset.theme = themeList[themeIndex];
   }, [themeIndex]);
 
-  console.log(themeIndex, themeList[themeIndex]);
   return (
     <>
       {children}

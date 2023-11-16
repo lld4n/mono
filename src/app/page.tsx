@@ -11,6 +11,7 @@ import { userType } from '../../types/userType';
 import { useRouter } from 'next/navigation';
 import { doc, getDoc, setDoc } from '@firebase/firestore';
 import { InternationalizationContext } from '../../providers/InternationalizationProvider/InternationalizationProvider';
+import Loading from '../../components/Loading/Loading';
 const cookies = new Cookies();
 export default function Home() {
   const [sign, setSign] = React.useState<string>(cookies.get('auth-token'));
@@ -18,6 +19,7 @@ export default function Home() {
   const [loading, setLoading] = React.useState(true);
   const router = useRouter();
   const i18n = React.useContext(InternationalizationContext);
+
   React.useEffect(() => {
     const userBuffer = localStorage.getItem('user');
     if (userBuffer) {
@@ -73,11 +75,12 @@ export default function Home() {
     cookies.set('auth-token', result.user.refreshToken);
     setSign(result.user.refreshToken);
   }, []);
+
   return (
     <>
       <header></header>
       {loading ? (
-        <div className={styles.loading}>Идет загрузка...</div>
+        <Loading />
       ) : (
         <>
           {sign && user ? (
