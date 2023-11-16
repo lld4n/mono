@@ -1,88 +1,30 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import styles from './page.module.scss';
 import Image from 'next/image';
 
-import cat from '../../../assets/characters/cat.svg';
-import music from '../../../assets/characters/music.svg';
-import octocat from '../../../assets/characters/octocat.svg';
-import bone from '../../../assets/characters/bone.svg';
-import cactus from '../../../assets/characters/cactus.svg';
-import duck from '../../../assets/characters/duck.svg';
-import heart from '../../../assets/characters/heart.svg';
-import zip from '../../../assets/characters/zip.svg';
 import rocket from '../../../assets/rocket.png';
-import { db } from '../../../utils/firebase';
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  onSnapshot,
-  setDoc,
-} from '@firebase/firestore';
-import { useRouter } from 'next/navigation';
-import { userType } from '../../../types/userType';
 import formatData from '../../../utils/formatData';
+import { useRoom } from '../../../hooks/useRoom';
 
 export default function joinRoom() {
-  const router = useRouter();
-  const characters = [duck, bone, cactus, cat, octocat, heart, music, zip];
-  const [messages, setMessages] = useState<any>([]);
-  const [message, setMessage] = useState('');
-  const [chat, setChat] = useState(localStorage.getItem('chat-key'));
-  const [user, setUser] = useState<userType | null>(null);
-  useEffect(() => {
-    const userBuffer = localStorage.getItem('user');
-    if (userBuffer) {
-      setUser(JSON.parse(userBuffer));
-    } else {
-      router.push('/error');
-    }
-    const setData = async () => {
-      const docRef = await addDoc(collection(db, 'chats'), {
-        messages: [],
-      });
-      localStorage.setItem('chat-key', docRef.id);
-    };
-    if (!chat) setData();
-  }, []);
-  useEffect(() => {
-    if (chat) {
-      const docSnap = onSnapshot(doc(db, 'chats', chat), (doc) => {
-        setMessages(doc.data()?.messages);
-      });
-    }
-  }, [chat]);
-  function clickCharacter(event: any) {
-    event.currentTarget.setAttribute('disabled', 'disabled');
-  }
-  function writeMessage(event: any) {
-    setMessage(event.target.value);
-  }
-  async function sendMessage(event: any) {
-    if (event.key === 'Enter') {
-      if (chat && event.target.value.length !== 0) {
-        const message = {
-          text: event.target.value,
-          email: user?.email,
-          displayName: user?.displayName,
-          date: new Date().getTime(),
-        };
-        setMessage('');
-        await setDoc(doc(db, 'chats', chat), {
-          messages: [...messages, message],
-        });
-      }
-    }
-  }
+  const {
+    messages,
+    message,
+    characters,
+    writeMessage,
+    sendMessage,
+    clickCharacter,
+    chat,
+    i18n,
+  } = useRoom();
+
   return (
     <main className={styles.main}>
       <div className={styles['left-side']}>
-        <div className={styles['room__title']}>Начать игру</div>
+        <div className={styles['room__title']}>{i18n.room.title}</div>
         <div className={styles['room__persons']}>
           <div className={styles['room__person']}>
             <Image
@@ -107,9 +49,7 @@ export default function joinRoom() {
         </div>
         <div className={styles['room__info']}>
           <div className={styles['room__link']}>
-            <div className={styles['room__link-text']}>
-              PdwRhG1syEYKLdS3iujr
-            </div>
+            <div className={styles['room__link-text']}>{chat}</div>
             <div className={styles['room__link-icon']}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -127,16 +67,11 @@ export default function joinRoom() {
               </svg>
             </div>
           </div>
-          <div className={styles['room__subtitle']}>
-            Пригласи еще участников. Для этого скопируй код выше и отправь
-            друзьям
-          </div>
+          <div className={styles['room__subtitle']}>{i18n.room.subtitle}</div>
         </div>
       </div>
       <div className={styles['right-side']}>
-        <div className={styles['room__subtitle']}>
-          Выберите персонажа за которого будете играть
-        </div>
+        <div className={styles['room__subtitle']}>{i18n.room.character}</div>
         <div className={styles['room__characters']}>
           {characters.map((elem, index) => (
             <button
@@ -165,7 +100,7 @@ export default function joinRoom() {
           <div className={styles['room__input']}>
             <input
               type={'text'}
-              placeholder={'Введите сообщение'}
+              placeholder={i18n.room.input}
               value={message}
               onChange={writeMessage}
               onKeyDown={sendMessage}
