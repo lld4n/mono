@@ -1,5 +1,4 @@
-export default function formatData(data: string): string {
+export default function formatData(data: number): string {
   const date = new Date(data);
-  const resultData = date.getHours() + ':' + date.getMinutes();
-  return resultData;
+  return date.getHours() + ':' + date.getMinutes();
 }

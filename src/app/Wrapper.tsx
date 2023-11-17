@@ -6,16 +6,20 @@ import React from 'react';
 import InternationalizationProvider from '../../providers/InternationalizationProvider/InternationalizationProvider';
 import ThemeProvider from '../../providers/ThemeProvider/ThemeProvider';
 import Image from 'next/image';
+import Link from 'next/link';
 export const Wrapper = ({ children }: { children: ReactNode }) => {
   return (
     <>
-      <Image
-        src={logo}
-        alt="logo"
-        width={100}
-        height={35}
-        className={styles.logo}
-      />
+      <Link href="/">
+        <Image
+          src={logo}
+          alt="logo"
+          width={100}
+          height={35}
+          className={styles.logo}
+        />
+      </Link>
+
       <InternationalizationProvider>
         <ThemeProvider>{children}</ThemeProvider>
       </InternationalizationProvider>

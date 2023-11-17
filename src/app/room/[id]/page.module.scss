@@ -7,18 +7,31 @@
 }
 
 .container {
+  max-width: 1200px;
   display: flex;
   gap: 40px;
   padding: 0 20px;
+  align-items: center;
 }
 
 .left {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-width: 350px;
+  min-width: 350px;
   align-items: center;
 }
+
+.startDisabled {
+  padding: 13px 10px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-weight: bold;
+  border-radius: 5px;
+  color: var(--additive);
+}
+
 .startGame {
   padding: 13px 10px;
   display: flex;
@@ -47,6 +60,7 @@
   align-items: center;
   span {
     flex: 1;
+    overflow: clip;
   }
 }
 
@@ -66,7 +80,6 @@
 .playerSelected {
   width: 40px;
   height: 40px;
-  //background-color: var(--board);
   display: flex;
   justify-content: center;
   align-items: center;

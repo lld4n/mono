@@ -19,7 +19,6 @@ import heart from '../assets/characters/heart.svg';
 import music from '../assets/characters/music.svg';
 import zip from '../assets/characters/zip.svg';
 import { InternationalizationContext } from '../providers/InternationalizationProvider/InternationalizationProvider';
-import { findCharacterNameByImage } from '../utils/findCharacterNameByImage';
 
 export function useRoom() {
   const i18n = React.useContext(InternationalizationContext);
@@ -83,12 +82,6 @@ export function useRoom() {
         }
       }
 
-      const characterName = findCharacterNameByImage(event.currentTarget.value);
-      userObject = {
-        ...userObject,
-        characterUrlImage: event.currentTarget.value,
-        characterName,
-      };
       setUser(userObject);
       localStorage.setItem('user', JSON.stringify(userObject));
     } else {

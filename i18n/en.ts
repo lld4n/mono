@@ -14,8 +14,8 @@ const en: InternationalizationType = {
     subtitle:
       'Invite more participants. To do this, copy the code above and send it to your friends',
     character: 'Choose a character to play as',
-    input: 'Enter message',
   },
+  input: 'Enter message',
   copy: 'Copied',
 };
 

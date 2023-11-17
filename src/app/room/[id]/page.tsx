@@ -16,6 +16,7 @@ import { InternationalizationContext } from '../../../../providers/International
 import Copy from '../../../../components/Copy/Copy';
 import { characters } from '../../../../assets/characters';
 import Image from 'next/image';
+import Chat from '../../../../components/Chat/Chat';
 
 export default function RoomId({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -29,7 +30,11 @@ export default function RoomId({ params }: { params: { id: string } }) {
       router.push('/');
     }
     const unsub = onSnapshot(doc(db, 'games', params.id), (doc) => {
-      setGame(doc.data() as gameType);
+      if (doc.exists()) {
+        setGame(doc.data() as gameType);
+      } else {
+        router.push('/error');
+      }
     });
 
     return () => {
@@ -43,6 +48,9 @@ export default function RoomId({ params }: { params: { id: string } }) {
   };
   React.useEffect(() => {
     if (game && user) {
+      if (game.started !== 0) {
+        router.push('/game/' + params.id);
+      }
       console.log(game);
       const you = game.players.find((el) => el.email === user.email);
       if (!you) {
@@ -70,7 +78,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
     }
   }, [game]);
 
-  const handle = (index: gamePlayersSelectedCharacterType) => {
+  const choice = (index: gamePlayersSelectedCharacterType) => {
     if (game && user) {
       if (!game.players.map((el) => el.selected_character).includes(index)) {
         let gameBuffer = Object.assign({}, game);
@@ -85,6 +93,18 @@ export default function RoomId({ params }: { params: { id: string } }) {
     }
   };
 
+  const start = () => {
+    if (
+      game &&
+      game.players.map((el) => el.selected_character).every((v) => v !== -1)
+    ) {
+      let gameBuffer = Object.assign({}, game);
+      gameBuffer.started = new Date().getTime();
+      setAwait(gameBuffer);
+      router.push('/game/' + params.id);
+    }
+  };
+
   return (
     <>
       {game || !loading ? (
@@ -92,7 +112,18 @@ export default function RoomId({ params }: { params: { id: string } }) {
           <div className={styles.container}>
             <div className={styles.left}>
               {admin ? (
-                <div className={styles.startGame}>{i18n.room.title}</div>
+                <div
+                  className={
+                    game?.players
+                      .map((el) => el.selected_character)
+                      .every((v) => v !== -1)
+                      ? styles.startGame
+                      : styles.startDisabled
+                  }
+                  onClick={start}
+                >
+                  {i18n.room.title}
+                </div>
               ) : (
                 ''
               )}
@@ -159,7 +190,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
                         }
                         key={el.color}
                         onClick={() =>
-                          handle(index as gamePlayersSelectedCharacterType)
+                          choice(index as gamePlayersSelectedCharacterType)
                         }
                       >
                         <Image src={el.svg} alt={''} width={25} height={25} />
@@ -167,6 +198,28 @@ export default function RoomId({ params }: { params: { id: string } }) {
                     );
                   })}
                 </div>
+                {game ? (
+                  <Chat
+                    chat_id={game.chat_id}
+                    colors={game.players.map((el) => {
+                      if (el.selected_character !== -1) {
+                        return {
+                          color: characters[el.selected_character].color,
+                          email: el.email,
+                          opposite: characters[el.selected_character].opposite,
+                        };
+                      } else {
+                        return {
+                          color: '',
+                          email: '',
+                          opposite: '',
+                        };
+                      }
+                    })}
+                  />
+                ) : (
+                  ''
+                )}
               </div>
             </div>
           </div>

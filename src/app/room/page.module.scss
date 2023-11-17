@@ -99,40 +99,19 @@
 }
 
 .room__messages {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-  }
+
 }
 
 .room__message {
-  color: var(--opposite);
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 26px;
-  padding: 3px 0;
+
   .message-date {
-    word-wrap: normal;
-    color: var(--additive);
-    width: 40px;
-    margin-right: 10px;
+
   }
   .message-author {
-    margin-right: 10px;
-    white-space: nowrap;
-    padding: 2px 5px;
-    border-radius: 3px;
-    background: var(--opposite);
-    color: var(--bg);
-    font-size: 16px;
-    font-weight: 500;
+
   }
   .message-text {
-    word-wrap: anywhere;
+
   }
 }
 
@@ -165,17 +144,11 @@
 }
 
 .input {
-  background: var(--input);
-  padding: 13px 20px;
-  border-radius: 5px;
-  color: var(--opposite);
-  font-size: 20px;
-  font-weight: 500;
-  width: 100%;
+
 }
 
 .input::placeholder {
-  color: var(--additive);
+
 }
 
 
