@@ -9,34 +9,38 @@ import { gamePlayersTypeEnum, gameType } from '../../../types/gameType';
 
 export default function CreateRoom() {
   const router = useRouter();
-  const user = useUser(router);
+  const user = useUser();
 
   React.useEffect(() => {
-    const creating = async () => {
-      const chatBuffer: chatType = {
-        messages: [],
-        created: new Date().getTime(),
+    if (user) {
+      const creating = async () => {
+        const chatBuffer: chatType = {
+          messages: [],
+          created: new Date().getTime(),
+        };
+        const chat_id = await fstore.add('chats', chatBuffer);
+        const gameBuffer: gameType = {
+          chat_id,
+          created: new Date().getTime(),
+          started: 0,
+          players: [
+            {
+              display_name: user.display_name,
+              email: user.email,
+              photo_url: user.photo_url,
+              selected_character: -1,
+              type: gamePlayersTypeEnum.ADMIN,
+            },
+          ],
+        };
+        const game_id = await fstore.add('games', gameBuffer);
+        router.push('/room/' + game_id);
       };
-      const chat_id = await fstore.add('chats', chatBuffer);
-      const gameBuffer: gameType = {
-        chat_id,
-        created: new Date().getTime(),
-        started: 0,
-        players: [
-          {
-            display_name: user.display_name,
-            email: user.email,
-            photo_url: user.photo_url,
-            selected_character: -1,
-            type: gamePlayersTypeEnum.ADMIN,
-          },
-        ],
-      };
-      const game_id = await fstore.add('games', gameBuffer);
-      router.push('/room/' + game_id);
-    };
 
-    creating();
+      creating();
+    } else {
+      router.push('/');
+    }
   }, []);
   return <Loading />;
 }

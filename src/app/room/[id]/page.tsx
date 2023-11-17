@@ -19,12 +19,15 @@ import Image from 'next/image';
 
 export default function RoomId({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const user = useUser(router);
+  const user = useUser();
   const [game, setGame] = React.useState<gameType | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [admin, setAdmin] = React.useState(false);
   const i18n = React.useContext(InternationalizationContext);
   React.useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
     const unsub = onSnapshot(doc(db, 'games', params.id), (doc) => {
       setGame(doc.data() as gameType);
     });
@@ -39,7 +42,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
     setLoading(false);
   };
   React.useEffect(() => {
-    if (game) {
+    if (game && user) {
       console.log(game);
       const you = game.players.find((el) => el.email === user.email);
       if (!you) {
@@ -68,7 +71,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
   }, [game]);
 
   const handle = (index: gamePlayersSelectedCharacterType) => {
-    if (game) {
+    if (game && user) {
       if (!game.players.map((el) => el.selected_character).includes(index)) {
         let gameBuffer = Object.assign({}, game);
         gameBuffer.players = game.players.map((el) => {
