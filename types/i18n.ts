@@ -13,4 +13,5 @@ export interface InternationalizationType {
     character: string;
     input: string;
   };
+  copy: string;
 }

@@ -16,6 +16,7 @@ const en: InternationalizationType = {
     character: 'Choose a character to play as',
     input: 'Enter message',
   },
+  copy: 'Copied',
 };
 
 export default en;

@@ -1,0 +1,40 @@
+.button {
+  width: 100%;
+  display: flex;
+  padding: 13px 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  background-color: var(--highlight);
+  border-radius: 5px;
+  color: var(--opposite);
+  border: 1px solid var(--highlight);
+  &:hover {
+    background-color: var(--highlight-hover);
+  }
+}
+
+.svg {
+  path {
+    stroke: var(--opposite);
+  }
+  rect {
+    stroke: var(--opposite);
+  }
+}
+
+.copied {
+  width: 100%;
+  display: flex;
+  padding: 13px 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  background-color: var(--highlight);
+  border-radius: 5px;
+  color: var(--opposite);
+  border: 1px solid var(--accent);
+  path {
+    stroke: var(--opposite);
+  }
+}

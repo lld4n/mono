@@ -16,6 +16,7 @@ const ru: InternationalizationType = {
     character: 'Выберите персонажа за которого будете играть',
     input: 'Введите сообщение',
   },
+  copy: 'Скопировано',
 };
 
 export default ru;
