@@ -28,9 +28,9 @@ export default function Room() {
         <div className={styles['room__title']}>{i18n.room.title}</div>
         <div className={styles['room__persons']}>
           <div className={styles['room__person']}>
-            {user?.photoUrl ? (
+            {user?.photo_url ? (
               <img
-                src={user?.photoUrl}
+                src={user?.photo_url}
                 alt=""
                 width={40}
                 height={40}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { messageType } from '../types/messageType';
+import { messageType } from '../types/chatType';
 import { userType } from '../types/userType';
 import {
   addDoc,
@@ -104,7 +104,7 @@ export function useRoom() {
         const message = {
           text: event.target.value,
           email: user?.email,
-          displayName: user?.displayName,
+          display_name: user?.display_name,
           date: new Date().getTime(),
         };
         setMessage('');

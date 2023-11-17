@@ -1,7 +1,7 @@
 export type userType = {
-  displayName: string;
+  display_name: string;
   email: string;
-  photoUrl: string | null;
+  photo_url: string | null;
   // characterName?: string | null;
   // characterUrlImage?: string | null;
   // stats?: string[]; // пока не уверен

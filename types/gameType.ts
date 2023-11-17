@@ -1,6 +1,5 @@
 export type gameType = {
   chat_id: string;
-  game_id: string;
   players: gamePlayersType[];
   created: number;
   started: number;
@@ -9,10 +8,9 @@ export type gameType = {
 export type gamePlayersType = {
   display_name: string;
   email: string;
-  photo_url: string;
+  photo_url: string | null;
   selected_character: gamePlayersSelectedCharacterType;
   type: gamePlayersTypeEnum;
-  hash: string;
 };
 
 export enum gamePlayersTypeEnum {
@@ -20,4 +18,13 @@ export enum gamePlayersTypeEnum {
   PLAYER = 'PLAYER',
 }
 
-export type gamePlayersSelectedCharacterType = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+export type gamePlayersSelectedCharacterType =
+  | -1
+  | 0
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7;

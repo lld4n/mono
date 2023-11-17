@@ -34,10 +34,10 @@ export default function Home() {
   const addUser = React.useCallback(
     async (
       email: string | null,
-      displayName: string | null,
-      photoUrl: string | null,
+      display_name: string | null,
+      photo_url: string | null,
     ) => {
-      if (!email || !displayName) {
+      if (!email || !display_name) {
         await signOut(auth);
         cooky.remove('user_mono');
         router.push('/error');
@@ -45,9 +45,9 @@ export default function Home() {
         const docRef = doc(db, 'users', email);
         const docSnap = await getDoc(docRef);
         const userBuffer: userType = {
-          displayName,
+          display_name,
           email,
-          photoUrl,
+          photo_url,
         };
         cooky.set('user_mono', userBuffer);
         setUser(userBuffer);
@@ -82,12 +82,12 @@ export default function Home() {
               <div className={styles.wrapper}>
                 {user ? (
                   <div className={styles.account}>
-                    {user.photoUrl ? (
-                      <img src={user.photoUrl} className={styles.photo} />
+                    {user.photo_url ? (
+                      <img src={user.photo_url} className={styles.photo} />
                     ) : (
                       <></>
                     )}
-                    <span className={styles.name}>{user.displayName}</span>
+                    <span className={styles.name}>{user.display_name}</span>
                   </div>
                 ) : (
                   <></>

@@ -23,7 +23,8 @@ export default class fstore {
    * Добавить документ в коллекцию со сгенерированным названием
    */
   static async add(collectionName: string, data: any) {
-    await addDoc(collection(db, collectionName), data);
+    const docRef = await addDoc(collection(db, collectionName), data);
+    return docRef.id;
   }
 
   /**
