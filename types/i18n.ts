@@ -14,4 +14,7 @@ export interface InternationalizationType {
     input: string;
   };
   copy: string;
+  joinRoom: {
+    keyInput: string;
+  };
 }

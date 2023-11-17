@@ -5,10 +5,5 @@ export default function joinRoomLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <section>
-      {children}
-      joinRoom.layout
-    </section>
-  );
+  return <section>{children}</section>;
 }

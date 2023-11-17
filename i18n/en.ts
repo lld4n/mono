@@ -17,6 +17,9 @@ const en: InternationalizationType = {
     input: 'Enter message',
   },
   copy: 'Copied',
+  joinRoom: {
+    keyInput: 'Insert the unique room key',
+  },
 };
 
 export default en;

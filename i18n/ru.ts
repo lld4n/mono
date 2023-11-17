@@ -17,6 +17,9 @@ const ru: InternationalizationType = {
     input: 'Введите сообщение',
   },
   copy: 'Скопировано',
+  joinRoom: {
+    keyInput: 'Вставьте уникальный ключ от комнаты',
+  },
 };
 
 export default ru;
