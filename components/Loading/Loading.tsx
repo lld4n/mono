@@ -17,7 +17,6 @@ const icon = {
   },
 };
 export default function Loading() {
-  const i18n = React.useContext(InternationalizationContext);
   return (
     <div className={styles.loading}>
       <motion.svg
@@ -128,7 +127,6 @@ export default function Loading() {
           stroke="white"
         />
       </motion.svg>
-      <span>{i18n.loading}</span>
     </div>
   );
 }

@@ -12,7 +12,6 @@ import { useRouter } from 'next/navigation';
 import { doc, getDoc, setDoc } from '@firebase/firestore';
 import { InternationalizationContext } from '../../providers/InternationalizationProvider/InternationalizationProvider';
 import Loading from '../../components/Loading/Loading';
-import { ThemeContext } from '../../providers/ThemeProvider/ThemeProvider';
 const cookies = new Cookies();
 export default function Home() {
   const [sign, setSign] = React.useState<string>(cookies.get('auth-token'));
@@ -20,7 +19,6 @@ export default function Home() {
   const [loading, setLoading] = React.useState(true);
   const router = useRouter();
   const i18n = React.useContext(InternationalizationContext);
-  const themeIndex = React.useContext(ThemeContext);
 
   React.useEffect(() => {
     const userBuffer = localStorage.getItem('user');
@@ -60,8 +58,6 @@ export default function Home() {
           displayName,
           email,
           photoUrl,
-          themeIndex,
-          langIndex: 0,
         };
         localStorage.setItem('user', JSON.stringify(userBuffer));
         setUser(userBuffer);
@@ -83,9 +79,7 @@ export default function Home() {
       result.user.photoURL,
     );
     cookies.set('auth-token', result.user.refreshToken);
-    cookies.set('email', result.user.email);
-    cookies.set('displayName', result.user.displayName);
-    cookies.set('photoUrl', result.user.photoURL);
+
     setSign(result.user.refreshToken);
   }, []);
 

@@ -11,7 +11,7 @@ import { db } from './firebase';
 /**
  * Класс отвечающий за работу с Firebase Firestore
  */
-export class fstore {
+export default class fstore {
   /**
    * Добавить документ в коллекцию со своим названием
    */
