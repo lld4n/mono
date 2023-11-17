@@ -2,7 +2,11 @@
 import { useRouter } from 'next/navigation';
 import useUser from '../../../../hooks/useUser';
 import React from 'react';
-import { gamePlayersTypeEnum, gameType } from '../../../../types/gameType';
+import {
+  gamePlayersSelectedCharacterType,
+  gamePlayersTypeEnum,
+  gameType,
+} from '../../../../types/gameType';
 import { doc, onSnapshot } from '@firebase/firestore';
 import { db } from '../../../../utils/firebase';
 import Loading from '../../../../components/Loading/Loading';
@@ -10,6 +14,8 @@ import fstore from '../../../../utils/firestore';
 import styles from './page.module.scss';
 import { InternationalizationContext } from '../../../../providers/InternationalizationProvider/InternationalizationProvider';
 import Copy from '../../../../components/Copy/Copy';
+import { characters } from '../../../../assets/characters';
+import Image from 'next/image';
 
 export default function RoomId({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -28,12 +34,11 @@ export default function RoomId({ params }: { params: { id: string } }) {
     };
   }, []);
 
+  const setAwait = async (gameBuffer: gameType) => {
+    await fstore.set('games', params.id, gameBuffer);
+    setLoading(false);
+  };
   React.useEffect(() => {
-    const setAwait = async (gameBuffer: gameType) => {
-      await fstore.set('games', params.id, gameBuffer);
-      setLoading(false);
-    };
-
     if (game) {
       console.log(game);
       const you = game.players.find((el) => el.email === user.email);
@@ -62,9 +67,24 @@ export default function RoomId({ params }: { params: { id: string } }) {
     }
   }, [game]);
 
+  const handle = (index: gamePlayersSelectedCharacterType) => {
+    if (game) {
+      if (!game.players.map((el) => el.selected_character).includes(index)) {
+        let gameBuffer = Object.assign({}, game);
+        gameBuffer.players = game.players.map((el) => {
+          if (el.email === user.email) {
+            el.selected_character = index;
+          }
+          return el;
+        });
+        setAwait(gameBuffer);
+      }
+    }
+  };
+
   return (
     <>
-      {game || loading ? (
+      {game || !loading ? (
         <div className={styles.wrapper}>
           <div className={styles.container}>
             <div className={styles.left}>
@@ -90,7 +110,20 @@ export default function RoomId({ params }: { params: { id: string } }) {
 
                       <span>{elem.display_name}</span>
                       {elem.selected_character !== -1 ? (
-                        <div className={styles.playerSelected}></div>
+                        <div
+                          className={styles.playerSelected}
+                          style={{
+                            backgroundColor:
+                              characters[elem.selected_character].color,
+                          }}
+                        >
+                          <Image
+                            src={characters[elem.selected_character].svg}
+                            alt={''}
+                            width={25}
+                            height={25}
+                          />
+                        </div>
                       ) : (
                         ''
                       )}
@@ -107,7 +140,32 @@ export default function RoomId({ params }: { params: { id: string } }) {
                 </div>
               )}
             </div>
-            <div className={styles.right}>123</div>
+            <div className={styles.right}>
+              <div className={styles.block}>
+                <div className={styles.span}>{i18n.room.character}</div>
+                <div className={styles.characters}>
+                  {characters.map((el, index) => {
+                    return (
+                      <div
+                        className={
+                          game?.players
+                            .map((el) => el.selected_character)
+                            .includes(index as gamePlayersSelectedCharacterType)
+                            ? styles.disabledCharacter
+                            : styles.oneCharacter
+                        }
+                        key={el.color}
+                        onClick={() =>
+                          handle(index as gamePlayersSelectedCharacterType)
+                        }
+                      >
+                        <Image src={el.svg} alt={''} width={25} height={25} />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       ) : (

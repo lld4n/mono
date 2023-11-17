@@ -9,13 +9,14 @@
 .container {
   display: flex;
   gap: 40px;
+  padding: 0 20px;
 }
 
 .left {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 350px;
+  max-width: 350px;
   align-items: center;
 }
 .startGame {
@@ -47,7 +48,6 @@
   span {
     flex: 1;
   }
-
 }
 
 .photoPlayer {
@@ -64,6 +64,13 @@
 }
 
 .playerSelected {
+  width: 40px;
+  height: 40px;
+  //background-color: var(--board);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
 }
 
 .info {
@@ -80,4 +87,53 @@
 }
 
 .right {
+  min-width: 500px;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 100%;
+}
+
+.block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+
+}
+.span {
+  width: 100%;
+  color: var(--additive);
+  text-align: center;
+}
+
+.characters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 260px;
+}
+
+.oneCharacter {
+  width: 50px;
+  height: 50px;
+  background-color: var(--board);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.disabledCharacter {
+  width: 50px;
+  height: 50px;
+  background-color: var(--board);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  opacity: 0.5;
 }
