@@ -147,13 +147,14 @@
   display: flex;
   gap: 20px;
   justify-content: center;
+  align-items: center;
   background: var(--highlight);
   padding: 13px 10px;
+  color: var(--opposite);
   border-radius: 5px;
 }
 
 .room__link-text {
-  color: var(--opposite);
   font-size: 20px;
   font-weight: 500;
 }
@@ -187,4 +188,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.change-color{
+  color: #00ffa3;
+  svg path {
+    fill: #00ffa3;
+  }
 }
