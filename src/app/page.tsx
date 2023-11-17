@@ -3,7 +3,6 @@ import styles from './page.module.scss';
 import Link from 'next/link';
 import { auth, db, provider } from '../../utils/firebase';
 import { signInWithPopup, signOut } from '@firebase/auth';
-import Cookies from 'universal-cookie';
 import Image from 'next/image';
 import google from '../../assets/google.svg';
 import React from 'react';
@@ -12,16 +11,14 @@ import { useRouter } from 'next/navigation';
 import { doc, getDoc, setDoc } from '@firebase/firestore';
 import { InternationalizationContext } from '../../providers/InternationalizationProvider/InternationalizationProvider';
 import Loading from '../../components/Loading/Loading';
-const cookies = new Cookies();
+import cooky from '../../utils/cooky';
 export default function Home() {
-  const [sign, setSign] = React.useState<string>(cookies.get('auth-token'));
   const [user, setUser] = React.useState<userType | null>(null);
   const [loading, setLoading] = React.useState(true);
   const router = useRouter();
   const i18n = React.useContext(InternationalizationContext);
-
   React.useEffect(() => {
-    const userBuffer = localStorage.getItem('user');
+    const userBuffer = cooky.get('user_mono');
     if (userBuffer) {
       setUser(JSON.parse(userBuffer));
     }
@@ -30,11 +27,8 @@ export default function Home() {
 
   const signOutApp = React.useCallback(async () => {
     await signOut(auth);
-    cookies.remove('auth-token');
-    cookies.remove('email');
-    cookies.remove('displayName');
-    cookies.remove('photoUrl');
-    setSign('');
+    cooky.remove('user_mono');
+    setUser(null);
   }, []);
 
   const addUser = React.useCallback(
@@ -45,11 +39,7 @@ export default function Home() {
     ) => {
       if (!email || !displayName) {
         await signOut(auth);
-        cookies.remove('auth-token');
-        cookies.remove('email');
-        cookies.remove('displayName');
-        cookies.remove('photoUrl');
-        setSign('');
+        cooky.remove('user_mono');
         router.push('/error');
       } else {
         const docRef = doc(db, 'users', email);
@@ -59,7 +49,7 @@ export default function Home() {
           email,
           photoUrl,
         };
-        localStorage.setItem('user', JSON.stringify(userBuffer));
+        cooky.set('user_mono', userBuffer);
         setUser(userBuffer);
         if (!docSnap.exists()) {
           await setDoc(doc(db, 'users', email), userBuffer);
@@ -78,9 +68,6 @@ export default function Home() {
       result.user.displayName,
       result.user.photoURL,
     );
-    cookies.set('auth-token', result.user.refreshToken);
-
-    setSign(result.user.refreshToken);
   }, []);
 
   return (
@@ -90,7 +77,7 @@ export default function Home() {
         <Loading />
       ) : (
         <>
-          {sign && user ? (
+          {user ? (
             <main className={styles.main}>
               <div className={styles.wrapper}>
                 {user ? (
