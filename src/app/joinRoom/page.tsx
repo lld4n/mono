@@ -22,8 +22,6 @@ export default function JoinRoom() {
     if (event?.key === 'Enter') {
       sendRoomKey();
     }
-    const target = event.target as HTMLInputElement;
-    setRoomKey(target.value);
   }
   return (
     <main className={styles['joinRoom']}>
@@ -35,7 +33,7 @@ export default function JoinRoom() {
         onChange={(event) => setRoomKey(event.target.value)}
         onKeyDown={(event) => changeRoomKey(event)}
       />
-      <div onClick={() => sendRoomKey()}>
+      <div onClick={() => sendRoomKey()} className={styles['joinRoom__button']}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="30"

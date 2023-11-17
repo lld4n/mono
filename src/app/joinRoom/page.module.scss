@@ -17,4 +17,19 @@
   &__input::placeholder{
     color: #6A6A6A;
   }
+  &__button{
+    border-radius: 5px;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:hover{
+      background: var(--hover);
+    }
+  }
+  svg path{
+    fill: var(--opposite)
+  }
 }
