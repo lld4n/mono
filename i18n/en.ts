@@ -1,7 +1,6 @@
 import { InternationalizationType } from '../types/i18n';
 
 const en: InternationalizationType = {
-  loading: 'Loading...',
   root: {
     rules: 'Rules',
     google: 'Sign in with Google',

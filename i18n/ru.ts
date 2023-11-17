@@ -1,7 +1,6 @@
 import { InternationalizationType } from '../types/i18n';
 
 const ru: InternationalizationType = {
-  loading: 'Идет загрузка...',
   root: {
     rules: 'Правила',
     google: 'Войти с Google',

@@ -1,5 +1,4 @@
 export interface InternationalizationType {
-  loading: string;
   root: {
     rules: string;
     google: string;
