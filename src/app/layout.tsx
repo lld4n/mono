@@ -9,6 +9,10 @@ import { Wrapper } from '@/app/Wrapper';
 export const metadata: Metadata = {
   title: 'mono',
   description: 'Бесплатная монополия онлайн',
+  icons: {
+    icon: '/icon.png',
+    apple: '/apple-icon.png',
+  },
 };
 
 export default function RootLayout({
