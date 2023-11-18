@@ -3,8 +3,8 @@ import { useRouter } from 'next/navigation';
 import useUser from '../../../../hooks/useUser';
 import React from 'react';
 import {
-  gamePlayersSelectedCharacterType,
-  gamePlayersTypeEnum,
+  gameSelectedCharacterType,
+  gameUsersTypeEnum,
   gameType,
 } from '../../../../types/gameType';
 import { doc, onSnapshot } from '@firebase/firestore';
@@ -68,19 +68,19 @@ export default function RoomId({ params }: { params: { id: string } }) {
         router.push('/game/' + params.id);
       }
       console.log(game);
-      const you = game.players.find((el) => el.email === user.email);
+      const you = game.users.find((el) => el.email === user.email);
       if (!you) {
-        if (game.players.length <= 5) {
+        if (game.users.length <= 5) {
           if (game.blocked.includes(user.email)) {
             router.push('/');
           } else {
             let gameBuffer = Object.assign({}, game);
-            gameBuffer.players.push({
+            gameBuffer.users.push({
               display_name: user.display_name,
               email: user.email,
               photo_url: user.photo_url,
               selected_character: -1,
-              type: gamePlayersTypeEnum.PLAYER,
+              type: gameUsersTypeEnum.PLAYER,
             });
             if (!gameBuffer.private) {
               addPlayerInOpen();
@@ -91,7 +91,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
           router.push('/error');
         }
       } else {
-        if (you.type === gamePlayersTypeEnum.ADMIN) {
+        if (you.type === gameUsersTypeEnum.ADMIN) {
           setAdmin(true);
         }
 
@@ -100,11 +100,11 @@ export default function RoomId({ params }: { params: { id: string } }) {
     }
   }, [game]);
 
-  const choice = (index: gamePlayersSelectedCharacterType) => {
+  const choice = (index: gameSelectedCharacterType) => {
     if (game && user) {
-      if (!game.players.map((el) => el.selected_character).includes(index)) {
+      if (!game.users.map((el) => el.selected_character).includes(index)) {
         let gameBuffer = Object.assign({}, game);
-        gameBuffer.players = game.players.map((el) => {
+        gameBuffer.users = game.users.map((el) => {
           if (el.email === user.email) {
             el.selected_character = index;
           }
@@ -118,7 +118,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
   const start = async () => {
     if (
       game &&
-      game.players.map((el) => el.selected_character).every((v) => v !== -1)
+      game.users.map((el) => el.selected_character).every((v) => v !== -1)
     ) {
       let gameBuffer = Object.assign({}, game);
       gameBuffer.started = new Date().getTime();
@@ -145,7 +145,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
       )) as openType;
       if (game.private) {
         const list: openPlayersType[] = [];
-        for (let el of game.players) {
+        for (let el of game.users) {
           list.push({
             display_name: el.display_name,
             photo_url: el.photo_url,
@@ -171,11 +171,11 @@ export default function RoomId({ params }: { params: { id: string } }) {
   const blockUser = async (email: string) => {
     if (game) {
       let gameBuffer = Object.assign({}, game);
-      const indexPlayer = gameBuffer.players.findIndex(
+      const indexPlayer = gameBuffer.users.findIndex(
         (el) => el.email === email,
       );
       if (indexPlayer) {
-        gameBuffer.players.splice(indexPlayer, 1);
+        gameBuffer.users.splice(indexPlayer, 1);
         gameBuffer.blocked.push(email);
         if (!gameBuffer.private) {
           const openBuffer: openType = (await fstore.get(
@@ -185,7 +185,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
           if (openBuffer[params.id]) {
             // delete openBuffer[params.id];
             const list: openPlayersType[] = [];
-            for (let el of game.players) {
+            for (let el of game.users) {
               list.push({
                 display_name: el.display_name,
                 photo_url: el.photo_url,
@@ -209,7 +209,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
               {admin ? (
                 <div
                   className={
-                    game?.players
+                    game?.users
                       .map((el) => el.selected_character)
                       .every((v) => v !== -1)
                       ? styles.startGame
@@ -224,7 +224,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
               )}
 
               <div className={styles.players}>
-                {game?.players.map((elem) => {
+                {game?.users.map((elem) => {
                   return (
                     <div key={elem.email} className={styles.onePlayer}>
                       {elem.photo_url ? (
@@ -281,7 +281,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
                   );
                 })}
               </div>
-              {game && game.players.length >= 5 ? (
+              {game && game.users.length >= 5 ? (
                 ''
               ) : (
                 <div className={styles.info}>
@@ -311,15 +311,15 @@ export default function RoomId({ params }: { params: { id: string } }) {
                     return (
                       <div
                         className={
-                          game?.players
+                          game?.users
                             .map((el) => el.selected_character)
-                            .includes(index as gamePlayersSelectedCharacterType)
+                            .includes(index as gameSelectedCharacterType)
                             ? styles.disabledCharacter
                             : styles.oneCharacter
                         }
                         key={el.color}
                         onClick={() =>
-                          choice(index as gamePlayersSelectedCharacterType)
+                          choice(index as gameSelectedCharacterType)
                         }
                       >
                         <Image src={el.svg} alt={''} width={25} height={25} />
@@ -330,7 +330,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
                 {game ? (
                   <Chat
                     chat_id={game.chat_id}
-                    colors={game.players.map((el) => {
+                    colors={game.users.map((el) => {
                       if (el.selected_character !== -1) {
                         return {
                           color: characters[el.selected_character].color,

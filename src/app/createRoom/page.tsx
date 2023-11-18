@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { chatType } from '../../../types/chatType';
 import fstore from '../../../utils/firestore';
-import { gamePlayersTypeEnum, gameType } from '../../../types/gameType';
+import { gameUsersTypeEnum, gameType } from '../../../types/gameType';
 
 export default function CreateRoom() {
   const router = useRouter();
@@ -25,13 +25,23 @@ export default function CreateRoom() {
           created: new Date().getTime(),
           started: 0,
           private: true,
-          players: [
+          players: {},
+          exchange: null,
+          characters: {},
+          currentMove: {
+            email: user.email,
+            valueDice: -1,
+          },
+          auction: null,
+          cards: [],
+          prison: [],
+          users: [
             {
               display_name: user.display_name,
               email: user.email,
               photo_url: user.photo_url,
               selected_character: -1,
-              type: gamePlayersTypeEnum.ADMIN,
+              type: gameUsersTypeEnum.ADMIN,
             },
           ],
         };
