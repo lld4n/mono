@@ -1,0 +1,10 @@
+.main{
+  height: calc(100vh - 20px);
+  flex-direction: column;
+  display: flex;
+  .section{
+    max-width: 1200px;
+    margin: 0 auto;
+    flex: 1 1 auto;
+  }
+}
