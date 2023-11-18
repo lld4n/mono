@@ -5,49 +5,63 @@ export type gameType = {
   started: number;
   private: boolean;
   blocked: string[];
-  characters: {
-    [id: number]: number;
-  };
-  currentMove: {
-    email: string;
-    valueDice: number;
-  };
-  auction: {
-    started: number;
-    card: number;
-    minPrice: number;
-    players: {
-      email: string;
-      selected_character: gameSelectedCharacterType;
-      stake: number;
-      date: number;
-    }[];
-  } | null;
+  characters: gameCharactersType;
+  currentMove: gameCurrentMoveType;
+  auction: gameAuctionType;
+  cards: gameCardsType[];
+  exchange: gameExchangeType;
+  prison: gamePrisonType[];
+  players: gamePlayersType;
+};
 
-  cards: {
-    status: gameCardsStatusType;
-    card_id: number;
-    owner_email: string | null;
-  }[];
-  exchange: {
-    sender: gameExchangeType;
-    recipient: gameExchangeType;
-  } | null;
-  prison: {
-    email: string;
-    tries: number;
-  }[];
+export type gameCharactersType = {
+  [id: number]: number;
+};
 
-  players: {
-    [email: string]: {
-      balance: number;
-      selected_character: gameSelectedCharacterType;
-      inventory?: number[];
-    };
-  };
+export type gameCurrentMoveType = {
+  email: string;
+  valueDice: number;
+};
+
+export type gameAuctionType = {
+  started: number;
+  card: number;
+  minPrice: number;
+  players: gameAuctionPlayersType[];
+} | null;
+
+export type gameAuctionPlayersType = {
+  email: string;
+  selected_character: gameSelectedCharacterType;
+  stake: number;
+  date: number;
+};
+
+export type gameCardsType = {
+  status: gameCardsStatusType;
+  card_id: number;
+  owner_email: string | null;
 };
 
 export type gameExchangeType = {
+  sender: gameExchangeBlockType;
+  recipient: gameExchangeBlockType;
+} | null;
+
+export type gamePrisonType = {
+  email: string;
+  tries: number;
+};
+
+export type gamePlayersType = {
+  [email: string]: {
+    balance: number;
+    selected_character: gameSelectedCharacterType;
+    inventory?: number[];
+  };
+};
+
+export type gameExchangeBlockType = {
   email: string;
   cards: number[];
   value: number;
