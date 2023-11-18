@@ -4,6 +4,7 @@ export type gameType = {
   created: number;
   started: number;
   private: boolean;
+  blocked: string[];
 };
 
 export type gamePlayersType = {
