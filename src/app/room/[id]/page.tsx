@@ -126,7 +126,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
       for (let elem of gameBuffer.users) {
         gameBuffer.players[elem.email] = {
           display_name: elem.display_name,
-          balance: 1500,
+          balance: 15000,
           selected_character: elem.selected_character,
         };
       }
