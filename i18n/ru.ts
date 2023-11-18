@@ -23,6 +23,7 @@ const ru: InternationalizationType = {
   joinRoom: {
     keyInput: 'Вставьте уникальный ключ от комнаты',
   },
+  connect: 'Присоединиться',
 };
 
 export default ru;

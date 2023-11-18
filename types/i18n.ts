@@ -20,4 +20,5 @@ export interface InternationalizationType {
   joinRoom: {
     keyInput: string;
   };
+  connect: string;
 }

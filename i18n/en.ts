@@ -23,6 +23,7 @@ const en: InternationalizationType = {
   joinRoom: {
     keyInput: 'Insert the unique room key',
   },
+  connect: 'Join',
 };
 
 export default en;
