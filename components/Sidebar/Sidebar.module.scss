@@ -1,0 +1,13 @@
+.sidebar{
+  max-width: 200px;
+}
+
+.player{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  &__name{
+    padding: 5px;
+    border-radius: 5px;
+  }
+}
