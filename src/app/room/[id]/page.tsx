@@ -122,6 +122,14 @@ export default function RoomId({ params }: { params: { id: string } }) {
     ) {
       let gameBuffer = Object.assign({}, game);
       gameBuffer.started = new Date().getTime();
+
+      for (let elem of gameBuffer.users) {
+        gameBuffer.players[elem.email] = {
+          display_name: elem.display_name,
+          balance: 1500,
+          selected_character: elem.selected_character,
+        };
+      }
       await setAwait(gameBuffer);
       if (!gameBuffer.private) {
         const openBuffer: openType = (await fstore.get(

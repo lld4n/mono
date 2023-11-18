@@ -55,6 +55,7 @@ export type gamePrisonType = {
 
 export type gamePlayersType = {
   [email: string]: {
+    display_name: string;
     balance: number;
     selected_character: gameSelectedCharacterType;
     inventory?: number[];
