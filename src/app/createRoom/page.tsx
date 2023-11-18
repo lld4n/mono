@@ -23,6 +23,7 @@ export default function CreateRoom() {
           chat_id,
           created: new Date().getTime(),
           started: 0,
+          private: true,
           players: [
             {
               display_name: user.display_name,

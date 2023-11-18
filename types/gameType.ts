@@ -3,6 +3,7 @@ export type gameType = {
   players: gamePlayersType[];
   created: number;
   started: number;
+  private: boolean;
 };
 
 export type gamePlayersType = {

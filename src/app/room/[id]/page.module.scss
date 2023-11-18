@@ -99,6 +99,28 @@
   color: var(--additive);
 }
 
+.toggle {
+  display: flex;
+  gap: 1px;
+  align-items: center;
+  font-weight: bold;
+}
+
+.toggleButton {
+  padding: 5px 3px;
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  color: var(--opposite);
+  &:hover {
+    background: var(--hover);
+  }
+}
+
+
 .right {
   min-width: 500px;
   max-width: 900px;

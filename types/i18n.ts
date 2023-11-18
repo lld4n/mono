@@ -11,6 +11,9 @@ export interface InternationalizationType {
     title: string;
     subtitle: string;
     character: string;
+    toggle: string;
+    private: string;
+    public: string;
   };
   input: string;
   copy: string;

@@ -17,6 +17,7 @@ import Copy from '../../../../components/Copy/Copy';
 import { characters } from '../../../../assets/characters';
 import Image from 'next/image';
 import Chat from '../../../../components/Chat/Chat';
+import { openPlayersType, openType } from '../../../../types/openType';
 
 export default function RoomId({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -46,6 +47,21 @@ export default function RoomId({ params }: { params: { id: string } }) {
     await fstore.set('games', params.id, gameBuffer);
     setLoading(false);
   };
+
+  const addPlayerInOpen = async () => {
+    const openBuffer: openType = (await fstore.get(
+      'games',
+      'open',
+    )) as openType;
+    if (openBuffer[params.id] && user) {
+      openBuffer[params.id].push({
+        display_name: user.display_name,
+        photo_url: user.photo_url,
+      });
+      await fstore.set('games', 'open', openBuffer);
+    }
+  };
+
   React.useEffect(() => {
     if (game && user) {
       if (game.started !== 0) {
@@ -63,7 +79,9 @@ export default function RoomId({ params }: { params: { id: string } }) {
             selected_character: -1,
             type: gamePlayersTypeEnum.PLAYER,
           });
-
+          if (!gameBuffer.private) {
+            addPlayerInOpen();
+          }
           setAwait(gameBuffer);
         } else {
           router.push('/error');
@@ -93,15 +111,56 @@ export default function RoomId({ params }: { params: { id: string } }) {
     }
   };
 
-  const start = () => {
+  const start = async () => {
     if (
       game &&
       game.players.map((el) => el.selected_character).every((v) => v !== -1)
     ) {
       let gameBuffer = Object.assign({}, game);
       gameBuffer.started = new Date().getTime();
-      setAwait(gameBuffer);
+      await setAwait(gameBuffer);
+      if (!gameBuffer.private) {
+        const openBuffer: openType = (await fstore.get(
+          'games',
+          'open',
+        )) as openType;
+        if (openBuffer[params.id]) {
+          delete openBuffer[params.id];
+          await fstore.set('games', 'open', openBuffer);
+        }
+      }
       router.push('/game/' + params.id);
+    }
+  };
+
+  const setOpen = async () => {
+    if (game) {
+      const openBuffer: openType = (await fstore.get(
+        'games',
+        'open',
+      )) as openType;
+      if (game.private) {
+        const list: openPlayersType[] = [];
+        for (let el of game.players) {
+          list.push({
+            display_name: el.display_name,
+            photo_url: el.photo_url,
+          });
+        }
+        openBuffer[params.id] = list;
+        await fstore.set('games', 'open', openBuffer);
+        let gameBuffer = Object.assign({}, game);
+        gameBuffer.private = false;
+        await fstore.set('games', params.id, gameBuffer);
+      } else {
+        if (openBuffer[params.id]) {
+          delete openBuffer[params.id];
+          await fstore.set('games', 'open', openBuffer);
+          let gameBuffer = Object.assign({}, game);
+          gameBuffer.private = true;
+          await fstore.set('games', params.id, gameBuffer);
+        }
+      }
     }
   };
 
@@ -171,6 +230,19 @@ export default function RoomId({ params }: { params: { id: string } }) {
                 <div className={styles.info}>
                   <Copy value={params.id} />
                   <div className={styles.subtitle}>{i18n.room.subtitle}</div>
+                </div>
+              )}
+              {admin ? (
+                <div className={styles.toggle}>
+                  {i18n.room.toggle}
+                  <div className={styles.toggleButton} onClick={setOpen}>
+                    {game?.private ? i18n.room.private : i18n.room.public}
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.toggle}>
+                  {i18n.room.toggle}{' '}
+                  {game?.private ? i18n.room.private : i18n.room.public}
                 </div>
               )}
             </div>
