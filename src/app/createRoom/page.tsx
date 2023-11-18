@@ -21,6 +21,7 @@ export default function CreateRoom() {
         const chat_id = await fstore.add('chats', chatBuffer);
         const gameBuffer: gameType = {
           chat_id,
+          blocked: [],
           created: new Date().getTime(),
           started: 0,
           private: true,

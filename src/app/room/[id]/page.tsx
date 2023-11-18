@@ -71,18 +71,22 @@ export default function RoomId({ params }: { params: { id: string } }) {
       const you = game.players.find((el) => el.email === user.email);
       if (!you) {
         if (game.players.length <= 5) {
-          let gameBuffer = Object.assign({}, game);
-          gameBuffer.players.push({
-            display_name: user.display_name,
-            email: user.email,
-            photo_url: user.photo_url,
-            selected_character: -1,
-            type: gamePlayersTypeEnum.PLAYER,
-          });
-          if (!gameBuffer.private) {
-            addPlayerInOpen();
+          if (game.blocked.includes(user.email)) {
+            router.push('/');
+          } else {
+            let gameBuffer = Object.assign({}, game);
+            gameBuffer.players.push({
+              display_name: user.display_name,
+              email: user.email,
+              photo_url: user.photo_url,
+              selected_character: -1,
+              type: gamePlayersTypeEnum.PLAYER,
+            });
+            if (!gameBuffer.private) {
+              addPlayerInOpen();
+            }
+            setAwait(gameBuffer);
           }
-          setAwait(gameBuffer);
         } else {
           router.push('/error');
         }
@@ -164,6 +168,38 @@ export default function RoomId({ params }: { params: { id: string } }) {
     }
   };
 
+  const blockUser = async (email: string) => {
+    if (game) {
+      let gameBuffer = Object.assign({}, game);
+      const indexPlayer = gameBuffer.players.findIndex(
+        (el) => el.email === email,
+      );
+      if (indexPlayer) {
+        gameBuffer.players.splice(indexPlayer, 1);
+        gameBuffer.blocked.push(email);
+        if (!gameBuffer.private) {
+          const openBuffer: openType = (await fstore.get(
+            'games',
+            'open',
+          )) as openType;
+          if (openBuffer[params.id]) {
+            // delete openBuffer[params.id];
+            const list: openPlayersType[] = [];
+            for (let el of game.players) {
+              list.push({
+                display_name: el.display_name,
+                photo_url: el.photo_url,
+              });
+            }
+            openBuffer[params.id] = list;
+            await fstore.set('games', 'open', openBuffer);
+          }
+        }
+        await fstore.set('games', params.id, gameBuffer);
+      }
+    }
+  };
+
   return (
     <>
       {game || !loading ? (
@@ -216,6 +252,27 @@ export default function RoomId({ params }: { params: { id: string } }) {
                             width={25}
                             height={25}
                           />
+                        </div>
+                      ) : (
+                        ''
+                      )}
+                      {admin && elem.email !== user?.email ? (
+                        <div
+                          className={styles.deletePlayer}
+                          onClick={() => blockUser(elem.email)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="22"
+                            height="16"
+                            viewBox="0 0 22 16"
+                            fill="none"
+                          >
+                            <path
+                              d="M6.43287 16H15.5583C17.2704 16 18.0265 15.2004 18.2873 13.497L19.6865 4.04128L18.2873 4.12818L16.8967 13.4796C16.7663 14.34 16.3057 14.6876 15.541 14.6876H6.45894C5.67676 14.6876 5.22483 14.34 5.10316 13.4796L3.71262 4.12818L2.31338 4.04128L3.71262 13.497C3.96465 15.2091 4.72945 16 6.43287 16ZM2.22647 4.78H19.7734C20.8424 4.78 21.4247 4.1108 21.4247 3.05051V1.72949C21.4247 0.6692 20.8424 0 19.7734 0H2.22647C1.20963 0 0.575195 0.6692 0.575195 1.72949V3.05051C0.575195 4.1108 1.15749 4.78 2.22647 4.78ZM2.58279 3.46767C2.14825 3.46767 1.97443 3.28516 1.97443 2.85062V1.92938C1.97443 1.49483 2.14825 1.31233 2.58279 1.31233H19.4258C19.8603 1.31233 20.0255 1.49483 20.0255 1.92938V2.85062C20.0255 3.28516 19.8603 3.46767 19.4258 3.46767H2.58279ZM8.48395 12.8712C8.65771 12.8712 8.8142 12.7843 8.94458 12.6627L10.9956 10.6029L13.0553 12.6627C13.177 12.7756 13.3334 12.8712 13.5246 12.8712C13.8897 12.8712 14.1939 12.5583 14.1939 12.1933C14.1939 11.9934 14.1069 11.8544 13.9852 11.724L11.9429 9.67298L13.994 7.59584C14.1243 7.45678 14.2025 7.32644 14.2025 7.14393C14.2025 6.77022 13.9071 6.47473 13.5246 6.47473C13.3595 6.47473 13.2118 6.54426 13.0728 6.68331L10.9956 8.74306L8.93582 6.69201C8.79677 6.56163 8.65771 6.49211 8.48395 6.49211C8.11025 6.49211 7.80603 6.77891 7.80603 7.14393C7.80603 7.33513 7.89294 7.48289 8.01458 7.60451L10.057 9.67298L8.01458 11.7328C7.89294 11.8544 7.80603 12.0021 7.80603 12.1933C7.80603 12.5583 8.11025 12.8712 8.48395 12.8712Z"
+                              fill="#1C1C1E"
+                            />
+                          </svg>
                         </div>
                       ) : (
                         ''
