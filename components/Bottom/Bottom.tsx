@@ -19,9 +19,7 @@ export default function Bottom({ game_id }: { game_id: string }) {
       </div>
       <div className={styles['bottom-right']}>
         <div>Настройки</div>
-        <div>Участники</div>
         <div>Обмен</div>
-        <div>Инвентарь</div>
       </div>
     </div>
   );

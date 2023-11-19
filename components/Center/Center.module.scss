@@ -1,4 +1,7 @@
 .center {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   grid-column-start: 2;
   grid-column-end: 11;
   grid-row-start: 2;

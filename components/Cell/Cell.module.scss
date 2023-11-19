@@ -42,8 +42,18 @@
     background-color: var(--hover);
   }
   .cellTop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
     height: 20px;
     width: 100%;
+    gap: 2px;
+    &::after {
+      content: "✦";
+      color: var(--money);
+    }
+
   }
 }
 .cellHor {
@@ -56,8 +66,35 @@
     background-color: var(--hover);
   }
   .cellTop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    writing-mode: vertical-rl;
     height: 100%;
     width: 20px;
+    font-size: 12px;
+    &::after {
+      content: " ✦";
+      color: var(--money);
+    }
+  }
+  .cellLeftWrapper {
+    width: 20px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .cellLeft {
+    display: flex;
+    gap: 2px;
+    transform: rotate(270deg);
+    font-size: 12px;
+    &::after {
+      content: " ✦";
+      color: var(--money);
+    }
   }
 }
 
@@ -68,4 +105,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+
+.plug {
+  width: 20px;
+  height: 20px;
 }

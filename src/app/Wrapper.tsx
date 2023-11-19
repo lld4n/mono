@@ -17,6 +17,7 @@ export const Wrapper = ({ children }: { children: ReactNode }) => {
           width={100}
           height={35}
           className={styles.logo}
+          priority={true}
         />
       </Link>
 

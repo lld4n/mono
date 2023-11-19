@@ -109,6 +109,8 @@ const en: InternationalizationType = {
       prices: ['Pledge', 'Buy'],
     },
   },
+  close: 'Close',
+  disclose: 'Disclose',
 };
 
 export default en;

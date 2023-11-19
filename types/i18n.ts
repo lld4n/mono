@@ -39,4 +39,6 @@ export interface InternationalizationType {
       prices: string[];
     };
   };
+  close: string;
+  disclose: string;
 }

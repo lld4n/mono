@@ -110,6 +110,8 @@ const ru: InternationalizationType = {
       prices: ['Залог', 'Купить'],
     },
   },
+  close: 'Скрыть',
+  disclose: 'Раскрыть',
 };
 
 export default ru;

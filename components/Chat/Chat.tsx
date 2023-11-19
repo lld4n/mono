@@ -38,7 +38,7 @@ export default function Chat({
   }, []);
 
   React.useEffect(() => {
-    scroll.current?.scrollTo(0, scroll.current?.offsetHeight);
+    scroll.current?.scrollTo(0, scroll.current?.scrollHeight);
   }, [chat]);
 
   const renderMessage = (message: messageType) => {

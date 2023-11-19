@@ -14,6 +14,7 @@ import { GameContext } from '../../../../utils/GameContext';
 
 export default function GameId({ params }: { params: { id: string } }) {
   const [game, setGame] = React.useState<gameType | null>(null);
+  const [openCard, setOpenCard] = React.useState(-1);
   const router = useRouter();
   const user = useUser();
   React.useEffect(() => {
@@ -42,7 +43,9 @@ export default function GameId({ params }: { params: { id: string } }) {
       {game ? (
         <GameContext.Provider
           value={{
-            game: game,
+            game,
+            openCard,
+            setOpenCard,
           }}
         >
           <main className={styles['main']}>
