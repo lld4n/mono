@@ -21,4 +21,22 @@ export interface InternationalizationType {
     keyInput: string;
   };
   connect: string;
+  cards: {
+    titles: string[];
+    info: {
+      [key: string]: string;
+    };
+    street: {
+      rent: string[];
+      prices: string[];
+    };
+    train: {
+      rent: string[];
+      prices: string[];
+    };
+    resources: {
+      rent: string[];
+      prices: string[];
+    };
+  };
 }

@@ -37,7 +37,7 @@ import rightCurving from './rightCurving.svg';
 import prisonArrow from './prisonArrow.svg';
 
 export enum cardsTypeEnum {
-  NONE = 'NONE',
+  START = 'START',
   STREET = 'STREET',
   BOX = 'BOX',
   TAX = 'TAX',
@@ -63,7 +63,7 @@ export const cardsList: cardsListType[] = [
   {
     card_id: 0,
     svg: right,
-    type: cardsTypeEnum.NONE,
+    type: cardsTypeEnum.START,
     group: null,
     prices: null,
     rent: null,
