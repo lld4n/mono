@@ -85,7 +85,6 @@ export default function Chat({
     }
   };
 
-  console.log(chat);
   return (
     <div className={styles.wrapper}>
       <div className={styles.messages} ref={scroll}>

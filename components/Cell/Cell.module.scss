@@ -1,0 +1,71 @@
+.start {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--board);
+  border-radius: 20px 0 0 0;
+}
+
+.prison {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--board);
+  border-radius: 0 20px 0 0;
+}
+
+.parking {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--board);
+  border-radius: 0 0 20px 0;
+}
+
+
+.police {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--board);
+  border-radius: 0 0 0 20px;
+}
+
+.cellVer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--board);
+  flex-direction: column;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--hover);
+  }
+  .cellTop {
+    height: 20px;
+    width: 100%;
+  }
+}
+.cellHor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--board);
+  cursor: pointer;
+  &:hover {
+    background-color: var(--hover);
+  }
+  .cellTop {
+    height: 100%;
+    width: 20px;
+  }
+}
+
+
+
+.cellBottom {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

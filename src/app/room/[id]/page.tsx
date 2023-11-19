@@ -18,6 +18,7 @@ import { characters } from '../../../../assets/characters';
 import Image from 'next/image';
 import Chat from '../../../../components/Chat/Chat';
 import { openPlayersType, openType } from '../../../../types/openType';
+import { cardsList } from '../../../../assets/cards';
 
 export default function RoomId({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -26,6 +27,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
   const [loading, setLoading] = React.useState(true);
   const [admin, setAdmin] = React.useState(false);
   const i18n = React.useContext(InternationalizationContext);
+
   React.useEffect(() => {
     if (!user) {
       router.push('/');
@@ -123,12 +125,30 @@ export default function RoomId({ params }: { params: { id: string } }) {
       let gameBuffer = Object.assign({}, game);
       gameBuffer.started = new Date().getTime();
 
+      gameBuffer.characters = {};
       for (let elem of gameBuffer.users) {
+        gameBuffer.characters[elem.selected_character] = 0;
         gameBuffer.players[elem.email] = {
           display_name: elem.display_name,
           balance: 15000,
           selected_character: elem.selected_character,
         };
+      }
+      const ignoreList = [0, 2, 4, 7, 10, 17, 20, 22, 30, 33, 36, 38];
+      for (let i = 0; i < cardsList.length; i++) {
+        if (ignoreList.includes(i)) {
+          gameBuffer.cards.push({
+            status: null,
+            owner_email: null,
+            card_id: i,
+          });
+        } else {
+          gameBuffer.cards.push({
+            status: -2,
+            owner_email: null,
+            card_id: i,
+          });
+        }
       }
       await setAwait(gameBuffer);
       if (!gameBuffer.private) {

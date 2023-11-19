@@ -9,7 +9,8 @@ import Board from '../../../../components/Board/Board';
 import Loading from '../../../../components/Loading/Loading';
 import Sidebar from '../../../../components/Sidebar/Sidebar';
 import Bottom from '../../../../components/Bottom/Bottom';
-import styles from './Page.module.scss';
+import styles from './page.module.scss';
+import { GameContext } from '../../../../utils/GameContext';
 
 export default function GameId({ params }: { params: { id: string } }) {
   const [game, setGame] = React.useState<gameType | null>(null);
@@ -32,16 +33,26 @@ export default function GameId({ params }: { params: { id: string } }) {
     };
   }, []);
 
+  React.useEffect(() => {
+    console.log(game);
+  }, [game]);
+
   return (
     <>
       {game ? (
-        <main className={styles['main']}>
-          <section className={styles['section']}>
-            <Board game={game} />
-            <Sidebar players={game.players} />
-          </section>
-          <Bottom game_id={params.id} started={game.started} />
-        </main>
+        <GameContext.Provider
+          value={{
+            game: game,
+          }}
+        >
+          <main className={styles['main']}>
+            <section className={styles['section']}>
+              <Board />
+              <Sidebar />
+            </section>
+            <Bottom game_id={params.id} />
+          </main>
+        </GameContext.Provider>
       ) : (
         <Loading />
       )}

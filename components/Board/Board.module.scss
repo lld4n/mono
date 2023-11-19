@@ -1,0 +1,11 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: 120px repeat(9, 68px) 120px;
+  grid-template-rows: 120px repeat(9, 68px) 120px;
+}

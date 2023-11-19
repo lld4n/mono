@@ -1,13 +1,32 @@
-.sidebar{
-  max-width: 200px;
+.sidebar {
+  width: 150px;
 }
 
-.player{
+.player {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
   gap: 10px;
-  &__name{
-    padding: 5px;
+  padding: 10px;
+  border-radius: 5px;
+  width: 150px;
+  height: 150px;
+  &__name {
+    font-size: 20px;
+    text-align: center;
+    padding: 10px;
+    overflow: hidden;
+    word-break: break-all;
+  }
+  &__balance {
+    padding: 5px 10px;
     border-radius: 5px;
+    background-color: var(--bg);
+    color: var(--opposite);
+    &::after {
+      content: ' ✦';
+      color: var(--money);
+    }
   }
 }

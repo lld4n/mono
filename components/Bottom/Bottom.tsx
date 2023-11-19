@@ -1,16 +1,11 @@
 import styles from './Bottom.module.scss';
-import formatData from '../../utils/formatData';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getGameTime } from '../../utils/getGameTime';
+import { GameContext } from '../../utils/GameContext';
 
-export default function Bottom({
-  started,
-  game_id,
-}: {
-  started: number;
-  game_id: string;
-}) {
+export default function Bottom({ game_id }: { game_id: string }) {
   const [now, setNow] = useState(Date.now());
+  const context = React.useContext(GameContext);
   useEffect(() => {
     setInterval(() => {
       setNow(Date.now());
@@ -19,16 +14,14 @@ export default function Bottom({
   return (
     <div className={styles['bottom']}>
       <div className={styles['bottom-left']}>
-        <div className={styles['bottom-left__key']}>{game_id}</div>
-        <div className={styles['bottom-left__time']}>
-          {getGameTime(started, now)}
-        </div>
+        <div>{game_id}</div>
+        <div>{getGameTime(context?.game.started, now)}</div>
       </div>
       <div className={styles['bottom-right']}>
-        <div className={styles['bottom-right__settings']}>Настройки</div>
-        <div className={styles['bottom-right__players']}>Участники</div>
-        <div className={styles['bottom-right__exchange']}>Обмен</div>
-        <div className={styles['bottom-right__inventory']}>Инвентарь</div>
+        <div>Настройки</div>
+        <div>Участники</div>
+        <div>Обмен</div>
+        <div>Инвентарь</div>
       </div>
     </div>
   );

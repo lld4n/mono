@@ -1,18 +1,26 @@
-.bottom{
+.bottom {
   display: flex;
   justify-content: space-between;
   padding: 10px;
   &-right {
     display: flex;
-    gap: 40px;
-  }
-  &-left{
-    display: flex;
     gap: 10px;
-    div{
+    div {
+      cursor: pointer;
       padding: 5px 10px;
       border-radius: 5px;
-      background: var(--highlight);
+      &:hover {
+        background-color: var(--hover);
+      }
+    }
+  }
+  &-left {
+    display: flex;
+    gap: 10px;
+    div {
+      padding: 5px 10px;
+      border-radius: 5px;
+      background-color: var(--highlight);
     }
   }
 }
