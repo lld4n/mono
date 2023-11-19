@@ -1,5 +1,4 @@
 'use client';
-
 import React from 'react';
 import { gameType } from '../../../../types/gameType';
 import { doc, onSnapshot } from '@firebase/firestore';
