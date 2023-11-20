@@ -16,7 +16,6 @@ export default function Cell({ index }: { index: number }) {
         if (index === 12 || index === 28 || index % 5 === 0) {
           return cardsList[index].prices?.[1];
         }
-
         return cardsList[index].prices?.[3];
       }
       return '123';

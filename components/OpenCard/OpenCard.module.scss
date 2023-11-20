@@ -85,3 +85,34 @@
   align-items: center;
 }
 
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  //gap: 5px;
+  font-size: 13px;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 5px;
+  &.active {
+    background-color: var(--opposite);
+    color: var(--bg);
+  }
+}
+
+.money {
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: var(--highlight);
+  //color: var(--bg);
+  &::after {
+    content: " ✦";
+    color: var(--money);
+  }
+}
+

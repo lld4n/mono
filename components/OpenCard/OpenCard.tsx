@@ -2,13 +2,15 @@ import React from 'react';
 import styles from './OpenCard.module.scss';
 import { GameContext } from '../../utils/GameContext';
 import { InternationalizationContext } from '../../providers/InternationalizationProvider/InternationalizationProvider';
-import { cardsList } from '../../assets/cards';
+import { cardsList, cardsTypeEnum } from '../../assets/cards';
 import Image from 'next/image';
+
 const ignoreList = [0, 2, 4, 7, 10, 17, 20, 22, 30, 33, 36, 38];
 export default function OpenCard() {
   const context = React.useContext(GameContext);
   const i18n = React.useContext(InternationalizationContext);
   const [close, setClose] = React.useState(true);
+
   return (
     <>
       {context ? (
@@ -100,6 +102,48 @@ export default function OpenCard() {
                   width={50}
                   height={50}
                 />
+                <div className={styles.content}>
+                  {cardsList[context.openCard].rent?.map((el, index) => {
+                    return (
+                      <div key={index} className={styles.item}>
+                        <div>
+                          {cardsList[context.openCard].type ===
+                          cardsTypeEnum.STREET
+                            ? i18n.cards.street.rent[index]
+                            : cardsList[context.openCard].type ===
+                                cardsTypeEnum.TRAIN
+                              ? i18n.cards.train.rent[index]
+                              : cardsList[context.openCard].type ===
+                                  cardsTypeEnum.RESOURCES
+                                ? i18n.cards.resources.rent[index]
+                                : ''}
+                        </div>
+                        <div className={styles.money}>{el}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className={styles.content}>
+                  {cardsList[context.openCard].prices?.map((el, index) => {
+                    return (
+                      <div key={index} className={styles.item}>
+                        <div>
+                          {cardsList[context.openCard].type ===
+                          cardsTypeEnum.STREET
+                            ? i18n.cards.street.prices[index]
+                            : cardsList[context.openCard].type ===
+                                cardsTypeEnum.TRAIN
+                              ? i18n.cards.train.prices[index]
+                              : cardsList[context.openCard].type ===
+                                  cardsTypeEnum.RESOURCES
+                                ? i18n.cards.resources.prices[index]
+                                : ''}
+                        </div>
+                        <div className={styles.money}>{el}</div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           )}

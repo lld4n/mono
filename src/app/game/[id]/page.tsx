@@ -17,6 +17,7 @@ export default function GameId({ params }: { params: { id: string } }) {
   const [openCard, setOpenCard] = React.useState(-1);
   const router = useRouter();
   const user = useUser();
+
   React.useEffect(() => {
     if (!user) {
       router.push('/');
@@ -33,10 +34,6 @@ export default function GameId({ params }: { params: { id: string } }) {
       unsub();
     };
   }, []);
-
-  React.useEffect(() => {
-    console.log(game);
-  }, [game]);
 
   return (
     <>

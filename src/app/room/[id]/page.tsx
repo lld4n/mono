@@ -72,7 +72,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
       console.log(game);
       const you = game.users.find((el) => el.email === user.email);
       if (!you) {
-        if (game.users.length <= 5) {
+        if (game.users.length < 5) {
           if (game.blocked.includes(user.email)) {
             router.push('/');
           } else {
@@ -124,7 +124,6 @@ export default function RoomId({ params }: { params: { id: string } }) {
     ) {
       let gameBuffer = Object.assign({}, game);
       gameBuffer.started = new Date().getTime();
-
       gameBuffer.characters = {};
       for (let elem of gameBuffer.users) {
         gameBuffer.characters[elem.selected_character] = 0;
@@ -213,7 +212,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
           if (openBuffer[params.id]) {
             // delete openBuffer[params.id];
             const list: openPlayersType[] = [];
-            for (let el of game.users) {
+            for (let el of gameBuffer.users) {
               list.push({
                 display_name: el.display_name,
                 photo_url: el.photo_url,
