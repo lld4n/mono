@@ -13,12 +13,12 @@ export default function Spin({ currentValue }: { currentValue: number[] }) {
   useEffect(() => {
     if (ref1.current && ref2.current) {
       ref1.current?.scroll({
-        top: currentValue[0] * 80,
+        top: currentValue[0] * 100,
         left: 0,
         behavior: 'smooth',
       });
       ref2.current?.scroll({
-        top: currentValue[1] * 80,
+        top: currentValue[1] * 100,
         left: 0,
         behavior: 'smooth',
       });
