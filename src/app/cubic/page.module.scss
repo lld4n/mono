@@ -20,10 +20,12 @@
   .disabled{
     width: 0;
   }
-  //готовые классы для тебя
-  //svg rect:first-child{
-  //}
-  //svg rect:not(:first-child) {
-  //}
+  //значения в этих классах нужно изменить, я просто тестил
+  svg rect:first-child{
+    fill: var(--opposite);
+  }
+  svg rect:not(:first-child) {
+    fill: var(--bg);
+  }
 }
 
