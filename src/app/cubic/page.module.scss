@@ -1,0 +1,29 @@
+.cubic{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-direction: column;
+  &__items{
+    display: flex;
+    gap: 20px;
+    height: 80px;
+  }
+  &__button{
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    background: var(--highlight);
+  }
+  .disabled{
+    width: 0;
+  }
+  //готовые классы для тебя
+  //svg rect:first-child{
+  //}
+  //svg rect:not(:first-child) {
+  //}
+}
+
