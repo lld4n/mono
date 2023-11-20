@@ -1,0 +1,16 @@
+.spin {
+  display: flex;
+  gap: 20px;
+  &__item {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    border-radius: 5px;
+    height: 80px;
+    gap: 0;
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+  }
+}
