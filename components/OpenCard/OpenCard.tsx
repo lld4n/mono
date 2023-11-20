@@ -3,6 +3,7 @@ import styles from './OpenCard.module.scss';
 import { GameContext } from '../../utils/GameContext';
 import { InternationalizationContext } from '../../providers/InternationalizationProvider/InternationalizationProvider';
 import { cardsList } from '../../assets/cards';
+import Image from 'next/image';
 const ignoreList = [0, 2, 4, 7, 10, 17, 20, 22, 30, 33, 36, 38];
 export default function OpenCard() {
   const context = React.useContext(GameContext);
@@ -57,7 +58,50 @@ export default function OpenCard() {
           {ignoreList.includes(context.openCard) ? (
             ''
           ) : (
-            <div className={styles.bottom}></div>
+            <div className={styles.bottom}>
+              <div className={styles.bottomTop}>
+                <div className={styles.group}>
+                  {cardsList[context.openCard].group?.map((el) => {
+                    return (
+                      <Image
+                        key={el}
+                        src={cardsList[el].svg}
+                        alt={''}
+                        width={20}
+                        height={20}
+                      />
+                    );
+                  })}
+                </div>
+                <div
+                  className={styles.exit}
+                  onClick={() => context?.setOpenCard(-1)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                  >
+                    <path
+                      d="M1 1L6 6M11 11L6 6M6 6L11 1M6 6L1 11"
+                      stroke="black"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div className={styles.bottomBottom}>
+                <Image
+                  src={cardsList[context.openCard].svg}
+                  alt={''}
+                  width={50}
+                  height={50}
+                />
+              </div>
+            </div>
           )}
         </div>
       ) : (
