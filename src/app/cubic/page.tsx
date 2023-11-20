@@ -8,6 +8,7 @@ import Dice3 from '../../../components/Dice/Dice3';
 import Dice4 from '../../../components/Dice/Dice4';
 import Dice5 from '../../../components/Dice/Dice5';
 import Dice6 from '../../../components/Dice/Dice6';
+import Dice0 from '../../../components/Dice/Dice0';
 export default function Cubic() {
   //массив, в котором первое число - значение первого кубика, а второе число - значение второго кубика
   const [currentValue, setCurrentValue] = useState<number[]>([0, 0]);
@@ -32,7 +33,7 @@ export default function Cubic() {
       ) : (
         <div className={styles['cubic__items']}>
           <div className={styles['cubic__item']}>
-            {currentValue[0] === 0 ? <Dice1 /> : ''}
+            {currentValue[0] === 0 ? <Dice0 /> : ''}
             {currentValue[0] === 6 ? <Dice6 /> : ''}
             {currentValue[0] === 5 ? <Dice5 /> : ''}
             {currentValue[0] === 4 ? <Dice4 /> : ''}
@@ -41,7 +42,7 @@ export default function Cubic() {
             {currentValue[0] === 1 ? <Dice1 /> : ''}
           </div>
           <div className={styles['cubic__item']}>
-            {currentValue[1] === 0 ? <Dice1 /> : ''}
+            {currentValue[1] === 0 ? <Dice0 /> : ''}
             {currentValue[1] === 6 ? <Dice6 /> : ''}
             {currentValue[1] === 5 ? <Dice5 /> : ''}
             {currentValue[1] === 4 ? <Dice4 /> : ''}
