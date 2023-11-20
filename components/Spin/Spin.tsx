@@ -1,6 +1,11 @@
 import styles from './Spin.module.scss';
 import React, { useEffect, useRef } from 'react';
-
+import Dice1 from '../Dice/Dice1';
+import Dice2 from '../Dice/Dice2';
+import Dice3 from '../Dice/Dice3';
+import Dice4 from '../Dice/Dice4';
+import Dice5 from '../Dice/Dice5';
+import Dice6 from '../Dice/Dice6';
 export default function Spin({ currentValue }: { currentValue: number[] }) {
   const ref1 = useRef<HTMLDivElement | null>(null);
   const ref2 = useRef<HTMLDivElement | null>(null);
@@ -23,185 +28,42 @@ export default function Spin({ currentValue }: { currentValue: number[] }) {
     <div className={styles['spin']}>
       <div className={styles['spin__item']} ref={ref1}>
         <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="80"
-            height="80"
-            viewBox="0 0 80 80"
-            fill="none"
-          >
-            <rect width="80" height="80" rx="10" fill="white" />
-            <rect x="35" y="35" width="10" height="10" rx="5" fill="black" />
-          </svg>
+          <Dice1 />
         </div>
-
         <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="80"
-            height="80"
-            viewBox="0 0 80 80"
-            fill="none"
-          >
-            <rect width="80" height="80" rx="10" fill="white" />
-            <rect x="10" y="10" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="60" width="10" height="10" rx="5" fill="black" />
-          </svg>
+          <Dice2 />
         </div>
-
         <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="80"
-            height="80"
-            viewBox="0 0 80 80"
-            fill="none"
-          >
-            <rect width="80" height="80" rx="10" fill="white" />
-            <rect x="10" y="10" width="10" height="10" rx="5" fill="black" />
-            <rect x="35" y="35" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="60" width="10" height="10" rx="5" fill="black" />
-          </svg>
+          <Dice3 />
         </div>
-
         <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="80"
-            height="80"
-            viewBox="0 0 80 80"
-            fill="none"
-          >
-            <rect width="80" height="80" rx="10" fill="white" />
-            <rect x="10" y="10" width="10" height="10" rx="5" fill="black" />
-            <rect x="10" y="60" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="60" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="10" width="10" height="10" rx="5" fill="black" />
-          </svg>
+          <Dice4 />
         </div>
-
         <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="80"
-            height="80"
-            viewBox="0 0 80 80"
-            fill="none"
-          >
-            <rect width="80" height="80" rx="10" fill="white" />
-            <rect x="10" y="10" width="10" height="10" rx="5" fill="black" />
-            <rect x="35" y="35" width="10" height="10" rx="5" fill="black" />
-            <rect x="10" y="60" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="60" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="10" width="10" height="10" rx="5" fill="black" />
-          </svg>
+          <Dice5 />
         </div>
-
         <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="80"
-            height="80"
-            viewBox="0 0 80 80"
-            fill="none"
-          >
-            <rect width="80" height="80" rx="10" fill="white" />
-            <rect x="10" y="10" width="10" height="10" rx="5" fill="black" />
-            <rect x="10" y="35" width="10" height="10" rx="5" fill="black" />
-            <rect x="10" y="60" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="35" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="60" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="10" width="10" height="10" rx="5" fill="black" />
-          </svg>
+          <Dice6 />
         </div>
       </div>
       <div className={styles['spin__item']} ref={ref2}>
         <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="80"
-            height="80"
-            viewBox="0 0 80 80"
-            fill="none"
-          >
-            <rect width="80" height="80" rx="10" fill="white" />
-            <rect x="35" y="35" width="10" height="10" rx="5" fill="black" />
-          </svg>
+          <Dice1 />
         </div>
         <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="80"
-            height="80"
-            viewBox="0 0 80 80"
-            fill="none"
-          >
-            <rect width="80" height="80" rx="10" fill="white" />
-            <rect x="10" y="10" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="60" width="10" height="10" rx="5" fill="black" />
-          </svg>
+          <Dice2 />
         </div>
         <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="80"
-            height="80"
-            viewBox="0 0 80 80"
-            fill="none"
-          >
-            <rect width="80" height="80" rx="10" fill="white" />
-            <rect x="10" y="10" width="10" height="10" rx="5" fill="black" />
-            <rect x="35" y="35" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="60" width="10" height="10" rx="5" fill="black" />
-          </svg>
+          <Dice3 />
         </div>
         <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="80"
-            height="80"
-            viewBox="0 0 80 80"
-            fill="none"
-          >
-            <rect width="80" height="80" rx="10" fill="white" />
-            <rect x="10" y="10" width="10" height="10" rx="5" fill="black" />
-            <rect x="10" y="60" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="60" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="10" width="10" height="10" rx="5" fill="black" />
-          </svg>
+          <Dice4 />
         </div>
         <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="80"
-            height="80"
-            viewBox="0 0 80 80"
-            fill="none"
-          >
-            <rect width="80" height="80" rx="10" fill="white" />
-            <rect x="10" y="10" width="10" height="10" rx="5" fill="black" />
-            <rect x="35" y="35" width="10" height="10" rx="5" fill="black" />
-            <rect x="10" y="60" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="60" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="10" width="10" height="10" rx="5" fill="black" />
-          </svg>
+          <Dice5 />
         </div>
         <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="80"
-            height="80"
-            viewBox="0 0 80 80"
-            fill="none"
-          >
-            <rect width="80" height="80" rx="10" fill="white" />
-            <rect x="10" y="10" width="10" height="10" rx="5" fill="black" />
-            <rect x="10" y="35" width="10" height="10" rx="5" fill="black" />
-            <rect x="10" y="60" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="35" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="60" width="10" height="10" rx="5" fill="black" />
-            <rect x="60" y="10" width="10" height="10" rx="5" fill="black" />
-          </svg>
+          <Dice6 />
         </div>
       </div>
     </div>

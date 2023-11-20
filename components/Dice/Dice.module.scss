@@ -1,0 +1,118 @@
+.dice {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  border-radius: 10px;
+  background-color: var(--bg);
+}
+
+.bullet {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  border-radius: 50%;
+  background-color: var(--opposite);
+}
+
+.bullet1_1 {
+  top: 35px;
+  left: 35px;
+}
+
+.bullet2_1 {
+  top: 10px;
+  left: 10px;
+}
+
+.bullet2_2 {
+  bottom: 10px;
+  right: 10px;
+}
+
+.bullet3_1 {
+  top: 10px;
+  left: 10px;
+}
+
+.bullet3_2 {
+  top: 35px;
+  left: 35px;
+}
+
+.bullet3_3 {
+  bottom: 10px;
+  right: 10px;
+}
+
+.bullet4_1 {
+  top: 10px;
+  left: 10px;
+}
+
+.bullet4_2 {
+  bottom: 10px;
+  left: 10px;
+}
+
+.bullet4_3 {
+  bottom: 10px;
+  right: 10px;
+}
+
+.bullet4_4 {
+  top: 10px;
+  right: 10px;
+}
+
+.bullet5_1 {
+  top: 10px;
+  left: 10px;
+}
+
+.bullet5_2 {
+  bottom: 10px;
+  left: 10px;
+}
+
+.bullet5_3 {
+  bottom: 10px;
+  right: 10px;
+}
+
+.bullet5_4 {
+  top: 10px;
+  right: 10px;
+}
+
+.bullet5_5 {
+  top: 35px;
+  right: 35px;
+}
+
+.bullet6_1 {
+  top: 10px;
+  left: 10px;
+}
+
+.bullet6_2 {
+  bottom: 10px;
+  left: 10px;
+}
+
+.bullet6_3 {
+  bottom: 10px;
+  right: 10px;
+}
+
+.bullet6_4 {
+  top: 10px;
+  right: 10px;
+}
+.bullet6_5 {
+  top: 35px;
+  right: 10px;
+}
+.bullet6_6 {
+  top: 35px;
+  left: 10px;
+}
