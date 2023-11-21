@@ -1,0 +1,19 @@
+.cubic {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-direction: column;
+  &__items {
+    display: flex;
+    gap: 20px;
+    height: 80px;
+  }
+  &__button {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    color: var(--color-onboard);
+  }
+}

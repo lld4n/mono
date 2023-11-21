@@ -7,7 +7,11 @@ import Dice4 from '../Dice/Dice4';
 import Dice5 from '../Dice/Dice5';
 import Dice6 from '../Dice/Dice6';
 import Dice0 from '../Dice/Dice0';
-export default function Spin({ currentValue }: { currentValue: number[] }) {
+export default function Spin({
+  currentValue,
+}: {
+  currentValue: [number, number];
+}) {
   const ref1 = useRef<HTMLDivElement | null>(null);
   const ref2 = useRef<HTMLDivElement | null>(null);
   useEffect(() => {

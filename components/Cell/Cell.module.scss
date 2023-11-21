@@ -38,10 +38,9 @@
   background-color: var(--board);
   flex-direction: column;
   cursor: pointer;
-  &:hover {
-    background-color: var(--hover);
-  }
+
   .cellTop {
+    color: var(--color-onboard);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -51,7 +50,7 @@
     gap: 2px;
     &::after {
       content: "✦";
-      color: var(--money);
+      color: var(--money-onboard);
     }
 
   }
@@ -62,9 +61,7 @@
   align-items: center;
   background-color: var(--board);
   cursor: pointer;
-  &:hover {
-    background-color: var(--hover);
-  }
+
   .cellTop {
     display: flex;
     justify-content: center;
@@ -74,9 +71,10 @@
     height: 100%;
     width: 20px;
     font-size: 12px;
+    color: var(--color-onboard);
     &::after {
       content: " ✦";
-      color: var(--money);
+      color: var(--money-onboard);
     }
   }
   .cellLeftWrapper {
@@ -91,9 +89,10 @@
     gap: 2px;
     transform: rotate(270deg);
     font-size: 12px;
+    color: var(--color-onboard);
     &::after {
       content: " ✦";
-      color: var(--money);
+      color: var(--money-onboard);
     }
   }
 }
