@@ -34,6 +34,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
     }
     const unsub = onSnapshot(doc(db, 'games', params.id), (doc) => {
       if (doc.exists()) {
+        console.log(doc.data());
         setGame(doc.data() as gameType);
       } else {
         router.push('/error');
@@ -69,9 +70,9 @@ export default function RoomId({ params }: { params: { id: string } }) {
       if (game.started !== 0) {
         router.push('/game/' + params.id);
       }
-      console.log(game);
       const you = game.users.find((el) => el.email === user.email);
       if (!you) {
+        console.log(you);
         if (game.users.length < 5) {
           if (game.blocked.includes(user.email)) {
             router.push('/');
@@ -227,6 +228,37 @@ export default function RoomId({ params }: { params: { id: string } }) {
     }
   };
 
+  const leaveRoom = async () => {
+    if (user && game) {
+      let gameBuffer = Object.assign({}, game);
+      const indexPlayer = gameBuffer.users.findIndex(
+        (el) => el.email === user.email,
+      );
+      if (indexPlayer >= 0) {
+        gameBuffer.users.splice(indexPlayer, 1);
+        if (!gameBuffer.private) {
+          const openBuffer: openType = (await fstore.get(
+            'games',
+            'open',
+          )) as openType;
+          if (openBuffer[params.id]) {
+            const list: openPlayersType[] = [];
+            for (let el of gameBuffer.users) {
+              list.push({
+                display_name: el.display_name,
+                photo_url: el.photo_url,
+              });
+            }
+            openBuffer[params.id] = list;
+            await fstore.set('games', 'open', openBuffer);
+            router.push('/');
+          }
+        }
+        await fstore.set('games', params.id, gameBuffer);
+        router.push('/');
+      }
+    }
+  };
   return (
     <>
       {game || !loading ? (
@@ -329,6 +361,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
                   {game?.private ? i18n.room.private : i18n.room.public}
                 </div>
               )}
+              {user ? <div onClick={leaveRoom}>{i18n.room.leave}</div> : ''}
             </div>
             <div className={styles.right}>
               <div className={styles.block}>
