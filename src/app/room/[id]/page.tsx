@@ -26,6 +26,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
   const [game, setGame] = React.useState<gameType | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [admin, setAdmin] = React.useState(false);
+  const [leave, setLeave] = React.useState(false);
   const i18n = React.useContext(InternationalizationContext);
 
   React.useEffect(() => {
@@ -37,7 +38,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
         console.log(doc.data());
         setGame(doc.data() as gameType);
       } else {
-        router.push('/error');
+        router.push('/');
       }
     });
 
@@ -56,7 +57,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
       'games',
       'open',
     )) as openType;
-    if (openBuffer[params.id] && user) {
+    if (openBuffer[params.id] && user && !leave) {
       openBuffer[params.id].push({
         display_name: user.display_name,
         photo_url: user.photo_url,
@@ -72,19 +73,20 @@ export default function RoomId({ params }: { params: { id: string } }) {
       }
       const you = game.users.find((el) => el.email === user.email);
       if (!you) {
-        console.log(you);
         if (game.users.length < 5) {
           if (game.blocked.includes(user.email)) {
             router.push('/');
           } else {
             let gameBuffer = Object.assign({}, game);
-            gameBuffer.users.push({
-              display_name: user.display_name,
-              email: user.email,
-              photo_url: user.photo_url,
-              selected_character: -1,
-              type: gameUsersTypeEnum.PLAYER,
-            });
+            if (!leave) {
+              gameBuffer.users.push({
+                display_name: user.display_name,
+                email: user.email,
+                photo_url: user.photo_url,
+                selected_character: -1,
+                type: gameUsersTypeEnum.PLAYER,
+              });
+            }
             if (!gameBuffer.private) {
               addPlayerInOpen();
             }
@@ -242,19 +244,29 @@ export default function RoomId({ params }: { params: { id: string } }) {
             'open',
           )) as openType;
           if (openBuffer[params.id]) {
-            const list: openPlayersType[] = [];
-            for (let el of gameBuffer.users) {
-              list.push({
-                display_name: el.display_name,
-                photo_url: el.photo_url,
-              });
+            if (admin) {
+              delete openBuffer[params.id];
+            } else {
+              const list: openPlayersType[] = [];
+              for (let el of gameBuffer.users) {
+                list.push({
+                  display_name: el.display_name,
+                  photo_url: el.photo_url,
+                });
+              }
+              openBuffer[params.id] = list;
             }
-            openBuffer[params.id] = list;
+            setLeave(true);
             await fstore.set('games', 'open', openBuffer);
             // router.push('/'); // не надо, так как если комната публичная, то он уберет пользователя из open, а из games/params.id не успеет, так как пользователя уже перекинет на главную
           }
         }
-        await fstore.set('games', params.id, gameBuffer);
+        setLeave(true);
+        if (admin) {
+          await fstore.delete('games', params.id);
+        } else {
+          await fstore.set('games', params.id, gameBuffer);
+        }
         router.push('/');
       }
     }
