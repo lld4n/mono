@@ -17,6 +17,7 @@ const en: InternationalizationType = {
     toggle: 'Now room is',
     private: 'private',
     public: 'public',
+    leave: 'Leave the room',
   },
   input: 'Enter message',
   copy: 'Copied',

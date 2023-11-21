@@ -14,6 +14,7 @@ export interface InternationalizationType {
     toggle: string;
     private: string;
     public: string;
+    leave: string;
   };
   input: string;
   copy: string;

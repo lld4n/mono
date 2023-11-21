@@ -17,6 +17,7 @@ const ru: InternationalizationType = {
     toggle: 'Сейчас комната',
     private: 'приватная',
     public: 'публичная',
+    leave: 'Покинуть комнату',
   },
   input: 'Введите сообщение',
   copy: 'Скопировано',
