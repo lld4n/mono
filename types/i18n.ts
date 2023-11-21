@@ -41,4 +41,6 @@ export interface InternationalizationType {
   };
   close: string;
   disclose: string;
+  currentMove: string;
+  rollDice: string;
 }

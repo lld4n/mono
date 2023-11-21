@@ -1,5 +1,8 @@
 .sidebar {
   width: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .player {
@@ -12,21 +15,38 @@
   border-radius: 5px;
   width: 150px;
   height: 150px;
-  &__name {
-    font-size: 20px;
-    text-align: center;
-    padding: 10px;
-    overflow: hidden;
-    word-break: break-all;
-  }
-  &__balance {
-    padding: 5px 10px;
-    border-radius: 5px;
-    background-color: var(--bg);
-    color: var(--opposite);
-    &::after {
-      content: ' ✦';
-      color: var(--money);
-    }
+
+
+}
+
+.playerActive {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  width: 150px;
+  height: 150px;
+  background-color: var(--opposite) !important;
+  color: var(--bg) !important;
+}
+
+.player__name {
+  font-size: 20px;
+  text-align: center;
+  //padding: 10px;
+  overflow: hidden;
+  //word-break: break-all;
+}
+.player__balance {
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: var(--bg);
+  color: var(--opposite);
+  &::after {
+    content: ' ✦';
+    color: var(--money);
   }
 }

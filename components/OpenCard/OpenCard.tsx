@@ -11,6 +11,34 @@ export default function OpenCard() {
   const i18n = React.useContext(InternationalizationContext);
   const [close, setClose] = React.useState(true);
 
+  const getPricesClassName = (index: number) => {
+    if (context) {
+      if (cardsList[context.openCard].type === cardsTypeEnum.STREET) {
+        if (context.game.cards[context.openCard].status === -2 && index === 3) {
+          return styles.itemActive;
+        }
+        if (context.game.cards[context.openCard].status === -1 && index === 2) {
+          return styles.itemActive;
+        }
+
+        return styles.item;
+      } else if (
+        cardsList[context.openCard].type === cardsTypeEnum.TRAIN ||
+        cardsList[context.openCard].type === cardsTypeEnum.RESOURCES
+      ) {
+        if (context.game.cards[context.openCard].status === -1 && index === 0) {
+          return styles.itemActive;
+        }
+        if (context.game.cards[context.openCard].status === -2 && index === 1) {
+          return styles.itemActive;
+        }
+
+        return styles.item;
+      }
+    }
+    return styles.item;
+  };
+
   return (
     <>
       {context ? (
@@ -69,8 +97,8 @@ export default function OpenCard() {
                         key={el}
                         src={cardsList[el].svg}
                         alt={''}
-                        width={20}
-                        height={20}
+                        width={15}
+                        height={15}
                       />
                     );
                   })}
@@ -105,7 +133,14 @@ export default function OpenCard() {
                 <div className={styles.content}>
                   {cardsList[context.openCard].rent?.map((el, index) => {
                     return (
-                      <div key={index} className={styles.item}>
+                      <div
+                        key={index}
+                        className={
+                          context.game.cards[context.openCard].status === index
+                            ? styles.itemActive
+                            : styles.item
+                        }
+                      >
                         <div>
                           {cardsList[context.openCard].type ===
                           cardsTypeEnum.STREET
@@ -126,7 +161,7 @@ export default function OpenCard() {
                 <div className={styles.content}>
                   {cardsList[context.openCard].prices?.map((el, index) => {
                     return (
-                      <div key={index} className={styles.item}>
+                      <div key={index} className={getPricesClassName(index)}>
                         <div>
                           {cardsList[context.openCard].type ===
                           cardsTypeEnum.STREET

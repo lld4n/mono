@@ -17,8 +17,25 @@ export default function Cell({ index }: { index: number }) {
           return cardsList[index].prices?.[1];
         }
         return cardsList[index].prices?.[3];
+      } else if (cardBuffer.status === -1) {
+        if (index === 12 || index === 28 || index % 5 === 0) {
+          return cardsList[index].prices?.[0];
+        }
+        return cardsList[index].prices?.[2];
+      } else if (cardBuffer.status === 0) {
+        return cardsList[index].rent?.[0];
+      } else if (cardBuffer.status === 1) {
+        return cardsList[index].rent?.[1];
+      } else if (cardBuffer.status === 2) {
+        return cardsList[index].rent?.[2];
+      } else if (cardBuffer.status === 3) {
+        return cardsList[index].rent?.[3];
+      } else if (cardBuffer.status === 4) {
+        return cardsList[index].rent?.[4];
+      } else if (cardBuffer.status === 5) {
+        return cardsList[index].rent?.[5];
       }
-      return '123';
+      return '';
     }
     return '';
   }, []);

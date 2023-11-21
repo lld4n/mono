@@ -51,6 +51,7 @@
   padding: 2px 7px 4px;
   border-radius: 3px;
   cursor: pointer;
+  font-size: 12px;
   &:hover {
     background-color: var(--hover);
   }
@@ -81,7 +82,7 @@
 
 .bottomBottom {
   display: flex;
-  gap: 10px;
+  gap: 5px;
   align-items: center;
 }
 
@@ -89,7 +90,6 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  //gap: 5px;
   font-size: 13px;
 }
 
@@ -97,11 +97,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px 10px;
+  padding: 4px 5px 4px 8px;
   border-radius: 5px;
-  &.active {
+}
+
+.itemActive {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 5px 4px 8px;
+  border-radius: 5px;
+  font-weight: bold;
+  background-color: var(--opposite);
+  color: var(--bg);
+  .money {
     background-color: var(--opposite);
-    color: var(--bg);
   }
 }
 
@@ -109,7 +119,6 @@
   padding: 5px 10px;
   border-radius: 5px;
   background-color: var(--highlight);
-  //color: var(--bg);
   &::after {
     content: " ✦";
     color: var(--money);

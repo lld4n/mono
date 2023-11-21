@@ -101,16 +101,18 @@ const en: InternationalizationType = {
     },
     train: {
       rent: [
-        'Rent with one station',
-        'Rent with two stations',
-        'Rent with three stations',
-        'four-station rent',
+        'Rent with 1 station',
+        'Rent with 2 stations',
+        'Rent with 3 stations',
+        'Rent with 4 stations',
       ],
       prices: ['Pledge', 'Buy'],
     },
   },
   close: 'Close',
   disclose: 'Disclose',
+  currentMove: 'Current move',
+  rollDice: 'Roll dice',
 };
 
 export default en;

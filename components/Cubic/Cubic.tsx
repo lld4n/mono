@@ -2,12 +2,14 @@ import React from 'react';
 import styles from './Cubic.module.scss';
 import Dice0 from '../Dice/Dice0';
 import Spin from '../Spin/Spin';
+import { InternationalizationContext } from '../../providers/InternationalizationProvider/InternationalizationProvider';
 
 export default function Cubic() {
   const [currentValue, setCurrentValue] = React.useState<[number, number]>([
     0, 0,
   ]);
   const [spin, setSpin] = React.useState(false);
+  const i18n = React.useContext(InternationalizationContext);
 
   function clickButton() {
     const value1 = Math.floor(Math.random() * 6 + 1);
@@ -33,7 +35,7 @@ export default function Cubic() {
         ''
       ) : (
         <div className={styles['cubic__button']} onClick={clickButton}>
-          {!spin ? 'Бросить кубики' : ''}
+          {!spin ? i18n.rollDice : ''}
         </div>
       )}
     </div>
