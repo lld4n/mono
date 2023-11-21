@@ -202,7 +202,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
       const indexPlayer = gameBuffer.users.findIndex(
         (el) => el.email === email,
       );
-      if (indexPlayer) {
+      if (indexPlayer >= 0) {
         gameBuffer.users.splice(indexPlayer, 1);
         gameBuffer.blocked.push(email);
         if (!gameBuffer.private) {
@@ -251,7 +251,7 @@ export default function RoomId({ params }: { params: { id: string } }) {
             }
             openBuffer[params.id] = list;
             await fstore.set('games', 'open', openBuffer);
-            router.push('/');
+            // router.push('/'); // не надо, так как если комната публичная, то он уберет пользователя из open, а из games/params.id не успеет, так как пользователя уже перекинет на главную
           }
         }
         await fstore.set('games', params.id, gameBuffer);
