@@ -13,6 +13,7 @@ import fstore from '../../utils/firestore';
 import { getFullBalance } from '../../utils/getFullBalance';
 import { cardsList } from '../../assets/cards';
 import { InternationalizationContext } from '../../providers/InternationalizationProvider/InternationalizationProvider';
+import Surprise from '../Surprise/Surprise';
 export default function Center() {
   const context = React.useContext(GameContext);
   const user = useUser();
@@ -152,14 +153,23 @@ export default function Center() {
             gameBuffer.currentMove.end = true;
             fstore.set('games', context.game_id, gameBuffer);
             return '';
+          } else if ([2, 17, 33].includes(changePosition)) {
+            return <Surprise renderPayButton={renderPayButton} type="box" />;
+          } else if ([7, 22, 36].includes(changePosition)) {
+            return <Surprise renderPayButton={renderPayButton} type="chance" />;
+          } else if (changePosition === 0) {
+            const gameBuffer = Object.assign({}, context.game);
+            gameBuffer.currentMove.end = true;
+            fstore.set('games', context.game_id, gameBuffer);
+            return '';
           }
           return 'пустой статус, карточки не улицы';
         } else if (context.game.cards[changePosition].status === -2) {
-          context.setOpenCard(changePosition);
+          // context.setOpenCard(changePosition);
           return (
             <div className={styles.block}>
               {cardsList[changePosition].prices &&
-              fullBalance >=
+              context.game.players[user.email].balance >=
                 Math.max(...(cardsList[changePosition].prices || [0])) ? (
                 <div
                   className={styles.btn}
@@ -183,7 +193,13 @@ export default function Center() {
           context.game.cards[changePosition].owner_email &&
           context.game.cards[changePosition].owner_email !== user.email
         ) {
-          return <div>Заплатить</div>;
+          const rent = cardsList[changePosition].rent;
+          const status = context.game.cards[changePosition].status;
+          const whoamEmail = context.game.cards[changePosition].owner_email;
+          if (rent && status !== null && status >= 0 && whoamEmail) {
+            return renderPayButton(rent[status], whoamEmail);
+          }
+          return 'Заплатить';
         } else {
           const gameBuffer = Object.assign({}, context.game);
           gameBuffer.currentMove.end = true;

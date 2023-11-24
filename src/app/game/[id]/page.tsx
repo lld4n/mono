@@ -45,7 +45,7 @@ export default function GameId({ params }: { params: { id: string } }) {
       let indexPlayer = gameBuffer.users.findIndex(
         (el) => el.email === gameBuffer.currentMove.email,
       );
-      if (indexPlayer) {
+      if (indexPlayer !== undefined) {
         indexPlayer = (indexPlayer + 1) % gameBuffer.users.length;
       } else {
         indexPlayer = 0;
