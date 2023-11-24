@@ -56,7 +56,11 @@ export default function Cell({ index }: { index: number }) {
 
   if (index === 0) {
     return (
-      <div className={styles.start} onClick={() => context?.setOpenCard(index)}>
+      <div
+        className={styles.start}
+        onClick={() => context?.setOpenCard(index)}
+        title="0"
+      >
         <Image
           src={cardsList[index].svg}
           alt={'start'}
@@ -72,6 +76,7 @@ export default function Cell({ index }: { index: number }) {
       <div
         className={styles.prison}
         onClick={() => context?.setOpenCard(index)}
+        title="10"
       >
         <Image
           priority={true}
@@ -89,6 +94,7 @@ export default function Cell({ index }: { index: number }) {
       <div
         className={styles.parking}
         onClick={() => context?.setOpenCard(index)}
+        title="20"
       >
         <Image
           src={cardsList[index].svg}
@@ -105,6 +111,7 @@ export default function Cell({ index }: { index: number }) {
       <div
         className={styles.police}
         onClick={() => context?.setOpenCard(index)}
+        title="30"
       >
         <Image
           src={cardsList[index].svg}
@@ -121,6 +128,7 @@ export default function Cell({ index }: { index: number }) {
       <div
         className={styles.cellVer}
         onClick={() => context?.setOpenCard(index)}
+        title="5"
       >
         <div className={styles.cellTop}>{getPrice(index)}</div>
         <div className={styles.cellBottom}>
@@ -140,6 +148,7 @@ export default function Cell({ index }: { index: number }) {
       <div
         className={styles.cellVer}
         onClick={() => context?.setOpenCard(index)}
+        title="25"
       >
         <div className={styles.cellBottom}>
           <Image
@@ -159,6 +168,7 @@ export default function Cell({ index }: { index: number }) {
       <div
         className={styles.cellHor}
         onClick={() => context?.setOpenCard(index)}
+        title="15"
       >
         <div className={styles.cellBottom}>
           <Image
@@ -178,6 +188,7 @@ export default function Cell({ index }: { index: number }) {
       <div
         className={styles.cellHor}
         onClick={() => context?.setOpenCard(index)}
+        title="35"
       >
         <div className={styles.cellLeftWrapper}>
           <div className={styles.cellLeft}>{getPrice(index)}</div>
@@ -199,6 +210,7 @@ export default function Cell({ index }: { index: number }) {
       <div
         className={styles.cellVer}
         onClick={() => context?.setOpenCard(index)}
+        title={String(index)}
       >
         {ignoreList.includes(index) ? (
           <div className={styles.plug}></div>
@@ -226,6 +238,7 @@ export default function Cell({ index }: { index: number }) {
       <div
         className={styles.cellHor}
         onClick={() => context?.setOpenCard(index)}
+        title={String(index)}
       >
         <div className={styles.cellBottom}>
           <Image
@@ -249,6 +262,7 @@ export default function Cell({ index }: { index: number }) {
       <div
         className={styles.cellVer}
         onClick={() => context?.setOpenCard(index)}
+        title={String(index)}
       >
         <div className={styles.cellBottom}>
           <Image
@@ -272,6 +286,7 @@ export default function Cell({ index }: { index: number }) {
       <div
         className={styles.cellHor}
         onClick={() => context?.setOpenCard(index)}
+        title={String(index)}
       >
         {ignoreList.includes(index) ? (
           <div className={styles.plug}></div>

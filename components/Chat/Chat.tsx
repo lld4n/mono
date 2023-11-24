@@ -63,7 +63,11 @@ export default function Chat({
       return (
         <span className={styles.oneMessage} key={message.date}>
           <span className={styles.date}>{formatData(message.date)}</span>
-          <span className={styles.author}>{message.display_name}</span>
+          {message.display_name ? (
+            <span className={styles.author}>{message.display_name}</span>
+          ) : (
+            ''
+          )}
           <span className={styles.text}>{message.text}</span>
         </span>
       );

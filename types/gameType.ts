@@ -21,6 +21,10 @@ export type gameCharactersType = {
 export type gameCurrentMoveType = {
   email: string;
   valueDice: number;
+  double: boolean;
+  doubleCount: number;
+  changePosition: number;
+  end: boolean;
 };
 
 export type gameAuctionType = {
@@ -58,7 +62,6 @@ export type gamePlayersType = {
     display_name: string;
     balance: number;
     selected_character: gameSelectedCharacterType;
-    inventory?: number[];
   };
 };
 

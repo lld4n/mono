@@ -10,3 +10,24 @@
   padding: 10px;
   //border: 2px solid var(--bg);
 }
+
+.block {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.btn {
+  padding: 3px 5px;
+  border-radius: 5px;
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.money:after {
+  content: " ✦";
+  color: var(--money-onboard);
+}

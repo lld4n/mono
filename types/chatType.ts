@@ -5,7 +5,7 @@ export type chatType = {
 
 export type messageType = {
   date: number;
-  display_name: string;
-  email: string;
+  display_name?: string;
+  email?: string;
   text: string;
 };
