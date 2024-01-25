@@ -5,11 +5,13 @@ import styles from './LogoOverlay.module.scss'
 import Link from "next/link";
 export default function LogoOverlay({children}: { children: React.ReactNode }) {
   return (
-    <div className={styles.content}>
-      <Link className={styles.logo} href={'/'}>
-        <Image src={MiniLogo} alt={'mini-logo'} width={115} height={40}/>
-      </Link>
+    <>
+      <div className={styles.content}>
+        <Link className={styles.logo} href={'/'}>
+          <Image src={MiniLogo} alt={'mini-logo'} width={115} height={40}/>
+        </Link>
+      </div>
       {children}
-    </div>
+    </>
   );
 };
