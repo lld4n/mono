@@ -27,7 +27,7 @@ export default function Secondary() {
       <Link href={"/come"} className={styles.item}>
         Войти в комнату
       </Link>
-      <Link href={"/room"} className={styles.itemLast}>
+      <Link href={"/room"} className={styles.item}>
         Создать комнату
       </Link>
       {userId && (
