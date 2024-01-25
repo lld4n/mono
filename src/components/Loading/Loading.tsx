@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from "next/image";
-import Logo from '../assets/logo.svg'
+import Logo from '../../assets/logo.svg'
 import {Loader2} from "lucide-react";
 import styles from "./Loading.module.scss"
 export default function Loading() {
