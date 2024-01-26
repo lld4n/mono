@@ -25,4 +25,9 @@ export default defineSchema({
     users_id: v.id("users"),
     games_id: v.id("games"),
   }),
+  messages: defineTable({
+    message: v.string(),
+    players_id: v.optional(v.id("players")),
+    games_id: v.id("games"),
+  }),
 });
