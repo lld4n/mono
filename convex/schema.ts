@@ -16,4 +16,13 @@ export default defineSchema({
     current: v.number(),
     players_count: v.number(),
   }),
+  players: defineTable({
+    selected: v.number(),
+    position: v.number(),
+    balance: v.number(),
+    loser: v.boolean(),
+    order: v.number(),
+    users_id: v.id("users"),
+    games_id: v.id("games"),
+  }),
 });
