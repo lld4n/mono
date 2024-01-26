@@ -10,6 +10,7 @@ export const send = mutation({
   handler: async (ctx, args) => {
     return await ctx.db.insert("messages", {
       games_id: args.games_id,
+      players_id: args.players_id,
       message: args.message,
     });
   },

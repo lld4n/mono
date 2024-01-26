@@ -47,7 +47,6 @@ export const open = mutation({
     await ctx.db.patch(args.games_id, {
       open: !game.open,
     });
-    return await ctx.db.get(args.games_id);
   },
 });
 
@@ -57,8 +56,13 @@ export const getOpen = query({
     return await ctx.db
       .query("games")
       .filter((q) =>
-        q.and(q.eq(q.field("open"), true), q.lt(q.field("players_count"), 5)),
+        q.and(
+          q.eq(q.field("open"), true),
+          q.lt(q.field("players_count"), 5),
+          q.eq(q.field("started"), 0),
+        ),
       )
+      .order("desc")
       .take(20);
   },
 });

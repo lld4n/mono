@@ -21,9 +21,18 @@ export const add = mutation({
 
     const player = await ctx.db
       .query("players")
-      .filter((q) => q.eq(q.field("users_id"), user_id))
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("users_id"), user_id),
+          q.eq(q.field("games_id"), args.games_id),
+        ),
+      )
       .first();
     if (!player) {
+      const game = await ctx.db.get(args.games_id);
+      if (!game) {
+        throw new Error("Игра не найдена");
+      }
       const player_id = await ctx.db.insert("players", {
         selected: -1,
         position: 0,
@@ -33,10 +42,6 @@ export const add = mutation({
         users_id: user_id,
         games_id: args.games_id,
       });
-      const game = await ctx.db.get(args.games_id);
-      if (!game) {
-        throw new Error("Игра не найдена");
-      }
       await ctx.db.patch(args.games_id, {
         players_count: game.players_count++,
       });
@@ -50,8 +55,20 @@ export const add = mutation({
 export const remove = mutation({
   args: { players_id: v.id("players") },
   handler: async (ctx, args) => {
-    //по идее здесь нужно ещё уменьшать players_count на 1?
-    await ctx.db.delete(args.players_id);
+    const player = await ctx.db.get(args.players_id);
+    if (player) {
+      const game = await ctx.db.get(player.games_id);
+      if (game) {
+        await ctx.db.patch(game?._id, {
+          players_count: game.players_count--,
+        });
+      } else {
+        throw new Error("Игра не найдена");
+      }
+      await ctx.db.delete(args.players_id);
+    } else {
+      throw new Error("Пользователь не найден");
+    }
   },
 });
 
