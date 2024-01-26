@@ -8,4 +8,12 @@ export default defineSchema({
     picture: v.string(),
     name: v.string(),
   }).index("by_token", ["token"]),
+  games: defineTable({
+    started: v.number(),
+    admin: v.id("users"),
+    open: v.boolean(),
+    winner: v.optional(v.id("users")),
+    current: v.number(),
+    players_count: v.number(),
+  }),
 });
