@@ -7,6 +7,9 @@ export default defineSchema({
     token: v.string(),
     picture: v.string(),
     name: v.string(),
+    blocked: v.number(),
+    wins: v.number(),
+    losers: v.number(),
   }).index("by_token", ["token"]),
   games: defineTable({
     started: v.number(),
