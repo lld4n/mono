@@ -25,7 +25,7 @@ export default defineSchema({
     balance: v.number(),
     loser: v.boolean(),
     order: v.number(),
-    users_id: v.id("users"),
+    user: v.id("users"),
     games_id: v.id("games"),
   }),
   messages: defineTable({
