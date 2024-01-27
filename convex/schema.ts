@@ -7,6 +7,9 @@ export default defineSchema({
     token: v.string(),
     picture: v.string(),
     name: v.string(),
+    blocked: v.number(),
+    wins: v.number(),
+    losers: v.number(),
   }).index("by_token", ["token"]),
   games: defineTable({
     started: v.number(),
@@ -22,12 +25,12 @@ export default defineSchema({
     balance: v.number(),
     loser: v.boolean(),
     order: v.number(),
-    users_id: v.id("users"),
+    user: v.id("users"),
     games_id: v.id("games"),
   }),
   messages: defineTable({
     message: v.string(),
-    players_id: v.optional(v.id("players")),
+    player: v.optional(v.id("players")),
     games_id: v.id("games"),
   }),
 });

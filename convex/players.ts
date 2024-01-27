@@ -1,5 +1,6 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import { PlayersGetType } from "../src/utils/PlayersGetType";
 
 export const add = mutation({
   args: {
@@ -23,7 +24,7 @@ export const add = mutation({
       .query("players")
       .filter((q) =>
         q.and(
-          q.eq(q.field("users_id"), user_id),
+          q.eq(q.field("user"), user_id),
           q.eq(q.field("games_id"), args.games_id),
         ),
       )
@@ -39,7 +40,7 @@ export const add = mutation({
         balance: 1500,
         loser: false,
         order: -1,
-        users_id: user_id,
+        user: user_id,
         games_id: args.games_id,
       });
       await ctx.db.patch(args.games_id, {
@@ -101,9 +102,19 @@ export const getAllByGames = query({
     games_id: v.id("games"),
   },
   handler: async (ctx, args) => {
-    return await ctx.db
+    let players = await ctx.db
       .query("players")
       .filter((q) => q.eq(q.field("games_id"), args.games_id))
       .collect();
+    const result: PlayersGetType[] = await Promise.all(
+      players.map(async (players) => {
+        return {
+          ...players,
+          user: await ctx.db.get(players.user),
+        };
+      }),
+    );
+    result.sort((a, b) => a.order - b.order);
+    return result;
   },
 });

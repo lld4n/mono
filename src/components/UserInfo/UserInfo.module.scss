@@ -6,12 +6,10 @@
   border-radius: 5px;
   border: 1px solid #000;
   background: #1a1a1c;
-  gap: 10px;
+  gap: 20px;
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
   border-radius: 5px;
   object-fit: fill;
 }
@@ -44,5 +42,27 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+.achievements{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.achieve {
+  display: flex;
+  padding: 3px 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  align-self: stretch;
+  border-radius: 5px;
+  background: #000;
+  .count{
+    color: #FFF;
+    font-size: 12px;
+    font-weight: 500;
   }
 }
