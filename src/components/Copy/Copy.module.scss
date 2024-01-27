@@ -1,13 +1,13 @@
 .wrapper {
   display: flex;
-  width: 300px;
-  padding: 13px 10px;
+  padding: 13px 20px;
   justify-content: center;
   align-items: center;
   gap: 20px;
   border-radius: 5px;
   background-color: #272729;
   cursor: pointer;
+  user-select: none;
   &:hover {
     background-color: #343436;
   }
