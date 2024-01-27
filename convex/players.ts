@@ -44,7 +44,7 @@ export const add = mutation({
         games_id: args.games_id,
       });
       await ctx.db.patch(args.games_id, {
-        players_count: game.players_count++,
+        players_count: game.players_count + 1,
       });
       return player_id;
     }
