@@ -1,7 +1,7 @@
 export default {
   providers: [
     {
-      domain: "https://creative-polecat-29.clerk.accounts.dev",
+      domain: process.env.NEXT_PUBLIC_PROVIDER_DOMAIN,
       applicationID: "convex",
     },
   ],
