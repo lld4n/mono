@@ -2,8 +2,7 @@ export type CardClassType =
   | "street"
   | "train"
   | "nature"
-  | "chance"
-  | "chest"
+  | "lucky"
   | "tax"
   | "empty"
   | "jail";
