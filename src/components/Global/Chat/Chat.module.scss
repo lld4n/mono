@@ -11,7 +11,11 @@
 }
 
 .message {
-  width: 100%;
+  width: 552px;
+}
+.text {
+  word-wrap: break-word;
+  line-height: 20px;
 }
 .messages {
   flex: 1;

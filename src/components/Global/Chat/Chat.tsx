@@ -52,7 +52,7 @@ export default function Chat({
                   {player.user!.name}
                 </span>
               )}
-              <span>{message.message}</span>
+              <span className={styles.text}>{message.message}</span>
             </div>
           );
         })}
