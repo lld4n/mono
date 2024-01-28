@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useMutation } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 import { useState } from "react";
+import { GetFigureFromSelected } from "@/utils/GetFigureFromSelected";
 
 type PropsType = {
   players: PlayersGetType[];
@@ -37,27 +38,17 @@ export default function Admin({ players, adminId, gameId }: PropsType) {
     <>
       <div className={styles.players}>
         {players.map((player) => {
+          const figure = GetFigureFromSelected(player);
           if (player.user?._id === adminId) {
             return (
               <div key={player.user?._id} className={styles.player}>
                 <div
                   className={styles.figure}
-                  style={
-                    player.selected !== -1
-                      ? {
-                          backgroundColor: figuresList[player.selected].bg,
-                        }
-                      : {}
-                  }
+                  style={{
+                    backgroundColor: figure.bg,
+                  }}
                 >
-                  <Crown
-                    size={16}
-                    color={
-                      player.selected !== -1
-                        ? figuresList[player.selected].color
-                        : "#fff"
-                    }
-                  />
+                  <Crown size={16} color={figure.color} />
                 </div>
                 <Image
                   src={player.user?.picture!}
@@ -76,13 +67,9 @@ export default function Admin({ players, adminId, gameId }: PropsType) {
               <div key={player.user?._id} className={styles.player}>
                 <div
                   className={styles.figure}
-                  style={
-                    player.selected !== -1
-                      ? {
-                          backgroundColor: figuresList[player.selected].bg,
-                        }
-                      : {}
-                  }
+                  style={{
+                    backgroundColor: figure.bg,
+                  }}
                 ></div>
                 <Image
                   src={player.user?.picture!}
