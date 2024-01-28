@@ -6,29 +6,40 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 import styles from "./page.module.scss";
+import Loading from "@/components/Loading/Loading";
 
-export default function Game({ params }: { params: { id: Id<"games"> } }) {
+export default function Game({
+  params,
+}: {
+  params: { games_id: Id<"games"> };
+}) {
   const [playerId, setPlayerId] = useState<Id<"players">>();
 
   const players = useQuery(api.players.getAllByGames, {
-    games_id: params.id,
+    games_id: params.games_id,
   });
 
-  const mutation = useMutation(api.players.add);
+  const game = useQuery(api.games.get, {
+    games_id: params.games_id,
+  });
+
+  const addPlayer = useMutation(api.players.add);
   useEffect(() => {
-    const addPlayer = async () => {
-      const playerId = await mutation({ games_id: params.id });
-      setPlayerId(playerId);
-    };
-    addPlayer();
+    addPlayer({ games_id: params.games_id }).then((player_id) =>
+      setPlayerId(player_id),
+    );
   }, []);
+
+  if (!game || !players) {
+    return <Loading />;
+  }
 
   return (
     <div className={styles.wrapper}>
-      <Copy value={params.id} />
+      <Copy value={params.games_id} />
       {players && playerId && (
         <RoomFigureSelect
-          games_id={params.id}
+          games_id={params.games_id}
           players_id={playerId}
           players={players}
         />
