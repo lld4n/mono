@@ -1,6 +1,6 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
-import { PlayersGetType } from "../src/utils/PlayersGetType";
+import { PlayersGetType } from "../src/types/PlayersGetType";
 
 export const add = mutation({
   args: {

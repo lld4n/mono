@@ -1,8 +1,8 @@
 import React from "react";
 import Image from "next/image";
-import Logo from "../../assets/logo.svg";
+import Logo from "../../../assets/logo.svg";
 import styles from "./Loading.module.scss";
-import MiniLoading from "@/components/MiniLoading/MiniLoading";
+import MiniLoading from "@/components/Global/MiniLoading/MiniLoading";
 export default function Loading() {
   return (
     <div className={styles.content}>

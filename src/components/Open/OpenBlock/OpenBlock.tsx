@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./OpenBlock.module.scss";
-import { Doc } from "../../../convex/_generated/dataModel";
+import { Doc } from "../../../../convex/_generated/dataModel";
 import { useQuery } from "convex/react";
-import { api } from "../../../convex/_generated/api";
+import { api } from "../../../../convex/_generated/api";
 import Image from "next/image";
-import MiniLoading from "@/components/MiniLoading/MiniLoading";
+import MiniLoading from "@/components/Global/MiniLoading/MiniLoading";
 import { ReformatDate } from "@/utils/ReformatDate";
 import Link from "next/link";
 import { getPlayerAdmin } from "@/utils/GetPlayerAdmin";

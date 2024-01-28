@@ -1,12 +1,12 @@
 import React from "react";
 import styles from "./UserInfo.module.scss";
-import { Id } from "../../../convex/_generated/dataModel";
+import { Id } from "../../../../convex/_generated/dataModel";
 import { useQuery } from "convex/react";
-import { api } from "../../../convex/_generated/api";
+import { api } from "../../../../convex/_generated/api";
 import { Award, BookmarkX, LogOut } from "lucide-react";
 import { SignOutButton } from "@clerk/nextjs";
 import Image from "next/image";
-import MiniLoading from "@/components/MiniLoading/MiniLoading";
+import MiniLoading from "@/components/Global/MiniLoading/MiniLoading";
 
 export default function UserInfo({ users_id }: { users_id: Id<"users"> }) {
   const user = useQuery(api.users.get, {

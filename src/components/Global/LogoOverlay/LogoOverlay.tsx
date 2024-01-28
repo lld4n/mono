@@ -1,5 +1,5 @@
 import React from "react";
-import MiniLogo from "../../assets/mini-logo.svg";
+import MiniLogo from "../../../assets/mini-logo.svg";
 import Image from "next/image";
 import styles from "./LogoOverlay.module.scss";
 import Link from "next/link";
