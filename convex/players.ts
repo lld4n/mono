@@ -61,7 +61,7 @@ export const remove = mutation({
       const game = await ctx.db.get(player.games_id);
       if (game) {
         await ctx.db.patch(game?._id, {
-          players_count: game.players_count--,
+          players_count: game.players_count - 1,
         });
       } else {
         throw new Error("Игра не найдена");
