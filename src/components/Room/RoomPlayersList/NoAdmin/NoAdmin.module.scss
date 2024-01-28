@@ -1,0 +1,29 @@
+.players {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.player {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-size: 12px;
+}
+
+.avatar {
+  border-radius: 5px;
+}
+
+.figure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.playerName {
+  flex: 1 1 auto;
+}

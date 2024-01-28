@@ -2,12 +2,14 @@
 import RoomFigureSelect from "@/components/Room/RoomFigureSelect/RoomFigureSelect";
 import Copy from "@/components/Room/Copy/Copy";
 import { useEffect, useState } from "react";
-import { useMutation, useQuery } from "convex/react";
+import { useConvexAuth, useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 import styles from "./page.module.scss";
 import Loading from "@/components/Global/Loading/Loading";
 import Chat from "@/components/Global/Chat/Chat";
+import RoomPlayersList from "@/components/Room/RoomPlayersList/RoomPlayersList";
+import { useRouter } from "next/navigation";
 
 export default function Game({
   params,
@@ -24,12 +26,28 @@ export default function Game({
     games_id: params.games_id,
   });
 
+  const router = useRouter();
+
+  const { isAuthenticated } = useConvexAuth();
+
   const addPlayer = useMutation(api.players.add);
   useEffect(() => {
-    addPlayer({ games_id: params.games_id }).then((player_id) =>
-      setPlayerId(player_id),
-    );
-  }, []);
+    if (isAuthenticated) {
+      addPlayer({ games_id: params.games_id }).then((player_id) =>
+        setPlayerId(player_id),
+      );
+    }
+  }, [addPlayer, isAuthenticated, params.games_id]);
+
+  useEffect(() => {
+    if (
+      players &&
+      playerId &&
+      players.filter((player) => player._id === playerId).length === 0
+    ) {
+      router.push("/");
+    }
+  }, [playerId, players, router]);
 
   if (!game || !players || !playerId) {
     return <Loading />;
@@ -43,6 +61,7 @@ export default function Game({
         players_id={playerId}
         players={players}
       />
+      <RoomPlayersList players={players} game={game} />
       <Chat players={players} playerId={playerId} games_id={params.games_id} />
     </div>
   );

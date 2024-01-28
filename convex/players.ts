@@ -61,7 +61,7 @@ export const remove = mutation({
       const game = await ctx.db.get(player.games_id);
       if (game) {
         await ctx.db.patch(game?._id, {
-          players_count: game.players_count--,
+          players_count: game.players_count - 1,
         });
       } else {
         throw new Error("Игра не найдена");
@@ -116,5 +116,34 @@ export const getAllByGames = query({
     );
     result.sort((a, b) => a.order - b.order);
     return result;
+  },
+});
+
+export const getByGames = query({
+  args: {
+    games_id: v.id("games"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Ошибочка");
+    }
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_token", (q) => q.eq("token", identity.tokenIdentifier))
+      .unique();
+    if (user === null) {
+      throw new Error("Не удалось получить данные о пользователе");
+    }
+    const user_id = user._id;
+    return await ctx.db
+      .query("players")
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("user"), user_id),
+          q.eq(q.field("games_id"), args.games_id),
+        ),
+      )
+      .first();
   },
 });
