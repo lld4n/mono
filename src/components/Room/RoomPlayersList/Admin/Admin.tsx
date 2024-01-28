@@ -57,9 +57,7 @@ export default function Admin({ players, adminId, gameId }: PropsType) {
                   height={30}
                   className={styles.avatar}
                 />
-                <span>{player.user?.name}</span>
-                {/*для того, чтобы корзинки выстроились в ряд*/}
-                <Trash2 size={20} color={"#fff"} opacity={0} />
+                <span className={styles.playerName}>{player.user?.name}</span>
               </div>
             );
           } else {
@@ -79,12 +77,14 @@ export default function Admin({ players, adminId, gameId }: PropsType) {
                   className={styles.avatar}
                 />
                 <span className={styles.playerName}>{player.user?.name}</span>
-                <Trash2
-                  size={20}
-                  color={"#fff"}
-                  cursor={"pointer"}
-                  onClick={() => remove(player?._id)}
-                />
+                <button className={styles.remove}>
+                  <Trash2
+                    size={20}
+                    color={"#fff"}
+                    cursor={"pointer"}
+                    onClick={() => remove(player?._id)}
+                  />
+                </button>
               </div>
             );
           }
@@ -110,7 +110,7 @@ export default function Admin({ players, adminId, gameId }: PropsType) {
           ></div>
         </div>
       </div>
-      <div className={styles.start}>Начать игру</div>
+      <button className={styles.start}>Начать игру</button>
     </>
   );
 }

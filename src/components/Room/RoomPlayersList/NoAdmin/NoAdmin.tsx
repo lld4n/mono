@@ -3,7 +3,6 @@ import { Id } from "../../../../../convex/_generated/dataModel";
 import { Crown } from "lucide-react";
 import Image from "next/image";
 import styles from "./NoAdmin.module.scss";
-import { figuresList } from "@/constants/figures";
 import { GetFigureFromSelected } from "@/utils/GetFigureFromSelected";
 
 type PropsType = {

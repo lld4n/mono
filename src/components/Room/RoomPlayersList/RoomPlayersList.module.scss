@@ -1,4 +1,7 @@
-.wrapper{
+.wrapper {
   position: absolute;
   left: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 225px;
 }

@@ -7,11 +7,12 @@ import { CardListTaxInterface } from "@/interfaces/card/CardListTaxInterface";
 import { CardListEmptyInterface } from "@/interfaces/card/CardListEmptyInterface";
 import { CardListJailInterface } from "@/interfaces/card/CardListJailInterface";
 
-export type CardListType = CardListStreetInterface &
-  CardListTrainInterface &
-  CardListNatureInterface &
-  CardListChanceInterface &
-  CardListChestInterface &
-  CardListTaxInterface &
-  CardListEmptyInterface &
-  CardListJailInterface;
+export type CardListType =
+  | CardListStreetInterface
+  | CardListTrainInterface
+  | CardListNatureInterface
+  | CardListChanceInterface
+  | CardListChestInterface
+  | CardListTaxInterface
+  | CardListEmptyInterface
+  | CardListJailInterface;

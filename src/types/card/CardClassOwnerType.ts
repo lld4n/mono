@@ -1,5 +1,1 @@
-export type CardClassOwnerType = {
-  street: "street";
-  train: "train";
-  nature: "nature";
-};
+export type CardClassOwnerType = "street" | "train" | "nature";

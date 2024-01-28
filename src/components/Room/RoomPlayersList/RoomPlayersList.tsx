@@ -17,10 +17,7 @@ export default function RoomPlayersList({ players, game }: PropsType) {
   const userId = useQuery(api.users.identify);
   const [admin, setAdmin] = useState<PlayersGetType | undefined>();
   useEffect(() => {
-    const getAdmin = () => {
-      setAdmin(getPlayerAdmin(players, game));
-    };
-    getAdmin();
+    setAdmin(getPlayerAdmin(players, game));
   }, [admin, game, players]);
 
   return (
