@@ -14,11 +14,6 @@ export default function Game({ params }: { params: { id: Id<"games"> } }) {
     games_id: params.id,
   });
 
-  // для теста
-  useEffect(() => {
-    console.log(players);
-  }, [players]);
-
   const mutation = useMutation(api.players.add);
   useEffect(() => {
     const addPlayer = async () => {

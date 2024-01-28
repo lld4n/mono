@@ -1,4 +1,4 @@
-.content{
+.content {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -8,17 +8,15 @@
   height: 100%;
 }
 
-.item{
-  color: #FFF;
-  font-size: 16px;
+.item {
   font-weight: 700;
   padding: 10px;
-  &:hover{
+  &:hover {
     background: #202020;
   }
 }
 
-.user{
+.user {
   position: absolute;
   bottom: 10px;
 }

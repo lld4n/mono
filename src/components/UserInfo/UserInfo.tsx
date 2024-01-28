@@ -3,16 +3,21 @@ import styles from "./UserInfo.module.scss";
 import { Id } from "../../../convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import { Award, BookmarkX, Loader2, LogOut } from "lucide-react";
+import { Award, BookmarkX, LogOut } from "lucide-react";
 import { SignOutButton } from "@clerk/nextjs";
 import Image from "next/image";
+import MiniLoading from "@/components/MiniLoading/MiniLoading";
 
 export default function UserInfo({ users_id }: { users_id: Id<"users"> }) {
   const user = useQuery(api.users.get, {
     users_id,
   });
   if (!user) {
-    return <Loader2 size={20} color={"#ffffff"} className={styles.loader} />;
+    return (
+      <div className={styles.wrapper}>
+        <MiniLoading />
+      </div>
+    );
   }
   return (
     <div className={styles.wrapper}>

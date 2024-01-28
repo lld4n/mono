@@ -16,7 +16,12 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="ru">
+      <html
+        lang="ru"
+        style={{
+          colorScheme: "dark",
+        }}
+      >
         <body>
           <ConvexClientProvider>
             <LogoOverlay>{children}</LogoOverlay>

@@ -28,9 +28,7 @@ export default function RoomFigureSelect({
 
   return (
     <div>
-      <h3 className={styles.title}>
-        Выберите персонажа, за которого будете играть
-      </h3>
+      <h3 className={styles.title}>Выберите персонажа</h3>
       <div className={styles.figureList}>
         {figuresList.map((figure) => {
           let isSelected = false;
