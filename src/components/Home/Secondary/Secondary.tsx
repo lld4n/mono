@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Secondary.module.scss";
 import Link from "next/link";
-import UserInfo from "@/components/UserInfo/UserInfo";
-import { api } from "../../../convex/_generated/api";
+import UserInfo from "@/components/Home/UserInfo/UserInfo";
+import { api } from "../../../../convex/_generated/api";
 import { useMutation } from "convex/react";
-import { Id } from "../../../convex/_generated/dataModel";
+import { Id } from "../../../../convex/_generated/dataModel";
 
 export default function Secondary() {
   const mutation = useMutation(api.users.store);

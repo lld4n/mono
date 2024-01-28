@@ -1,12 +1,12 @@
 import React from "react";
-import { PlayersGetType } from "@/utils/PlayersGetType";
-import { Id } from "../../../convex/_generated/dataModel";
+import { PlayersGetType } from "@/types/PlayersGetType";
+import { Id } from "../../../../convex/_generated/dataModel";
 import { figuresList } from "@/constants/figures";
 import styles from "./RoomFigureSelect.module.scss";
 
 import Image from "next/image";
 import { useMutation } from "convex/react";
-import { api } from "../../../convex/_generated/api";
+import { api } from "../../../../convex/_generated/api";
 
 type PropsType = {
   players: PlayersGetType[];

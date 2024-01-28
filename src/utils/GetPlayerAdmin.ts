@@ -1,4 +1,4 @@
-import { PlayersGetType } from "@/utils/PlayersGetType";
+import { PlayersGetType } from "@/types/PlayersGetType";
 import { Doc } from "../../convex/_generated/dataModel";
 
 export const getPlayerAdmin = (
