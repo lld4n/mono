@@ -1,7 +1,7 @@
 export default {
   providers: [
     {
-      domain: process.env.NEXT_PUBLIC_PROVIDER_DOMAIN,
+      domain: "https://clerk.lldan.ru",
       applicationID: "convex",
     },
   ],
