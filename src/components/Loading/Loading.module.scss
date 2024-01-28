@@ -1,6 +1,7 @@
 .content{
   background: #1A1A1C;
-  min-height: 100vh;
+  height: 100%; // работает же
+  //min-height: 100vh;
   position: relative;
   width: 100%;
   z-index: 2;
@@ -11,15 +12,3 @@
   gap: 10px;
 }
 
-.loader{
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}

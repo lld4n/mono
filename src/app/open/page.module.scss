@@ -1,0 +1,13 @@
+.wrapper {
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.list {
+  width: 820px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 80px 0;
+}
