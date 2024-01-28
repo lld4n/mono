@@ -6,6 +6,6 @@ export interface CardListStreetInterface extends CardListBaseInterface {
   buy: number;
   unlock: number;
   build: number;
-  rent: [number, number, number, number, number, number, number];
+  rent: [number, number, number, number, number, number];
   group: number[];
 }
