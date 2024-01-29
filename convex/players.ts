@@ -65,7 +65,7 @@ export const remove = mutation({
       throw new Error("Игра не найдена");
     }
 
-    await ctx.db.patch(game?._id, {
+    await ctx.db.patch(game._id, {
       players_count: game.players_count - 1,
     });
     await ctx.db.delete(args.players_id);

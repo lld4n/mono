@@ -17,7 +17,6 @@ export default function Game({
   params: { games_id: Id<"games"> };
 }) {
   const [playerId, setPlayerId] = useState<Id<"players">>();
-
   const players = useQuery(api.players.getAllByGames, {
     games_id: params.games_id,
   });
