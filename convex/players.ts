@@ -57,18 +57,30 @@ export const remove = mutation({
   args: { players_id: v.id("players") },
   handler: async (ctx, args) => {
     const player = await ctx.db.get(args.players_id);
-    if (player) {
-      const game = await ctx.db.get(player.games_id);
-      if (game) {
-        await ctx.db.patch(game?._id, {
-          players_count: game.players_count - 1,
-        });
-      } else {
-        throw new Error("Игра не найдена");
-      }
-      await ctx.db.delete(args.players_id);
-    } else {
+    if (player === null) {
       throw new Error("Пользователь не найден");
+    }
+    const game = await ctx.db.get(player.games_id);
+    if (game === null) {
+      throw new Error("Игра не найдена");
+    }
+
+    await ctx.db.patch(game?._id, {
+      players_count: game.players_count - 1,
+    });
+    await ctx.db.delete(args.players_id);
+    const messages = await ctx.db
+      .query("messages")
+      .filter((q) => q.eq(q.field("games_id"), game._id))
+      .collect();
+
+    for (const message of messages) {
+      if (message.player) {
+        const messagePlayer = await ctx.db.get(message.player);
+        if (messagePlayer === null) {
+          await ctx.db.delete(message._id);
+        }
+      }
     }
   },
 });

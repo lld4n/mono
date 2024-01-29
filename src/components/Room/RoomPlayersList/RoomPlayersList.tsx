@@ -43,7 +43,6 @@ export default function RoomPlayersList({ players, game }: PropsType) {
       ) : (
         <NoAdmin players={players} adminId={admin.user!._id} game={game} />
       )}
-      // TODO: необходимо сделать функциональной
       <button className={styles.delete}>
         {admin.user!._id === userId ? "Удалить" : "Покинуть"} игру
       </button>
