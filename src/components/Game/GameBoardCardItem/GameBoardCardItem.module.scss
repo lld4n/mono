@@ -1,0 +1,38 @@
+.angleCard1 {
+  background: #576574;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px 0 0 0;
+}
+
+.angleCard2 {
+  background: #576574;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 5px 0 0;
+}
+
+.angleCard3 {
+  background: #576574;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0 5px 0;
+}
+
+.angleCard4 {
+  background: #576574;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0 0 5px;
+}
+
+.card {
+  background: #576574;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

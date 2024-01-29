@@ -1,5 +1,6 @@
 .grid {
-  margin: 0 auto;
+  border-radius: 5px;
+  display: grid;
   grid-template-columns: 119px repeat(9, 66px) 119px;
   grid-template-rows: 119px repeat(9, 66px) 119px;
   gap: 0;
