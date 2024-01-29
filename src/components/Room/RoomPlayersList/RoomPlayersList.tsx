@@ -26,10 +26,6 @@ export default function RoomPlayersList({ players, game }: PropsType) {
     setAdmin(getPlayerAdmin(players, game));
   }, [admin, game, players]);
 
-  useEffect(() => {
-    if (game.started !== 0) router.push(`/game/${game._id}`);
-  }, [game, router]);
-
   return (
     <div className={styles.wrapper}>
       {!isStarted && userId === admin?.user?._id ? (

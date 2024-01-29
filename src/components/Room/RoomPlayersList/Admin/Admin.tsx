@@ -11,7 +11,7 @@ import { GetFigureFromSelected } from "@/utils/GetFigureFromSelected";
 type PropsType = {
   players: PlayersGetType[];
   adminId: Id<"users"> | undefined;
-  gameId: Id<"games"> | undefined;
+  gameId: Id<"games">;
   setIsStarted: React.Dispatch<React.SetStateAction<boolean>>;
 };
 

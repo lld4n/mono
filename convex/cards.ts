@@ -203,7 +203,13 @@ export const mortgage = mutation({
     if (card.owner !== player._id) {
       throw new Error("Карточка не принадлежит игроку");
     }
-    //получаю название группы карточки
+    if (card.mortgage) {
+      throw new Error("Карточка уже заложена");
+    }
+    if (card.status !== 0) {
+      throw new Error("У карточки есть дома или отель");
+    }
+    //получаю класс карточки
     const cardClass = CardClassObject[card.index];
     if (cardClass === "street") {
       if (card.status === 0) {
@@ -217,24 +223,23 @@ export const mortgage = mutation({
           .collect();
 
         //фильтрую карточки, получая только те, что принадлежат группе выше
-        const neededCards = convexCards.filter((card) =>
-          cardGroup.includes(card.index),
+        const neededCards = convexCards.filter((cardItem) =>
+          cardGroup.includes(cardItem.index),
         );
 
         //с помощью функции every проверяю, удовлетворяет ли условию каждая карточка
         const isMortgage = neededCards.every((card) => card.status === 0);
-        if (isMortgage) {
-          await ctx.db.patch(player._id, {
-            balance: player.balance + args.money,
-          });
-          await ctx.db.patch(card._id, {
-            mortgage: true,
-          });
-        } else {
+        if (!isMortgage) {
           throw new Error(
             "Карточку нельзя заложить, так как в группе есть карточки с домами/отелями",
           );
         }
+        await ctx.db.patch(player._id, {
+          balance: player.balance + args.money,
+        });
+        await ctx.db.patch(card._id, {
+          mortgage: true,
+        });
       }
     }
     if (cardClass === "train" || cardClass === "nature") {
@@ -267,18 +272,18 @@ export const unmortgage = mutation({
       throw new Error("Карточка не принадлежит игроку");
     }
 
-    if (player.balance >= args.money) {
-      await ctx.db.patch(player._id, {
-        balance: player.balance - args.money,
-      });
-      await ctx.db.patch(card._id, {
-        mortgage: false,
-      });
-    } else {
+    if (player.balance < args.money) {
       throw new Error("Недостаточно средств");
     }
 
-    //получаю название группы карточки
+    await ctx.db.patch(player._id, {
+      balance: player.balance - args.money,
+    });
+    await ctx.db.patch(card._id, {
+      mortgage: false,
+    });
+
+    //получаю класс карточки
     const cardClass = CardClassObject[card.index];
     if (cardClass === "train" || cardClass === "nature") {
       //получаю группу карточек

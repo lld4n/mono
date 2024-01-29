@@ -1,8 +1,6 @@
 import { Doc } from "../../../../convex/_generated/dataModel";
-import styles from "./Footer.module.scss";
+import styles from "./GameFooter.module.scss";
 import Money from "@/components/Game/Money/Money";
-import { useQuery } from "convex/react";
-import { api } from "../../../../convex/_generated/api";
 import Timer from "@/components/Game/Timer/Timer";
 
 type PropsType = {
@@ -10,7 +8,7 @@ type PropsType = {
   game: Doc<"games"> | undefined;
 };
 
-export default function Footer({ currentPlayer, game }: PropsType) {
+export default function GameFooter({ currentPlayer, game }: PropsType) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.left}>
