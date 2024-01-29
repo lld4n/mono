@@ -121,9 +121,11 @@ export default function Admin({
           ></div>
         </div>
       </div>
-      <button className={styles.btn} onClick={() => start()}>
-        Начать игру
-      </button>
+      {players.every((pl) => pl.selected !== -1) && (
+        <button className={styles.btn} onClick={() => start()}>
+          Начать игру
+        </button>
+      )}
     </>
   );
 }
