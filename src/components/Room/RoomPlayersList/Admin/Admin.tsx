@@ -1,23 +1,29 @@
 import { PlayersGetType } from "@/types/PlayersGetType";
 import { Id } from "../../../../../convex/_generated/dataModel";
 import styles from "./Admin.module.scss";
-import { figuresList } from "@/constants/figures";
 import { Crown, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useMutation } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
-import { useState } from "react";
+import React, { useState } from "react";
 import { GetFigureFromSelected } from "@/utils/GetFigureFromSelected";
 
 type PropsType = {
   players: PlayersGetType[];
   adminId: Id<"users"> | undefined;
   gameId: Id<"games"> | undefined;
+  setIsStarted: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function Admin({ players, adminId, gameId }: PropsType) {
+export default function Admin({
+  players,
+  adminId,
+  gameId,
+  setIsStarted,
+}: PropsType) {
   const removePlayer = useMutation(api.players.remove);
   const openGame = useMutation(api.games.open);
+  const startGame = useMutation(api.games.start);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -32,6 +38,11 @@ export default function Admin({ players, adminId, gameId }: PropsType) {
     await openGame({
       games_id: gameId!,
     });
+  }
+
+  async function start() {
+    setIsStarted(true);
+    await startGame({ games_id: gameId! });
   }
 
   return (
@@ -110,7 +121,9 @@ export default function Admin({ players, adminId, gameId }: PropsType) {
           ></div>
         </div>
       </div>
-      <button className={styles.start}>Начать игру</button>
+      <button className={styles.start} onClick={() => start()}>
+        Начать игру
+      </button>
     </>
   );
 }
