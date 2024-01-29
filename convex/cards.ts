@@ -148,3 +148,38 @@ export const build = mutation({
     });
   },
 });
+
+export const unbuild = mutation({
+  args: {
+    cards_id: v.id("cards"),
+    players_id: v.id("players"),
+    money: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const player = await ctx.db.get(args.players_id);
+    const card = await ctx.db.get(args.cards_id);
+    if (card === null) {
+      throw new Error("Карточка не найден");
+    }
+    if (player === null) {
+      throw new Error("Игрок не найден");
+    }
+    if (card.owner !== player._id) {
+      throw new Error("Карточка не принадлежит игроку");
+    }
+    if (card.mortgage) {
+      throw new Error(
+        "Критическая ошибка в логике, карточка не может быть заложена, если у нее можно продать дом",
+      );
+    }
+    if (CardClassObject[card.index] !== "street") {
+      throw new Error("Карточка не улица");
+    }
+    await ctx.db.patch(player._id, {
+      balance: player.balance + args.money,
+    });
+    await ctx.db.patch(card._id, {
+      status: card.status - 1,
+    });
+  },
+});
