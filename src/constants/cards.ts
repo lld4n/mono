@@ -33,6 +33,8 @@ import cookie from "../assets/emojis/cookie.png";
 import pepper from "../assets/emojis/pepper.png";
 import voltage from "../assets/emojis/voltage.png";
 import clover from "../assets/emojis/clover.png";
+import { CardGroupObjectType } from "@/types/card/CardGroupObjectType";
+import { CardClassObjectType } from "@/types/card/CardClassObjectType";
 
 export const cardsList: CardListType[] = [
   {
@@ -452,3 +454,34 @@ export const cardsList: CardListType[] = [
     rent: [500, 2000, 6000, 14000, 17000, 20000],
   },
 ];
+
+const generateCardGroupObject = () => {
+  const res: CardGroupObjectType = {};
+  for (const element of cardsList) {
+    if (
+      element.class === "street" ||
+      element.class === "train" ||
+      element.class === "nature"
+    ) {
+      res[element.index] = element.group;
+    }
+  }
+  return res;
+};
+
+const generateCardClassObject = () => {
+  const res: CardClassObjectType = {};
+  for (const element of cardsList) {
+    if (
+      element.class === "street" ||
+      element.class === "train" ||
+      element.class === "nature"
+    ) {
+      res[element.index] = element.class;
+    }
+  }
+  return res;
+};
+
+export const CardGroupObject = generateCardGroupObject();
+export const CardClassObject = generateCardClassObject();
