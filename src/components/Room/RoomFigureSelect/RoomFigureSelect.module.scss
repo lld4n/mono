@@ -22,17 +22,22 @@
   align-items: center;
 
   &:hover {
-    background: #202020; //добавил ховер у персонажей
+    background: #eae5e5;
   }
 }
 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 250px;
+}
+
 .title {
-  margin: 0 0 20px 0;
   text-align: center;
 }
 
 .figureList {
-  max-width: 300px;
   display: flex;
   justify-content: center;
   margin: 0 auto;
