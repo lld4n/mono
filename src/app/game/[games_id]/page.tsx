@@ -34,12 +34,12 @@ export default function Game({
 
   return (
     <div className={styles.wrapper}>
-      {/*<GameBoard*/}
-      {/*  cards={cards!}*/}
-      {/*  players={players!}*/}
-      {/*  game={game!}*/}
-      {/*  currentPlayer={currentPlayer!}*/}
-      {/*/>*/}
+      <GameBoard
+        cards={cards}
+        players={players}
+        game={game}
+        currentPlayer={currentPlayer}
+      />
       {/*<GamePlayersList players={players!} game={game!} />*/}
       <GameFooter currentPlayer={currentPlayer} game={game} />
     </div>

@@ -37,6 +37,7 @@ export default function GameBoard({
               currentPlayer={currentPlayer}
               openIndex={openCard}
               setOpenIndex={setOpenCard}
+              key={cardIndex}
             />
           );
         return (
