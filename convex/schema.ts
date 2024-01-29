@@ -33,4 +33,12 @@ export default defineSchema({
     player: v.optional(v.id("players")),
     games_id: v.id("games"),
   }),
+  cards: defineTable({
+    games_id: v.id("games"),
+    index: v.number(),
+    owner: v.optional(v.id("players")),
+    status: v.number(),
+    buy: v.boolean(),
+    mortgage: v.boolean(),
+  }),
 });
