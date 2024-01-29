@@ -1,38 +1,104 @@
-.angleCard1 {
-  background: #576574;
+.square {
   display: flex;
-  align-items: center;
+  width: 119px;
+  height: 119px;
+  padding: 10px;
   justify-content: center;
-  border-radius: 5px 0 0 0;
+  align-items: center;
+  background: #576574;
+  cursor: pointer;
+  &:nth-child(1) {
+    border-radius: 20px 0 0 0;
+  }
+  &:nth-child(11) {
+    border-radius: 0 20px 0 0;
+  }
+  &:nth-child(41) {
+    border-radius: 0 0 20px 0;
+  }
+  &:nth-child(31) {
+    border-radius: 0 0 0 20px;
+  }
+}
+.cell {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #576574;
+  cursor: pointer;
+  position: relative;
 }
 
-.angleCard2 {
-  background: #576574;
+.money {
   display: flex;
-  align-items: center;
+  width: 66px;
+  padding: 2px 0;
   justify-content: center;
-  border-radius: 0 5px 0 0;
+  align-items: center;
+  gap: 10px;
+  position: absolute;
+  background-color: #576574;
+  top: 0;
+}
+.block {
+  display: flex;
+  width: 66px;
+  padding: 6px 0;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  position: absolute;
+  bottom: 0;
 }
 
-.angleCard3 {
-  background: #576574;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0 0 5px 0;
+.house {
+  width: 6px;
+  height: 6px;
+  background-color: #1a1a1c;
+  border-radius: 50%;
 }
 
-.angleCard4 {
-  background: #576574;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0 0 0 5px;
+.hotel {
+  width: 33px;
+  height: 6px;
+  background-color: #1a1a1c;
+  border-radius: 3px;
 }
 
-.card {
-  background: #576574;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.cell_right {
+  .money {
+    transform: rotate(90deg);
+    top: auto;
+    right: -25px;
+  }
+  .block {
+    transform: rotate(90deg);
+    bottom: auto;
+    left: -21px;
+  }
+}
+.cell_bottom {
+  .money {
+    top: auto;
+    bottom: 0;
+  }
+  .block {
+    bottom: auto;
+    top: 0;
+  }
+}
+
+.cell_left {
+  .money {
+    transform: rotate(-90deg);
+    top: auto;
+    left: -25px;
+  }
+  .block {
+    transform: rotate(-90deg);
+    bottom: auto;
+    right: -21px;
+  }
 }
