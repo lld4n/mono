@@ -1,12 +1,12 @@
-import { getTimeGame } from "@/utils/GetTime";
+import { GetTimeGame } from "@/utils/GetTimeGame";
 import { useEffect, useState } from "react";
 
 export default function Timer({ time }: { time: number }) {
-  const [currentTime, setCurrentTime] = useState<string>(getTimeGame(time));
+  const [currentTime, setCurrentTime] = useState<string>(GetTimeGame(time));
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTime(getTimeGame(time));
+      setCurrentTime(GetTimeGame(time));
     }, 10000);
     return () => {
       clearInterval(interval);

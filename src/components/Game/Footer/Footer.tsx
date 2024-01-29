@@ -14,9 +14,11 @@ export default function Footer({ currentPlayer, game }: PropsType) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.left}>
-        <div className={styles.leftItem}>
-          <Timer time={game?.started!} />
-        </div>
+        {game && (
+          <div className={styles.leftItem}>
+            <Timer time={game?.started} />
+          </div>
+        )}
         <div className={styles.leftItem}>
           <Money value={currentPlayer?.balance} />
         </div>
