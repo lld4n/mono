@@ -1,6 +1,9 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
-
+const cardsIndexList = [
+  1, 3, 6, 8, 9, 11, 13, 14, 16, 18, 19, 21, 23, 24, 26, 27, 29, 31, 32, 34, 37,
+  39, 5, 15, 25, 35, 12, 28,
+];
 export const create = mutation({
   args: {},
   handler: async (ctx) => {
@@ -64,5 +67,44 @@ export const getOpen = query({
       )
       .order("desc")
       .take(20);
+  },
+});
+
+export const start = mutation({
+  args: {
+    games_id: v.id("games"),
+  },
+  handler: async (ctx, args) => {
+    const players = await ctx.db
+      .query("players")
+      .filter((q) => q.eq(q.field("games_id"), args.games_id))
+      .collect();
+    const game = await ctx.db.get(args.games_id);
+    if (players.length === 0) {
+      throw new Error("Нет игроков");
+    }
+    if (game === null) {
+      throw new Error("Игра не найдена");
+    }
+    if (!players.every((p) => p.selected !== -1)) {
+      throw new Error("Не все выбрали фигуру");
+    }
+    await ctx.db.patch(game._id, {
+      started: new Date().getTime(),
+    });
+    for (let i = 1; i < players.length + 1; i++) {
+      await ctx.db.patch(players[i - 1]._id, {
+        order: i,
+      });
+    }
+    for (const index of cardsIndexList) {
+      await ctx.db.insert("cards", {
+        games_id: game._id,
+        index,
+        status: -1,
+        buy: true,
+        mortgage: false,
+      });
+    }
   },
 });
