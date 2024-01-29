@@ -9,3 +9,9 @@
   z-index: 1;
   cursor: pointer;
 }
+
+@media (max-width: 1530px) {
+  .content {
+    display: none;
+  }
+}

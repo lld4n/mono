@@ -47,3 +47,11 @@
     background: #230000;
   }
 }
+.logo {
+  display: none;
+}
+@media (max-width: 1530px) {
+  .logo {
+    display: block;
+  }
+}

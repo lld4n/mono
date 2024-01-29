@@ -18,7 +18,7 @@ export default function GameBoard({
   game,
   currentPlayer,
 }: PropsType) {
-  const [openCard, setOpenCard] = useState<number>(-1);
+  const [openIndex, setOpenIndex] = useState<number>(-1);
 
   const indexes = [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 39, -1, 11, 38, 12, 37, 13, 36, 14, 35,
@@ -35,8 +35,8 @@ export default function GameBoard({
               cards={cards}
               game={game}
               currentPlayer={currentPlayer}
-              openIndex={openCard}
-              setOpenIndex={setOpenCard}
+              openIndex={openIndex}
+              setOpenIndex={setOpenIndex}
               key={cardIndex}
             />
           );
@@ -46,7 +46,7 @@ export default function GameBoard({
             key={cardIndex}
             players={players}
             cards={cards}
-            setOpenIndex={setOpenCard}
+            setOpenIndex={setOpenIndex}
           />
         );
       })}
