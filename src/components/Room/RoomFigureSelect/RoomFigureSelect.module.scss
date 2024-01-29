@@ -10,6 +10,7 @@
   justify-content: center;
   align-items: center;
 }
+
 .active {
   border-radius: 5px;
   background: #fff;
@@ -19,6 +20,10 @@
   padding: 10px;
   justify-content: center;
   align-items: center;
+
+  &:hover {
+    background: #202020; //добавил ховер у персонажей
+  }
 }
 
 .title {
