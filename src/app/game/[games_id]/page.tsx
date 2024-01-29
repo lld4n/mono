@@ -1,25 +1,22 @@
+"use client";
 import { Id } from "../../../../convex/_generated/dataModel";
-import { useQuery } from "convex/react";
-import { api } from "../../../../convex/_generated/api";
+import { useConvexAuth } from "convex/react";
+import Wrapper from "@/components/Game/Wrapper/Wrapper";
+import { useEffect, useState } from "react";
+import Loading from "@/components/Global/Loading/Loading";
 
 export default function Game({
   params,
 }: {
   params: { games_id: Id<"games"> };
 }) {
-  const game = useQuery(api.games.get, {
-    games_id: params.games_id,
-  });
-  const players = useQuery(api.players.getAllByGames, {
-    games_id: params.games_id,
-  });
-  const currentPlayer = useQuery(api.players.getByGames, {
-    games_id: params.games_id,
-  });
+  const [isLoading, setIsLoading] = useState(true);
+  const { isAuthenticated } = useConvexAuth();
+  useEffect(() => {
+    if (isAuthenticated) setIsLoading(false);
+  }, [isAuthenticated]);
 
-  const cards = useQuery(api.cards.getByGames, {
-    games_id: params.games_id,
-  });
-
-  return <div></div>;
+  return (
+    <>{!isLoading ? <Wrapper game_id={params.games_id} /> : <Loading />}</>
+  );
 }
