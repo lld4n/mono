@@ -9,8 +9,10 @@
 }
 
 .item {
+  border-radius: 5px; // округление кнопкам главной страницы забыли дать или ты убрал?
   font-weight: 700;
   padding: 10px;
+
   &:hover {
     background: #202020;
   }
