@@ -40,6 +40,10 @@ export default function Game({
   }, [addPlayer, isAuthenticated, params.games_id]);
 
   useEffect(() => {
+    if (game && game.started !== 0) router.push(`/game/${game._id}`);
+  }, [game, router]);
+
+  useEffect(() => {
     if (
       players &&
       playerId &&

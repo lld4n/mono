@@ -1,0 +1,33 @@
+.wrapper {
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.left, .right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.item {
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+
+  &:hover {
+    background: #272729;
+  }
+}
+
+.leftItem {
+  border-radius: 5px;
+  background: #272729;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+}
