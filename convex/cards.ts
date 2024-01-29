@@ -183,3 +183,130 @@ export const unbuild = mutation({
     });
   },
 });
+
+export const mortgage = mutation({
+  args: {
+    cards_id: v.id("cards"),
+    players_id: v.id("players"),
+    money: v.number(),
+  },
+  handler: async (ctx, args) => {
+    //дублирование кода будем как-то фиксить?
+    const player = await ctx.db.get(args.players_id);
+    const card = await ctx.db.get(args.cards_id);
+    if (card === null) {
+      throw new Error("Карточка не найден");
+    }
+    if (player === null) {
+      throw new Error("Игрок не найден");
+    }
+    if (card.owner !== player._id) {
+      throw new Error("Карточка не принадлежит игроку");
+    }
+    //получаю название группы карточки
+    const cardClass = CardClassObject[card.index];
+    if (cardClass === "street") {
+      if (card.status === 0) {
+        //получаю группу карточек
+        const cardGroup = CardGroupObject[card.index];
+
+        //получаю все карточки
+        const convexCards = await ctx.db
+          .query("cards")
+          .filter((q) => q.eq(q.field("games_id"), card.games_id))
+          .collect();
+
+        //фильтрую карточки, получая только те, что принадлежат группе выше
+        const neededCards = convexCards.filter((card) =>
+          cardGroup.includes(card.index),
+        );
+
+        //с помощью функции every проверяю, удовлетворяет ли условию каждая карточка
+        const isMortgage = neededCards.every((card) => card.status === 0);
+        if (isMortgage) {
+          await ctx.db.patch(player._id, {
+            balance: player.balance + args.money,
+          });
+          await ctx.db.patch(card._id, {
+            mortgage: true,
+          });
+        } else {
+          throw new Error(
+            "Карточку нельзя заложить, так как в группе есть карточки с домами/отелями",
+          );
+        }
+      }
+    }
+    if (cardClass === "train" || cardClass === "nature") {
+      await ctx.db.patch(player._id, {
+        balance: player.balance + args.money,
+      });
+      await ctx.db.patch(card._id, {
+        mortgage: true,
+      });
+    }
+  },
+});
+
+export const unmortgage = mutation({
+  args: {
+    cards_id: v.id("cards"),
+    players_id: v.id("players"),
+    money: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const player = await ctx.db.get(args.players_id);
+    const card = await ctx.db.get(args.cards_id);
+    if (card === null) {
+      throw new Error("Карточка не найден");
+    }
+    if (player === null) {
+      throw new Error("Игрок не найден");
+    }
+    if (card.owner !== player._id) {
+      throw new Error("Карточка не принадлежит игроку");
+    }
+
+    if (player.balance >= args.money) {
+      await ctx.db.patch(player._id, {
+        balance: player.balance - args.money,
+      });
+      await ctx.db.patch(card._id, {
+        mortgage: false,
+      });
+    } else {
+      throw new Error("Недостаточно средств");
+    }
+
+    //получаю название группы карточки
+    const cardClass = CardClassObject[card.index];
+    if (cardClass === "train" || cardClass === "nature") {
+      //получаю группу карточек
+      const cardGroup = CardGroupObject[card.index];
+
+      //получаю все карточки
+      const convexCards = await ctx.db
+        .query("cards")
+        .filter((q) => q.eq(q.field("games_id"), card.games_id))
+        .collect();
+
+      //фильтрую карточки, получая только те, что принадлежат группе выше
+      const neededCards = convexCards.filter((card) =>
+        cardGroup.includes(card.index),
+      );
+
+      //получили кол-во карточек, принадлежащих игроку
+      const count = neededCards.reduce((accum, card, _) => {
+        if (card.owner === player._id) accum = accum + 1;
+        return accum;
+      }, 0);
+
+      //меняем статус всем карточкам из группы
+      neededCards.map(async (card) => {
+        await ctx.db.patch(card._id, {
+          status: count - 1,
+        });
+      });
+    }
+  },
+});
