@@ -7,13 +7,17 @@ import Loading from "@/components/Global/Loading/Loading";
 
 export default function Room() {
   const router = useRouter();
-  const mutation = useMutation(api.games.create);
+  const createGame = useMutation(api.games.create);
+  const sendTech = useMutation(api.messages.sendTech);
   useEffect(() => {
-    const createGame = async () => {
-      const gameId = await mutation();
-      router.push(`/room/${gameId}`);
-    };
-    createGame();
-  }, []);
+    createGame().then((gameId) => {
+      sendTech({
+        games_id: gameId,
+        message: "Была создана комната",
+      }).then(() => {
+        router.push(`/room/${gameId}`);
+      });
+    });
+  }, [createGame, router, sendTech]);
   return <Loading />;
 }

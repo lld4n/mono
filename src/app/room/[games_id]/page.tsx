@@ -2,7 +2,7 @@
 import RoomFigureSelect from "@/components/Room/RoomFigureSelect/RoomFigureSelect";
 import Copy from "@/components/Room/Copy/Copy";
 import { useEffect, useState } from "react";
-import { useConvexAuth, useMutation, useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 import styles from "./page.module.scss";
@@ -17,7 +17,6 @@ export default function Game({
   params: { games_id: Id<"games"> };
 }) {
   const [playerId, setPlayerId] = useState<Id<"players">>();
-
   const players = useQuery(api.players.getAllByGames, {
     games_id: params.games_id,
   });
@@ -28,16 +27,12 @@ export default function Game({
 
   const router = useRouter();
 
-  const { isAuthenticated } = useConvexAuth();
-
   const addPlayer = useMutation(api.players.add);
   useEffect(() => {
-    if (isAuthenticated) {
-      addPlayer({ games_id: params.games_id }).then((player_id) =>
-        setPlayerId(player_id),
-      );
-    }
-  }, [addPlayer, isAuthenticated, params.games_id]);
+    addPlayer({ games_id: params.games_id }).then((player_id) =>
+      setPlayerId(player_id),
+    );
+  }, [addPlayer, params.games_id]);
 
   useEffect(() => {
     if (game && game.started !== 0) router.push(`/game/${game._id}`);
@@ -65,8 +60,8 @@ export default function Game({
         players_id={playerId}
         players={players}
       />
-      <RoomPlayersList players={players} game={game} />
       <Chat players={players} playerId={playerId} games_id={params.games_id} />
+      <RoomPlayersList players={players} game={game} />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { PlayersGetType } from "@/types/PlayersGetType";
-import { Id } from "../../../../../convex/_generated/dataModel";
+import { Doc, Id } from "../../../../../convex/_generated/dataModel";
 import styles from "./Admin.module.scss";
 import { Crown, Trash2 } from "lucide-react";
 import Image from "next/image";
@@ -10,22 +10,22 @@ import { GetFigureFromSelected } from "@/utils/GetFigureFromSelected";
 
 type PropsType = {
   players: PlayersGetType[];
-  adminId: Id<"users"> | undefined;
-  gameId: Id<"games">;
+  adminId: Id<"users">;
+  game: Doc<"games">;
   setIsStarted: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function Admin({
   players,
   adminId,
-  gameId,
+  game,
   setIsStarted,
 }: PropsType) {
   const removePlayer = useMutation(api.players.remove);
   const openGame = useMutation(api.games.open);
   const startGame = useMutation(api.games.start);
 
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(game.open);
 
   async function remove(playerId: Id<"players">) {
     await removePlayer({
@@ -36,13 +36,13 @@ export default function Admin({
   async function toggleRoom() {
     setIsOpen(!isOpen);
     await openGame({
-      games_id: gameId!,
+      games_id: game._id,
     });
   }
 
   async function start() {
     setIsStarted(true);
-    await startGame({ games_id: gameId! });
+    await startGame({ games_id: game._id });
   }
 
   return (
@@ -121,9 +121,11 @@ export default function Admin({
           ></div>
         </div>
       </div>
-      <button className={styles.start} onClick={() => start()}>
-        Начать игру
-      </button>
+      {players.every((pl) => pl.selected !== -1) && (
+        <button className={styles.btn} onClick={() => start()}>
+          Начать игру
+        </button>
+      )}
     </>
   );
 }

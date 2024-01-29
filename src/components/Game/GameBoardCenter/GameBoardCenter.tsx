@@ -34,13 +34,11 @@ export default function GameBoardCenter({
           currentPlayer={currentPlayer}
         />
       )}
-      {game && currentPlayer && (
-        <Chat
-          players={players}
-          games_id={game._id}
-          playerId={currentPlayer._id}
-        />
-      )}
+      <Chat
+        players={players}
+        games_id={game._id}
+        playerId={currentPlayer._id}
+      />
     </div>
   );
 }

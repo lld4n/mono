@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import styles from "./RoomPlayersList.module.scss";
 import Admin from "@/components/Room/RoomPlayersList/Admin/Admin";
 import NoAdmin from "@/components/Room/RoomPlayersList/NoAdmin/NoAdmin";
-import { useRouter } from "next/navigation";
+import MiniLoading from "@/components/Global/MiniLoading/MiniLoading";
 
 type PropsType = {
   players: PlayersGetType[];
@@ -17,27 +17,35 @@ type PropsType = {
 export default function RoomPlayersList({ players, game }: PropsType) {
   const userId = useQuery(api.users.identify);
   const [admin, setAdmin] = useState<PlayersGetType | undefined>();
-
   const [isStarted, setIsStarted] = useState<boolean>(false);
-
-  const router = useRouter();
 
   useEffect(() => {
     setAdmin(getPlayerAdmin(players, game));
   }, [admin, game, players]);
 
+  if (!admin || !userId) {
+    return (
+      <div className={styles.wrapper}>
+        <MiniLoading />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.wrapper}>
-      {!isStarted && userId === admin?.user?._id ? (
+      {!isStarted && userId === admin.user!._id ? (
         <Admin
+          game={game}
           players={players}
           adminId={userId}
-          gameId={game._id}
           setIsStarted={setIsStarted}
         ></Admin>
       ) : (
-        <NoAdmin players={players} adminId={admin?.user?._id} />
+        <NoAdmin players={players} adminId={admin.user!._id} game={game} />
       )}
+      <button className={styles.delete}>
+        {admin.user!._id === userId ? "Удалить" : "Покинуть"} игру
+      </button>
     </div>
   );
 }

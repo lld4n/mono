@@ -19,15 +19,15 @@ export default function RoomFigureSelect({
   games_id,
   players_id,
 }: PropsType) {
-  const mutation = useMutation(api.players.select);
+  const playersSelect = useMutation(api.players.select);
   async function select(figureIndex: number, isSelected: boolean) {
     if (!isSelected) {
-      await mutation({ players_id, games_id, selected: figureIndex });
+      await playersSelect({ players_id, games_id, selected: figureIndex });
     }
   }
 
   return (
-    <div>
+    <div className={styles.wrapper}>
       <h3 className={styles.title}>Выберите персонажа</h3>
       <div className={styles.figureList}>
         {figuresList.map((figure) => {
@@ -44,7 +44,7 @@ export default function RoomFigureSelect({
               className={isSelected ? styles.disabled : styles.active}
               onClick={() => select(figure.index, isSelected)}
             >
-              <Image src={figure.svg} alt={"figure"} />
+              <Image src={figure.svg} alt={String(figure.index)} />
             </button>
           );
         })}

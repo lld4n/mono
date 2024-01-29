@@ -6,7 +6,7 @@ import { api } from "../../../../convex/_generated/api";
 import MiniLoading from "@/components/Global/MiniLoading/MiniLoading";
 import { ReformatDate } from "@/utils/ReformatDate";
 import { GetPlayerFromId } from "@/utils/GetPlayerFromId";
-import { Send } from "lucide-react";
+import { CheckCircle, Send } from "lucide-react";
 import styles from "./Chat.module.scss";
 import { GetFigureFromSelected } from "@/utils/GetFigureFromSelected";
 export default function Chat({
@@ -41,7 +41,7 @@ export default function Chat({
               <span className={styles.date}>
                 {ReformatDate(message._creationTime)}
               </span>
-              {player && (
+              {player ? (
                 <span
                   className={styles.player}
                   style={{
@@ -51,6 +51,12 @@ export default function Chat({
                 >
                   {player.user!.name}
                 </span>
+              ) : (
+                <CheckCircle
+                  size={16}
+                  color="#ffffff"
+                  className={styles.tech}
+                />
               )}
               <span className={styles.text}>{message.message}</span>
             </div>

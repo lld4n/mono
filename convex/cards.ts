@@ -209,47 +209,12 @@ export const mortgage = mutation({
     if (card.status !== 0) {
       throw new Error("У карточки есть дома или отель");
     }
-    //получаю класс карточки
-    const cardClass = CardClassObject[card.index];
-    if (cardClass === "street") {
-      if (card.status === 0) {
-        //получаю группу карточек
-        const cardGroup = CardGroupObject[card.index];
-
-        //получаю все карточки
-        const convexCards = await ctx.db
-          .query("cards")
-          .filter((q) => q.eq(q.field("games_id"), card.games_id))
-          .collect();
-
-        //фильтрую карточки, получая только те, что принадлежат группе выше
-        const neededCards = convexCards.filter((cardItem) =>
-          cardGroup.includes(cardItem.index),
-        );
-
-        //с помощью функции every проверяю, удовлетворяет ли условию каждая карточка
-        const isMortgage = neededCards.every((card) => card.status === 0);
-        if (!isMortgage) {
-          throw new Error(
-            "Карточку нельзя заложить, так как в группе есть карточки с домами/отелями",
-          );
-        }
-        await ctx.db.patch(player._id, {
-          balance: player.balance + args.money,
-        });
-        await ctx.db.patch(card._id, {
-          mortgage: true,
-        });
-      }
-    }
-    if (cardClass === "train" || cardClass === "nature") {
-      await ctx.db.patch(player._id, {
-        balance: player.balance + args.money,
-      });
-      await ctx.db.patch(card._id, {
-        mortgage: true,
-      });
-    }
+    await ctx.db.patch(player._id, {
+      balance: player.balance + args.money,
+    });
+    await ctx.db.patch(card._id, {
+      mortgage: true,
+    });
   },
 });
 

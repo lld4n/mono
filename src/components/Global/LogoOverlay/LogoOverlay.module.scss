@@ -1,10 +1,17 @@
-.content{
+.content {
   display: flex;
   justify-content: center;
 }
 
-.logo{
+.logo {
   position: absolute;
   top: 10px;
   z-index: 1;
+  cursor: pointer;
+}
+
+@media (max-width: 1530px) {
+  .content {
+    display: none;
+  }
 }

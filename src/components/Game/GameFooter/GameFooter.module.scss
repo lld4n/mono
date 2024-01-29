@@ -3,11 +3,13 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  position: fixed;
+  bottom: 0;
 }
 
-.left, .right {
+.block {
   display: flex;
-  gap: 10px;
+  gap: 5px;
   align-items: center;
 }
 
@@ -19,7 +21,7 @@
   font-weight: 500;
 
   &:hover {
-    background: #272729;
+    background: #2b2b2d;
   }
 }
 
@@ -27,7 +29,29 @@
   border-radius: 5px;
   background: #272729;
   padding: 5px 10px;
-  cursor: pointer;
   font-size: 12px;
   font-weight: 500;
+}
+
+.delete {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  padding: 5px;
+  color: #f85149;
+  font-size: 12px;
+
+  &:hover {
+    background: #230000;
+  }
+}
+.logo {
+  display: none;
+}
+@media (max-width: 1530px) {
+  .logo {
+    display: block;
+  }
 }

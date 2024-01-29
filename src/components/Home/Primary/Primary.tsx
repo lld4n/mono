@@ -5,7 +5,7 @@ import { SignInButton } from "@clerk/nextjs";
 export default function Primary() {
   return (
     <div className={styles.content}>
-      <SignInButton mode={"modal"}>
+      <SignInButton mode="modal">
         <div className={styles.button}>
           <span>Войти</span>
           <svg
