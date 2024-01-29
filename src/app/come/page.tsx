@@ -15,6 +15,13 @@ export default function Come() {
         placeholder="Введите ключ комнаты"
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        onKeyUp={(e) => {
+          if (e.key === "Enter") {
+            if (value) {
+              router.push("/room/" + value);
+            }
+          }
+        }}
       />
       <button
         className={styles.btn}
