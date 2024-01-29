@@ -7,13 +7,11 @@ import Loading from "@/components/Global/Loading/Loading";
 
 export default function Room() {
   const router = useRouter();
-  const mutation = useMutation(api.games.create);
+  const createGame = useMutation(api.games.create);
   useEffect(() => {
-    const createGame = async () => {
-      const gameId = await mutation();
+    createGame().then((gameId) => {
       router.push(`/room/${gameId}`);
-    };
-    createGame();
-  }, []);
+    });
+  }, [createGame, router]);
   return <Loading />;
 }
