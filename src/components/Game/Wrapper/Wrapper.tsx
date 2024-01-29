@@ -3,6 +3,8 @@ import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 import Footer from "@/components/Game/Footer/Footer";
 import GamePlayersList from "@/components/Game/GamePlayersList/GamePlayersList";
+import GameBoard from "@/components/Game/GameBoard/GameBoard";
+import styles from "./Wrapper.module.scss";
 
 export default function Wrapper({ game_id }: { game_id: Id<"games"> }) {
   const game = useQuery(api.games.get, {
@@ -20,7 +22,13 @@ export default function Wrapper({ game_id }: { game_id: Id<"games"> }) {
     games_id: game_id,
   });
   return (
-    <div>
+    <div className={styles.wrapper}>
+      <GameBoard
+        cards={cards!}
+        players={players!}
+        game={game!}
+        currentPlayer={currentPlayer!}
+      />
       <GamePlayersList players={players!} game={game!} />
       <Footer currentPlayer={currentPlayer} game={game} />
     </div>
