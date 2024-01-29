@@ -17,14 +17,13 @@ type PropsType = {
 export default function RoomPlayersList({ players, game }: PropsType) {
   const userId = useQuery(api.users.identify);
   const [admin, setAdmin] = useState<PlayersGetType | undefined>();
-
   const [isStarted, setIsStarted] = useState<boolean>(false);
 
   useEffect(() => {
     setAdmin(getPlayerAdmin(players, game));
   }, [admin, game, players]);
 
-  if (!admin && !userId) {
+  if (!admin || !userId) {
     return (
       <div className={styles.wrapper}>
         <MiniLoading />
@@ -34,17 +33,20 @@ export default function RoomPlayersList({ players, game }: PropsType) {
 
   return (
     <div className={styles.wrapper}>
-      {!isStarted && userId === admin?.user?._id ? (
+      {!isStarted && userId === admin.user!._id ? (
         <Admin
           game={game}
           players={players}
           adminId={userId}
-          gameId={game._id}
           setIsStarted={setIsStarted}
         ></Admin>
       ) : (
-        <NoAdmin players={players} adminId={admin?.user?._id} />
+        <NoAdmin players={players} adminId={admin.user!._id} game={game} />
       )}
+      // TODO: необходимо сделать функциональной
+      <button className={styles.delete}>
+        {admin.user!._id === userId ? "Удалить" : "Покинуть"} игру
+      </button>
     </div>
   );
 }
