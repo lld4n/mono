@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import styles from "./RoomPlayersList.module.scss";
 import Admin from "@/components/Room/RoomPlayersList/Admin/Admin";
 import NoAdmin from "@/components/Room/RoomPlayersList/NoAdmin/NoAdmin";
-import { useRouter } from "next/navigation";
+import MiniLoading from "@/components/Global/MiniLoading/MiniLoading";
 
 type PropsType = {
   players: PlayersGetType[];
@@ -20,16 +20,23 @@ export default function RoomPlayersList({ players, game }: PropsType) {
 
   const [isStarted, setIsStarted] = useState<boolean>(false);
 
-  const router = useRouter();
-
   useEffect(() => {
     setAdmin(getPlayerAdmin(players, game));
   }, [admin, game, players]);
+
+  if (!admin && !userId) {
+    return (
+      <div className={styles.wrapper}>
+        <MiniLoading />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.wrapper}>
       {!isStarted && userId === admin?.user?._id ? (
         <Admin
+          game={game}
           players={players}
           adminId={userId}
           gameId={game._id}

@@ -1,5 +1,5 @@
 import { PlayersGetType } from "@/types/PlayersGetType";
-import { Id } from "../../../../../convex/_generated/dataModel";
+import { Doc, Id } from "../../../../../convex/_generated/dataModel";
 import styles from "./Admin.module.scss";
 import { Crown, Trash2 } from "lucide-react";
 import Image from "next/image";
@@ -11,6 +11,7 @@ import { GetFigureFromSelected } from "@/utils/GetFigureFromSelected";
 type PropsType = {
   players: PlayersGetType[];
   adminId: Id<"users"> | undefined;
+  game: Doc<"games">;
   gameId: Id<"games">;
   setIsStarted: React.Dispatch<React.SetStateAction<boolean>>;
 };
