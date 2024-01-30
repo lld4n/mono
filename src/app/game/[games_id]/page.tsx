@@ -7,6 +7,7 @@ import GameBoard from "@/components/Game/GameBoard/GameBoard";
 import GamePlayersList from "@/components/Game/GamePlayersList/GamePlayersList";
 import GameFooter from "@/components/Game/GameFooter/GameFooter";
 import Loading from "@/components/Global/Loading/Loading";
+import React from "react";
 
 export default function Game({
   params,
@@ -40,7 +41,7 @@ export default function Game({
         game={game}
         currentPlayer={currentPlayer}
       />
-      {/*<GamePlayersList players={players!} game={game!} />*/}
+      <GamePlayersList players={players} game={game} />
       <GameFooter currentPlayer={currentPlayer} game={game} />
     </div>
   );

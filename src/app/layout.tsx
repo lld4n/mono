@@ -4,6 +4,7 @@ import "@/styles/global.scss";
 import { ClerkProvider } from "@clerk/nextjs";
 import ConvexClientProvider from "@/providers/ConvexClientProvider";
 import LogoOverlay from "@/components/Global/LogoOverlay/LogoOverlay";
+import SizeOverlay from "@/components/Global/SizeOverlay/SizeOverlay";
 export const metadata: Metadata = {
   title: "mono",
   description: "created by lldan",
@@ -25,7 +26,9 @@ export default function RootLayout({
       >
         <body>
           <ConvexClientProvider>
-            <LogoOverlay>{children}</LogoOverlay>
+            <SizeOverlay>
+              <LogoOverlay>{children}</LogoOverlay>
+            </SizeOverlay>
           </ConvexClientProvider>
         </body>
       </html>
