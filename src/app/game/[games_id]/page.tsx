@@ -40,7 +40,7 @@ export default function Game({
         game={game}
         currentPlayer={currentPlayer}
       />
-      {/*<GamePlayersList players={players!} game={game!} />*/}
+      <GamePlayersList players={players} game={game} />
       <GameFooter currentPlayer={currentPlayer} game={game} />
     </div>
   );
