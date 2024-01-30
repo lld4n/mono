@@ -19,7 +19,7 @@ export default function GamePlayersList({ players, game }: PropsType) {
             <>
               {!player.loser ? (
                 <div
-                  key={player.user?._id}
+                  key={player.user!._id}
                   className={
                     player.order === game.current
                       ? styles.player + " " + styles.active
@@ -47,7 +47,7 @@ export default function GamePlayersList({ players, game }: PropsType) {
                   </div>
                 </div>
               ) : (
-                <div className={styles.player}>
+                <div className={styles.player} key={player.user!._id}>
                   <Image
                     src={player.user?.picture!}
                     alt={"avatar"}
