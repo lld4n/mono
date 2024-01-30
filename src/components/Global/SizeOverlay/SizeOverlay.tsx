@@ -5,6 +5,8 @@ import UAParser from "ua-parser-js";
 import { Command, MoveHorizontal, MoveVertical, Wrench } from "lucide-react";
 import Image from "next/image";
 import mini_logo from "@/assets/mini-logo.svg";
+const MIN_HEIGHT = 848;
+const MIN_WIDTH = 1500;
 export default function SizeOverlay({
   children,
 }: {
@@ -15,7 +17,7 @@ export default function SizeOverlay({
   const [height, setHeight] = React.useState(0);
   React.useEffect(() => {
     const handle = () => {
-      if (window.innerWidth < 1500 || window.innerHeight < 848) {
+      if (window.innerWidth < MIN_WIDTH || window.innerHeight < MIN_HEIGHT) {
         setView(false);
       } else {
         setView(true);
@@ -83,8 +85,8 @@ export default function SizeOverlay({
               </span>
             </div>
             <div className={styles.footer}>
-              <div>min-width: 1500px</div>
-              <div>min-height: 848px</div>
+              <div>min-width: {MIN_WIDTH}px</div>
+              <div>min-height: {MIN_HEIGHT}px</div>
             </div>
           </div>
         </div>
