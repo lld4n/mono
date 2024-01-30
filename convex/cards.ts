@@ -70,6 +70,7 @@ export const buy = mutation({
           q.and(
             q.eq(q.field("games_id"), card.games_id),
             q.eq(q.field("owner"), player._id),
+            q.eq(q.field("mortgage"), false),
           ),
         )
         .collect();
@@ -191,7 +192,6 @@ export const mortgage = mutation({
     money: v.number(),
   },
   handler: async (ctx, args) => {
-    //дублирование кода будем как-то фиксить?
     const player = await ctx.db.get(args.players_id);
     const card = await ctx.db.get(args.cards_id);
     if (card === null) {
@@ -209,12 +209,56 @@ export const mortgage = mutation({
     if (card.status !== 0) {
       throw new Error("У карточки есть дома или отель");
     }
-    await ctx.db.patch(player._id, {
-      balance: player.balance + args.money,
-    });
-    await ctx.db.patch(card._id, {
-      mortgage: true,
-    });
+
+    const cardClass = CardClassObject[card.index];
+    if (cardClass === "train" || cardClass === "nature") {
+      const group = CardGroupObject[card.index];
+      if (group.length === 0) {
+        throw new Error("Группу карточки не получилось определить");
+      }
+      await ctx.db.patch(player._id, {
+        balance: player.balance + args.money,
+      });
+      await ctx.db.patch(card._id, {
+        mortgage: true,
+        status: card.status - 1,
+      });
+      const cardsGroup = await ctx.db
+        .query("cards")
+        .filter((q) =>
+          q.and(
+            q.eq(q.field("games_id"), card.games_id),
+            q.eq(q.field("owner"), player._id),
+            q.eq(q.field("mortgage"), false),
+          ),
+        )
+        .collect();
+      if (cardsGroup.length === 0) {
+        throw new Error("Список группы пуст");
+      }
+      let count = 0;
+      for (const item of cardsGroup) {
+        if (group.includes(item.index)) {
+          count++;
+        }
+      }
+      // тут как будто поплыл я немного
+      for (const item of cardsGroup) {
+        if (group.includes(item.index)) {
+          await ctx.db.patch(item._id, {
+            status: count - 1,
+          });
+        }
+      }
+    } else {
+      await ctx.db.patch(player._id, {
+        balance: player.balance + args.money,
+      });
+      await ctx.db.patch(card._id, {
+        mortgage: true,
+        status: card.status - 1,
+      });
+    }
   },
 });
 
@@ -246,37 +290,42 @@ export const unmortgage = mutation({
     });
     await ctx.db.patch(card._id, {
       mortgage: false,
+      status: card.status + 1,
     });
 
-    //получаю класс карточки
     const cardClass = CardClassObject[card.index];
     if (cardClass === "train" || cardClass === "nature") {
-      //получаю группу карточек
-      const cardGroup = CardGroupObject[card.index];
-
-      //получаю все карточки
-      const convexCards = await ctx.db
+      const group = CardGroupObject[card.index];
+      if (group.length === 0) {
+        throw new Error("Группу карточки не получилось определить");
+      }
+      const cardsGroup = await ctx.db
         .query("cards")
-        .filter((q) => q.eq(q.field("games_id"), card.games_id))
+        .filter((q) =>
+          q.and(
+            q.eq(q.field("games_id"), card.games_id),
+            q.eq(q.field("owner"), player._id),
+            q.eq(q.field("mortgage"), false),
+          ),
+        )
         .collect();
-
-      //фильтрую карточки, получая только те, что принадлежат группе выше
-      const neededCards = convexCards.filter((card) =>
-        cardGroup.includes(card.index),
-      );
-
-      //получили кол-во карточек, принадлежащих игроку
-      const count = neededCards.reduce((accum, card, _) => {
-        if (card.owner === player._id) accum = accum + 1;
-        return accum;
-      }, 0);
-
-      //меняем статус всем карточкам из группы
-      neededCards.map(async (card) => {
-        await ctx.db.patch(card._id, {
-          status: count - 1,
-        });
-      });
+      if (cardsGroup.length === 0) {
+        throw new Error("Список группы пуст");
+      }
+      let count = 0;
+      for (const item of cardsGroup) {
+        if (group.includes(item.index)) {
+          count++;
+        }
+      }
+      // тут как будто поплыл я немного
+      for (const item of cardsGroup) {
+        if (group.includes(item.index)) {
+          await ctx.db.patch(item._id, {
+            status: count - 1,
+          });
+        }
+      }
     }
   },
 });
