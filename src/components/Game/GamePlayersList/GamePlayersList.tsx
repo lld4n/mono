@@ -1,25 +1,35 @@
+"use client";
 import { Doc } from "../../../../convex/_generated/dataModel";
 import { PlayersGetType } from "@/types/PlayersGetType";
 import styles from "./GamePlayersList.module.scss";
 import { GetFigureFromSelected } from "@/utils/GetFigureFromSelected";
 import Image from "next/image";
 import Money from "@/components/Game/Money/Money";
+import PlayerTimer from "@/components/Game/PlayerTimer/PlayerTimer";
+import { useMutation } from "convex/react";
+import { api } from "../../../../convex/_generated/api";
 
 type PropsType = {
   players: PlayersGetType[];
   game: Doc<"games">;
+  currentPlayer: Doc<"players">;
 };
-export default function GamePlayersList({ players, game }: PropsType) {
+export default function GamePlayersList({
+  players,
+  game,
+  currentPlayer,
+}: PropsType) {
+  const lose = useMutation(api.players.lose);
   return (
     <div className={styles.wrapper}>
       <div className={styles.players}>
-        {players.map((player) => {
+        {players.map((player, i) => {
           const figure = GetFigureFromSelected(player);
           return (
             <>
               {!player.loser ? (
                 <div
-                  key={player.user!._id}
+                  key={player._id}
                   className={
                     player._id === game.current
                       ? styles.player + " " + styles.active
@@ -45,9 +55,21 @@ export default function GamePlayersList({ players, game }: PropsType) {
                   <div className={styles.balance}>
                     <Money value={player.balance} />
                   </div>
+                  {player._id === game.current && (
+                    <PlayerTimer
+                      game={game}
+                      onFinish={() => {
+                        if (currentPlayer._id === game.current) {
+                          lose({
+                            players_id: game.current,
+                          });
+                        }
+                      }}
+                    />
+                  )}
                 </div>
               ) : (
-                <div className={styles.player} key={player.user!._id}>
+                <div className={styles.player} key={player._id}>
                   <Image
                     src={player.user?.picture!}
                     alt={"avatar"}
