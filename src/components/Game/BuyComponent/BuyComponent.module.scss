@@ -1,0 +1,22 @@
+.wrapper {
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #1a1a1c;
+}
+.btn {
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  gap: 3px;
+  &:hover {
+    background: #2b2b2d;
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
