@@ -34,7 +34,7 @@ export const buy = mutation({
     const player = await ctx.db.get(args.players_id);
     const card = await ctx.db.get(args.cards_id);
     if (card === null) {
-      throw new Error("Карточка не найден");
+      throw new Error("Карточка не найдена");
     }
     if (player === null) {
       throw new Error("Игрок не найден");
@@ -106,7 +106,7 @@ export const build = mutation({
     const player = await ctx.db.get(args.players_id);
     const card = await ctx.db.get(args.cards_id);
     if (card === null) {
-      throw new Error("Карточка не найден");
+      throw new Error("Карточка не найдена");
     }
     if (player === null) {
       throw new Error("Игрок не найден");
@@ -160,7 +160,7 @@ export const unbuild = mutation({
     const player = await ctx.db.get(args.players_id);
     const card = await ctx.db.get(args.cards_id);
     if (card === null) {
-      throw new Error("Карточка не найден");
+      throw new Error("Карточка не найдена");
     }
     if (player === null) {
       throw new Error("Игрок не найден");
@@ -185,6 +185,7 @@ export const unbuild = mutation({
   },
 });
 
+//так и не понял что ты от меня хочешь здесь, крч просто сделаю как написано в задаче
 export const mortgage = mutation({
   args: {
     cards_id: v.id("cards"),
@@ -195,7 +196,7 @@ export const mortgage = mutation({
     const player = await ctx.db.get(args.players_id);
     const card = await ctx.db.get(args.cards_id);
     if (card === null) {
-      throw new Error("Карточка не найден");
+      throw new Error("Карточка не найдена");
     }
     if (player === null) {
       throw new Error("Игрок не найден");
@@ -206,23 +207,20 @@ export const mortgage = mutation({
     if (card.mortgage) {
       throw new Error("Карточка уже заложена");
     }
-    if (card.status !== 0) {
-      throw new Error("У карточки есть дома или отель");
-    }
-
     const cardClass = CardClassObject[card.index];
     if (cardClass === "train" || cardClass === "nature") {
-      const group = CardGroupObject[card.index];
-      if (group.length === 0) {
-        throw new Error("Группу карточки не получилось определить");
-      }
       await ctx.db.patch(player._id, {
         balance: player.balance + args.money,
       });
       await ctx.db.patch(card._id, {
         mortgage: true,
-        status: card.status - 1,
+        status: -1,
       });
+
+      const group = CardGroupObject[card.index];
+      if (group.length === 0) {
+        throw new Error("Группу карточки не получилось определить");
+      }
       const cardsGroup = await ctx.db
         .query("cards")
         .filter((q) =>
@@ -250,13 +248,16 @@ export const mortgage = mutation({
           });
         }
       }
-    } else {
+    } else if (cardClass === "street") {
+      if (card.status !== 0) {
+        throw new Error("У карточки есть дома или отель");
+      }
       await ctx.db.patch(player._id, {
         balance: player.balance + args.money,
       });
       await ctx.db.patch(card._id, {
         mortgage: true,
-        status: card.status - 1,
+        status: -1,
       });
     }
   },
@@ -272,7 +273,7 @@ export const unmortgage = mutation({
     const player = await ctx.db.get(args.players_id);
     const card = await ctx.db.get(args.cards_id);
     if (card === null) {
-      throw new Error("Карточка не найден");
+      throw new Error("Карточка не найдена");
     }
     if (player === null) {
       throw new Error("Игрок не найден");
@@ -285,16 +286,18 @@ export const unmortgage = mutation({
       throw new Error("Недостаточно средств");
     }
 
-    await ctx.db.patch(player._id, {
-      balance: player.balance - args.money,
-    });
-    await ctx.db.patch(card._id, {
-      mortgage: false,
-      status: card.status + 1,
-    });
+    if (!card.mortgage) {
+      throw new Error("Карточка не заложена");
+    }
 
     const cardClass = CardClassObject[card.index];
     if (cardClass === "train" || cardClass === "nature") {
+      await ctx.db.patch(player._id, {
+        balance: player.balance - args.money,
+      });
+      await ctx.db.patch(card._id, {
+        mortgage: false,
+      });
       const group = CardGroupObject[card.index];
       if (group.length === 0) {
         throw new Error("Группу карточки не получилось определить");
@@ -326,6 +329,10 @@ export const unmortgage = mutation({
           });
         }
       }
+    } else if (cardClass === "street") {
+      await ctx.db.patch(card._id, {
+        status: 0,
+      });
     }
   },
 });
