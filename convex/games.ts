@@ -225,7 +225,7 @@ export const updateCurrent = mutation({
     let index = currentPlayer.order;
     while (!nextPlayer) {
       if (index >= players.length) index = 0;
-      if (players[index]._id) {
+      if (players[index]._id && players[index].order > 0) {
         nextPlayer = players[index]._id;
       }
       index++;
