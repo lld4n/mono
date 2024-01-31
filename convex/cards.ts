@@ -231,9 +231,6 @@ export const mortgage = mutation({
           ),
         )
         .collect();
-      if (cardsGroup.length === 0) {
-        throw new Error("Список группы пуст");
-      }
       let count = 0;
       for (const item of cardsGroup) {
         if (group.includes(item.index)) {
@@ -312,9 +309,6 @@ export const unmortgage = mutation({
           ),
         )
         .collect();
-      if (cardsGroup.length === 0) {
-        throw new Error("Список группы пуст");
-      }
       let count = 0;
       for (const item of cardsGroup) {
         if (group.includes(item.index)) {
