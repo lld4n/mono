@@ -1,9 +1,6 @@
 import { action, mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { api } from "./_generated/api";
-import exp from "node:constants";
-import { Simulate } from "react-dom/test-utils";
-import play = Simulate.play;
 
 const cardsIndexList = [
   1, 3, 6, 8, 9, 11, 13, 14, 16, 18, 19, 21, 23, 24, 26, 27, 29, 31, 32, 34, 37,

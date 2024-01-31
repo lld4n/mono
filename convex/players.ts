@@ -173,7 +173,12 @@ export const lose = mutation({
 
     const players = await ctx.db
       .query("players")
-      .filter((q) => q.eq(q.field("loser"), false))
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("games_id"), game._id),
+          q.eq(q.field("loser"), false),
+        ),
+      )
       .collect();
 
     if (players.length === 1) {
@@ -185,8 +190,11 @@ export const lose = mutation({
       });
 
       const user = await ctx.db.get(winner.user);
+
+      if (!user) throw new Error("Пользователь не найден");
+
       await ctx.db.patch(winner.user, {
-        wins: user?.wins ? user.wins + 1 : 1,
+        wins: user.wins + 1,
       });
       return;
     }
@@ -228,6 +236,14 @@ export const lose = mutation({
     await ctx.db.patch(player._id, {
       balance: 0,
       order: -1,
+    });
+
+    const loser = await ctx.db.get(player.user);
+
+    if (!loser) throw new Error("Проигравший не найден");
+
+    await ctx.db.patch(loser._id, {
+      losers: loser.losers - 1,
     });
 
     for (let i = 1; i < players.length + 1; i++) {

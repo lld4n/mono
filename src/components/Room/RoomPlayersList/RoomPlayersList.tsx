@@ -59,12 +59,14 @@ export default function RoomPlayersList({
       ) : (
         <NoAdmin players={players} adminId={admin.user?._id} game={game} />
       )}
-      <button
-        className={styles.delete}
-        onClick={userId === admin.user?._id ? () => del() : () => leave()}
-      >
-        {admin.user?._id === userId ? "Удалить" : "Покинуть"} игру
-      </button>
+      {!isStarted && (
+        <button
+          className={styles.delete}
+          onClick={userId === admin.user?._id ? () => del() : () => leave()}
+        >
+          {admin.user?._id === userId ? "Удалить" : "Покинуть"} игру
+        </button>
+      )}
     </div>
   );
 }
