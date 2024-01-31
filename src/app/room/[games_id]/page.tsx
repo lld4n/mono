@@ -27,6 +27,16 @@ export default function Game({
 
   const router = useRouter();
 
+  useEffect(() => {
+    if (
+      players &&
+      playerId &&
+      players.filter((player) => player._id === playerId).length === 0
+    ) {
+      router.push("/");
+    }
+  }, [playerId, players, router]);
+
   const addPlayer = useMutation(api.players.add);
   useEffect(() => {
     addPlayer({ games_id: params.games_id }).then((player_id) =>
@@ -37,16 +47,6 @@ export default function Game({
   useEffect(() => {
     if (game && game.started !== 0) router.push(`/game/${game._id}`);
   }, [game, router]);
-
-  useEffect(() => {
-    if (
-      players &&
-      playerId &&
-      players.filter((player) => player._id === playerId).length === 0
-    ) {
-      router.push("/");
-    }
-  }, [playerId, players, router]);
 
   if (!game || !players || !playerId) {
     return <Loading />;
@@ -61,7 +61,7 @@ export default function Game({
         players={players}
       />
       <Chat players={players} playerId={playerId} games_id={params.games_id} />
-      <RoomPlayersList players={players} game={game} />
+      <RoomPlayersList players={players} game={game} playerId={playerId} />
     </div>
   );
 }
