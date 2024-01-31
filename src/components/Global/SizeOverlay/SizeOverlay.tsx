@@ -5,6 +5,7 @@ import UAParser from "ua-parser-js";
 import { Command, MoveHorizontal, MoveVertical, Wrench } from "lucide-react";
 import Image from "next/image";
 import mini_logo from "@/assets/mini-logo.svg";
+
 const MIN_HEIGHT = 848;
 const MIN_WIDTH = 1500;
 export default function SizeOverlay({
@@ -32,7 +33,6 @@ export default function SizeOverlay({
     };
   }, []);
   const parser = new UAParser();
-  console.log(parser.getResult());
   return (
     <>
       {view ? (
