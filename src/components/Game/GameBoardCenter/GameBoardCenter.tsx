@@ -5,6 +5,8 @@ import { PlayersGetType } from "@/types/PlayersGetType";
 import { CardsGetType } from "@/types/CardsGetType";
 import React from "react";
 import GameBoardCardInfo from "@/components/Game/GameBoardCardInfo/GameBoardCardInfo";
+import PayComponent from "@/components/Game/PayComponent/PayComponent";
+import { GetGeneralBalance } from "@/utils/GetGeneralBalance";
 
 type PropsType = {
   players: PlayersGetType[];
@@ -25,6 +27,12 @@ export default function GameBoardCenter({
 }: PropsType) {
   return (
     <div className={styles.center}>
+      <PayComponent
+        onPay={(m) => console.log("выполнено" + m)}
+        money={1500}
+        currentPlayer={currentPlayer}
+        generalBalance={GetGeneralBalance(currentPlayer, cards)}
+      />
       {openIndex !== -1 && (
         <GameBoardCardInfo
           players={players}
