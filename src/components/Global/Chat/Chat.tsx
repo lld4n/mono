@@ -9,6 +9,7 @@ import { GetPlayerFromId } from "@/utils/GetPlayerFromId";
 import { CheckCircle, Send } from "lucide-react";
 import styles from "./Chat.module.scss";
 import { GetFigureFromSelected } from "@/utils/GetFigureFromSelected";
+
 export default function Chat({
   players,
   playerId,
@@ -41,7 +42,7 @@ export default function Chat({
               <span className={styles.date}>
                 {ReformatDate(message._creationTime)}
               </span>
-              {player ? (
+              {player && (
                 <span
                   className={styles.player}
                   style={{
@@ -51,14 +52,12 @@ export default function Chat({
                 >
                   {player.user!.name}
                 </span>
-              ) : (
-                <CheckCircle
-                  size={16}
-                  color="#ffffff"
-                  className={styles.tech}
-                />
               )}
-              <span className={styles.text}>{message.message}</span>
+              {player ? (
+                <span className={styles.text}>{message.message}</span>
+              ) : (
+                <span className={styles.textTech}>{message.message}</span>
+              )}
             </div>
           );
         })}
