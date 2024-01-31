@@ -16,8 +16,9 @@ export default defineSchema({
     admin: v.id("users"),
     open: v.boolean(),
     winner: v.optional(v.id("users")),
-    current: v.number(),
+    current: v.optional(v.id("players")),
     players_count: v.number(),
+    timer: v.number(),
   }),
   players: defineTable({
     selected: v.number(),

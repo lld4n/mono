@@ -2,6 +2,8 @@ import { action, mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { api } from "./_generated/api";
 import exp from "node:constants";
+import { Simulate } from "react-dom/test-utils";
+import play = Simulate.play;
 
 const cardsIndexList = [
   1, 3, 6, 8, 9, 11, 13, 14, 16, 18, 19, 21, 23, 24, 26, 27, 29, 31, 32, 34, 37,
@@ -26,8 +28,8 @@ export const create = mutation({
       started: 0,
       admin: user_id,
       open: false,
-      current: 1,
       players_count: 0,
+      timer: 0,
     });
   },
 });
@@ -96,6 +98,11 @@ export const start = mutation({
       started: new Date().getTime(),
     });
     for (let i = 1; i < players.length + 1; i++) {
+      if (i === 1) {
+        await ctx.db.patch(game._id, {
+          current: players[i - 1]._id,
+        });
+      }
       await ctx.db.patch(players[i - 1]._id, {
         order: i,
       });
@@ -109,6 +116,9 @@ export const start = mutation({
         mortgage: false,
       });
     }
+    await ctx.db.patch(game._id, {
+      timer: Date.now() + 120 * 1000, //вот тут чёт не уверен, ну вроде 120 секунд это 120_000 мс
+    });
   },
 });
 
@@ -181,5 +191,49 @@ export const del = mutation({
     if (game && !game.winner) {
       await ctx.db.delete(game._id);
     }
+  },
+});
+
+export const updateTimer = mutation({
+  args: { games_id: v.id("games") },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.games_id, {
+      timer: Date.now() + 90 * 1000, //вот тут чёт не уверен, ну вроде 90 секунд это 90_000 мс
+    });
+  },
+});
+
+export const updateCurrent = mutation({
+  args: { games_id: v.id("games") },
+  handler: async (ctx, args) => {
+    const game = await ctx.db.get(args.games_id);
+    if (!game) throw new Error("Игра не найдена");
+    if (!game.current) throw new Error("Текущий игрок не найден");
+    const currentPlayer = await ctx.db.get(game.current);
+    if (!currentPlayer) throw new Error("Такого игрока не существует");
+    const players = await ctx.db
+      .query("players")
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("games_id"), args.games_id),
+          q.eq(q.field("loser"), false),
+        ),
+      )
+      .collect();
+    //короче начинаем со следующего игрока, но так как наш игрок уже может быть последним в массиве, пришлось исполнять немного
+    let nextPlayer = null;
+    let index = currentPlayer.order;
+    while (!nextPlayer) {
+      if (index >= players.length) index = 0;
+      if (players[index]._id) {
+        nextPlayer = players[index]._id;
+      }
+      index++;
+    }
+
+    await ctx.db.patch(args.games_id, {
+      current: nextPlayer,
+      timer: Date.now() + 90 * 1000, //вот тут чёт не уверен, ну вроде 90 секунд это 90_000 мс
+    });
   },
 });
