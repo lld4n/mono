@@ -253,3 +253,34 @@ export const lose = mutation({
     }
   },
 });
+
+const updateBalance = mutation({
+  args: {
+    players_id: v.id("players"),
+    money: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const player = await ctx.db.get(args.players_id);
+    if (player === null) {
+      throw new Error("Игрок не найден");
+    }
+    await ctx.db.patch(args.players_id, {
+      balance: player.balance + args.money,
+    });
+  },
+});
+
+const updatePosition = mutation({
+  args: {
+    players_id: v.id("players"),
+    position: v.number(),
+  },
+  handler: async (ctx, args) => {
+    if (args.position > 39) {
+      throw new Error("Неправильная позиция");
+    }
+    await ctx.db.patch(args.players_id, {
+      position: args.position,
+    });
+  },
+});
