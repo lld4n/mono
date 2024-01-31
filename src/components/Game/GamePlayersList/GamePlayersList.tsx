@@ -21,7 +21,7 @@ export default function GamePlayersList({ players, game }: PropsType) {
                 <div
                   key={player.user!._id}
                   className={
-                    player.order === game.current
+                    player._id === game.current
                       ? styles.player + " " + styles.active
                       : styles.player
                   }

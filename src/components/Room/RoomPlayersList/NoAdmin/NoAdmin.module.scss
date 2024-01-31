@@ -17,6 +17,7 @@
 }
 
 .figure {
+  flex: 0 0 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,7 +28,9 @@
 
 .playerName {
   flex: 1 1 auto;
+  word-break: break-all;
 }
+
 .open {
   margin-top: 20px;
 }

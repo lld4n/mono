@@ -159,3 +159,97 @@ export const getByGames = query({
       .first();
   },
 });
+
+export const lose = mutation({
+  args: { players_id: v.id("players") },
+  handler: async (ctx, args) => {
+    const player = await ctx.db.get(args.players_id);
+    if (!player) throw new Error("Игрок не найден");
+    const game = await ctx.db.get(player?.games_id);
+    if (!game) throw new Error("Игра не найдена");
+    await ctx.db.patch(player._id, {
+      loser: true,
+    });
+
+    const players = await ctx.db
+      .query("players")
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("games_id"), game._id),
+          q.eq(q.field("loser"), false),
+        ),
+      )
+      .collect();
+
+    if (players.length === 1) {
+      const winner = await ctx.db.get(players[0]._id);
+      if (!winner) throw new Error("Победитель не найден");
+
+      await ctx.db.patch(game._id, {
+        winner: winner.user,
+      });
+
+      const user = await ctx.db.get(winner.user);
+
+      if (!user) throw new Error("Пользователь не найден");
+
+      await ctx.db.patch(winner.user, {
+        wins: user.wins + 1,
+      });
+      return;
+    }
+
+    const cards = await ctx.db
+      .query("cards")
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("games_id"), game._id),
+          q.eq(q.field("owner"), player._id),
+        ),
+      )
+      .collect();
+    for (let card of cards) {
+      await ctx.db.patch(card._id, {
+        status: -1,
+        buy: true,
+        mortgage: false,
+        owner: undefined,
+      });
+    }
+
+    if (game.current === player._id) {
+      //короче начинаем со следующего игрока, но так как наш игрок уже может быть последним в массиве, пришлось исполнять немного
+      let nextPlayer = null;
+      let index = player.order;
+      while (!nextPlayer) {
+        if (index >= players.length) index = 0;
+        if (players[index]._id) {
+          nextPlayer = players[index]._id;
+        }
+        index++;
+      }
+      await ctx.db.patch(game._id, {
+        timer: Date.now() + 120 * 1000,
+        current: nextPlayer,
+      });
+    }
+    await ctx.db.patch(player._id, {
+      balance: 0,
+      order: -1,
+    });
+
+    const loser = await ctx.db.get(player.user);
+
+    if (!loser) throw new Error("Проигравший не найден");
+
+    await ctx.db.patch(loser._id, {
+      losers: loser.losers - 1,
+    });
+
+    for (let i = 1; i < players.length + 1; i++) {
+      await ctx.db.patch(players[i - 1]._id, {
+        order: i,
+      });
+    }
+  },
+});
