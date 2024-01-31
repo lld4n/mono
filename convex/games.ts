@@ -1,5 +1,6 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+
 const cardsIndexList = [
   1, 3, 6, 8, 9, 11, 13, 14, 16, 18, 19, 21, 23, 24, 26, 27, 29, 31, 32, 34, 37,
   39, 5, 15, 25, 35, 12, 28,
@@ -105,6 +106,40 @@ export const start = mutation({
         buy: true,
         mortgage: false,
       });
+    }
+  },
+});
+
+export const remove = mutation({
+  args: {
+    games_id: v.id("games"),
+  },
+  handler: async (ctx, args) => {
+    const players = await ctx.db
+      .query("players")
+      .filter((q) => q.eq(q.field("games_id"), args.games_id))
+      .collect();
+    for (let player of players) {
+      await ctx.db.delete(player._id);
+    }
+    const messages = await ctx.db
+      .query("messages")
+      .filter((q) => q.eq(q.field("games_id"), args.games_id))
+      .collect();
+    for (let message of messages) {
+      await ctx.db.delete(message._id);
+    }
+    const cards = await ctx.db
+      .query("cards")
+      .filter((q) => q.eq(q.field("games_id"), args.games_id))
+      .collect();
+    for (let card of cards) {
+      await ctx.db.delete(card._id);
+    }
+
+    const game = await ctx.db.get(args.games_id);
+    if (game && !game.winner) {
+      await ctx.db.delete(game._id);
     }
   },
 });
