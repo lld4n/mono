@@ -4,18 +4,8 @@ import styles from "./PlayerTimer.module.scss";
 import { Doc } from "../../../../convex/_generated/dataModel";
 import { Timer } from "lucide-react";
 
-const ReformatMs = (time: number) => {
-  if (String(time).includes("-")) {
-    if (String(Math.abs(time)).length !== 3) {
-      return Math.abs(time) + 100;
-    }
-    return Math.abs(time);
-  }
-  if (String(Math.abs(time)).length !== 3) {
-    return time + 100;
-  }
-  return time;
-};
+const REFRESH_INTERVAL = 1000 / 30;
+
 export default function PlayerTimer({
   game,
   onFinish,
@@ -23,27 +13,36 @@ export default function PlayerTimer({
   game: Doc<"games">;
   onFinish: () => void;
 }) {
-  const [time, setTime] = React.useState(10000);
-  const [finish, setFinish] = React.useState(true);
-  React.useEffect(() => {
-    const updateTime = () => {
-      const now = new Date().getTime();
-      setTime(game.timer - now);
-      if (game.timer - now <= 0) {
-        if (!finish) {
-          setFinish(true);
-          onFinish();
-        }
-      } else {
-        setFinish(false);
-      }
-    };
+  const countdown = React.useRef<ReturnType<typeof setInterval> | null>(null);
+  const [time, setTime] = React.useState(100000);
 
-    updateTime();
-    const int = setInterval(() => updateTime(), 100);
+  const stopTimer = () => {
+    onFinish();
+    if (countdown.current) {
+      clearInterval(countdown.current);
+      countdown.current = null;
+    }
+  };
+  const syncTimer = () => {
+    const timestamp = new Date(game.timer).getTime();
+    if (timestamp >= Date.now()) {
+      countdown.current = setInterval(() => {
+        setTime(timestamp - Date.now());
+        if (timestamp < Date.now()) {
+          stopTimer();
+        }
+      }, REFRESH_INTERVAL);
+    }
+  };
+
+  React.useEffect(() => {
+    syncTimer();
 
     return () => {
-      clearInterval(int);
+      if (countdown.current) {
+        clearInterval(countdown.current);
+        countdown.current = null;
+      }
     };
   }, []);
 
@@ -56,7 +55,7 @@ export default function PlayerTimer({
       <div className={styles.danger}>
         <Timer size={16} color="#f85149" />
         <div className={styles.s}>{Math.floor(time / 1000)}</div>
-        <div className={styles.ms}>{ReformatMs(time % 1000)}</div>
+        <div className={styles.ms}>{time % 1000}</div>
       </div>
     );
   }
