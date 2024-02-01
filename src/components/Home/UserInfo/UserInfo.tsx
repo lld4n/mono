@@ -7,6 +7,7 @@ import { Award, BookmarkX, LogOut } from "lucide-react";
 import { SignOutButton } from "@clerk/nextjs";
 import Image from "next/image";
 import MiniLoading from "@/components/Global/MiniLoading/MiniLoading";
+import IconButton from "@/components/Global/IconButton/IconButton";
 
 export default function UserInfo({ users_id }: { users_id: Id<"users"> }) {
   const user = useQuery(api.users.get, {
@@ -29,29 +30,28 @@ export default function UserInfo({ users_id }: { users_id: Id<"users"> }) {
         height={47}
         priority
       />
-      {user.losers > 0 || user.wins > 0 ? (
-        <div className={styles.achievements}>
-          {user.wins > 0 && (
-            <div className={styles.achieve}>
-              <Award size={16} color="#ffffff" />
-              <span className={styles.count}>{user.wins}</span>
-            </div>
-          )}
-          {user.losers > 0 && (
-            <div className={styles.achieve}>
-              <BookmarkX size={16} color="#ffffff" />
-              <span className={styles.count}>{user.losers}</span>
-            </div>
-          )}
-        </div>
-      ) : (
-        ""
-      )}
+      {user.losers > 0 ||
+        (user.wins > 0 && (
+          <div className={styles.achievements}>
+            {user.wins > 0 && (
+              <div className={styles.achieve}>
+                <Award size={16} color="#ffffff" />
+                <span className={styles.count}>{user.wins}</span>
+              </div>
+            )}
+            {user.losers > 0 && (
+              <div className={styles.achieve}>
+                <BookmarkX size={16} color="#ffffff" />
+                <span className={styles.count}>{user.losers}</span>
+              </div>
+            )}
+          </div>
+        ))}
       <div className={styles.name}>{user.name}</div>
       <SignOutButton>
-        <button className={styles.btn}>
+        <IconButton>
           <LogOut size={20} color="#ffffff" />
-        </button>
+        </IconButton>
       </SignOutButton>
     </div>
   );

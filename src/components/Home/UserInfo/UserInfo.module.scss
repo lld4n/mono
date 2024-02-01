@@ -2,27 +2,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 15px;
-  border-radius: 5px;
+  padding: 10px;
+  border-radius: 10px;
   border: 1px solid #000;
   background: #1a1a1c;
-  gap: 20px;
+  gap: 10px;
 }
 
 .avatar {
   border-radius: 5px;
   object-fit: fill;
-}
-
-.btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px;
-  border-radius: 5px;
-  &:hover {
-    background-color: #202020;
-  }
 }
 
 .achievements {
