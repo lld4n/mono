@@ -71,13 +71,14 @@
   .money {
     transform: rotate(90deg);
     top: auto;
-    right: -25px;
+    right: -26px;
   }
   .block {
     transform: rotate(90deg);
     bottom: auto;
     left: -21px;
   }
+  border-right: 1px solid #576574;
 }
 .cell_bottom {
   .money {

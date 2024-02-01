@@ -60,11 +60,11 @@ export default function GamePlayersList({
                       game={game}
                       onFinish={() => {
                         console.log("finish");
-                        // if (currentPlayer._id === game.current) {
-                        //   lose({
-                        //     players_id: game.current,
-                        //   });
-                        // }
+                        if (currentPlayer._id === game.current) {
+                          lose({
+                            players_id: game.current,
+                          });
+                        }
                       }}
                     />
                   )}

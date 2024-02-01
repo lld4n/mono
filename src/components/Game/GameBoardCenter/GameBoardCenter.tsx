@@ -44,7 +44,30 @@ export default function GameBoardCenter({
   const updateTimer = useMutation(api.games.updateTimer);
   const updateCurrent = useMutation(api.games.updateCurrent);
   const buy = useMutation(api.cards.buy);
+  const lose = useMutation(api.players.lose);
   console.log(players);
+  console.log(game);
+
+  const baseLose = async () => {
+    setPayState(0);
+    setBuyState(0);
+    setNatureState(0);
+    setConvexCard(undefined);
+    setLuckyState(false);
+    await lose({
+      players_id: currentPlayer._id,
+    });
+  };
+  const baseAuction = async () => {
+    setPayState(0);
+    setBuyState(0);
+    setNatureState(0);
+    setConvexCard(undefined);
+    setLuckyState(false);
+    await updateCurrent({
+      games_id: game._id,
+    });
+  };
   const baseBuy = async (m: number) => {
     setBuyState(0);
     if (!convexCard) return;
@@ -114,36 +137,35 @@ export default function GameBoardCenter({
       games_id: game._id,
     });
     const bdCard = cards[curPosition % 40];
-    if (!bdCard) return;
     setConvexCard(bdCard);
     const currentCard = cardsList[curPosition % 40];
     if (currentCard.class === "street" || currentCard.class === "train") {
-      if (bdCard.mortgage) {
+      if (bdCard!.mortgage) {
         await updateCurrent({
           games_id: game._id,
         });
-      } else if (bdCard.owner === currentPlayer._id) {
+      } else if (bdCard!.owner === currentPlayer._id) {
         await updateCurrent({
           games_id: game._id,
         });
-      } else if (bdCard.owner === undefined) {
+      } else if (bdCard!.owner === undefined) {
         setBuyState(currentCard.buy);
       } else {
-        setPayState(currentCard.rent[bdCard.status]);
+        setPayState(currentCard.rent[bdCard!.status]);
       }
     } else if (currentCard.class === "nature") {
-      if (bdCard.mortgage) {
+      if (bdCard!.mortgage) {
         await updateCurrent({
           games_id: game._id,
         });
-      } else if (bdCard.owner === currentPlayer._id) {
+      } else if (bdCard!.owner === currentPlayer._id) {
         await updateCurrent({
           games_id: game._id,
         });
-      } else if (bdCard.owner === undefined) {
+      } else if (bdCard!.owner === undefined) {
         setBuyState(currentCard.buy);
       } else {
-        setNatureState(currentCard.rent[bdCard.status]);
+        setNatureState(currentCard.rent[bdCard!.status]);
       }
     } else if (currentCard.class === "lucky") {
       setLuckyState(true);
@@ -173,9 +195,9 @@ export default function GameBoardCenter({
         <BuyComponent
           onBuy={baseBuy}
           money={buyState}
-          game={game}
           currentPlayer={currentPlayer}
           generalBalance={GetGeneralBalance(currentPlayer, cards)}
+          onAuction={baseAuction}
         />
       )}
       {payState !== 0 && (
@@ -184,11 +206,10 @@ export default function GameBoardCenter({
           money={payState}
           currentPlayer={currentPlayer}
           generalBalance={GetGeneralBalance(currentPlayer, cards)}
+          onLose={baseLose}
         />
       )}
-      {luckyState && (
-        <LuckyComponent onChoice={(choice) => console.log(choice)} />
-      )}
+      {luckyState && <LuckyComponent onChoice={baseLucky} />}
       {natureState !== 0 && <RollDice rolling={baseNature} />}
       {openIndex !== -1 && (
         <GameBoardCardInfo

@@ -121,7 +121,7 @@ export default function Admin({
           ></div>
         </div>
       </div>
-      {players.every((pl) => pl.selected !== -1) && (
+      {players.every((pl) => pl.selected !== -1) && game.players_count > 1 && (
         <button className={styles.btn} onClick={() => start()}>
           Начать игру
         </button>

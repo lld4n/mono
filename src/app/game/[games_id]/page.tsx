@@ -8,6 +8,7 @@ import GamePlayersList from "@/components/Game/GamePlayersList/GamePlayersList";
 import GameFooter from "@/components/Game/GameFooter/GameFooter";
 import Loading from "@/components/Global/Loading/Loading";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 export default function Game({
   params,
@@ -28,6 +29,12 @@ export default function Game({
   const cards = useQuery(api.cards.getByGames, {
     games_id: params.games_id,
   });
+  const router = useRouter();
+  React.useEffect(() => {
+    if (game?.winner !== undefined) {
+      router.push("/finish/" + params.games_id);
+    }
+  }, [game]);
 
   if (!cards || !currentPlayer || !players || !game) {
     return <Loading />;
