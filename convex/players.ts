@@ -35,7 +35,6 @@ export const add = mutation({
         position: 0,
         balance: 1500,
         loser: false,
-        order: -1,
         user: user_id,
         games_id: args.games_id,
       });
@@ -122,7 +121,6 @@ export const getAllByGames = query({
         };
       }),
     );
-    result.sort((a, b) => a.order - b.order);
     return result;
   },
 });
@@ -147,7 +145,7 @@ export const getByGames = query({
     return await ctx.db
       .query("players")
       .withIndex("by_games", (q) => q.eq("games_id", args.games_id))
-      .filter((q) => q.eq(q.field("games_id"), args.games_id))
+      .filter((q) => q.eq(q.field("user"), user_id))
       .first();
   },
 });
@@ -202,24 +200,25 @@ export const lose = mutation({
     }
 
     if (game.current === player._id) {
-      //короче начинаем со следующего игрока, но так как наш игрок уже может быть последним в массиве, пришлось исполнять немного
-      let nextPlayer = null;
-      let index = player.order;
-      while (!nextPlayer) {
-        if (index >= players.length) index = 0;
-        if (players[index]._id) {
-          nextPlayer = players[index]._id;
-        }
-        index++;
-      }
       await ctx.db.patch(game._id, {
         timer: Date.now() + 120 * 1000,
-        current: nextPlayer,
+        current: player.next,
       });
     }
+    const nextPlayerId = player.next;
+    const prevPlayerId = player.prev;
+    if (!nextPlayerId) throw new Error("Следующий игрок не найден");
+    if (!prevPlayerId) throw new Error("Предыдущий игрок не найден");
+
+    await ctx.db.patch(nextPlayerId, {
+      prev: prevPlayerId,
+    });
+    await ctx.db.patch(prevPlayerId, {
+      next: nextPlayerId,
+    });
+
     await ctx.db.patch(player._id, {
       balance: 0,
-      order: -1,
     });
 
     const loser = await ctx.db.get(player.user);
@@ -229,12 +228,6 @@ export const lose = mutation({
     await ctx.db.patch(loser._id, {
       losers: loser.losers - 1,
     });
-
-    for (let i = 1; i < players.length + 1; i++) {
-      await ctx.db.patch(players[i - 1]._id, {
-        order: i,
-      });
-    }
   },
 });
 

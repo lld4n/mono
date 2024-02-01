@@ -6,7 +6,8 @@ export type PlayersGetType = {
   position: number;
   balance: number;
   loser: boolean;
-  order: number;
+  prev?: Id<"players">;
+  next?: Id<"players">;
   user: Doc<"users"> | null;
   games_id: Id<"games">;
 };
