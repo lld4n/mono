@@ -8,6 +8,7 @@ import GameBoardCardInfo from "@/components/Game/GameBoardCardInfo/GameBoardCard
 import PayComponent from "@/components/Game/PayComponent/PayComponent";
 import { GetGeneralBalance } from "@/utils/GetGeneralBalance";
 import BuyComponent from "@/components/Game/BuyComponent/BuyComponent";
+import LuckyComponent from "@/components/Game/LuckyComponent/LuckyComponent";
 
 type PropsType = {
   players: PlayersGetType[];
@@ -28,6 +29,7 @@ export default function GameBoardCenter({
 }: PropsType) {
   return (
     <div className={styles.center}>
+      <LuckyComponent onChoice={(choice) => console.log(choice)} />
       <PayComponent
         onPay={(m) => console.log("выполнено" + m)}
         money={1500}

@@ -14,7 +14,7 @@ export default function PlayerTimer({
   onFinish: () => void;
 }) {
   const countdown = React.useRef<ReturnType<typeof setInterval> | null>(null);
-  const [time, setTime] = React.useState(100000);
+  const [time, setTime] = React.useState(-1);
 
   const stopTimer = () => {
     onFinish();

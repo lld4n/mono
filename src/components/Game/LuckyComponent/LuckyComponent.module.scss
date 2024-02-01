@@ -1,0 +1,41 @@
+.wrapper {
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: 300;
+}
+
+.list {
+  display: flex;
+  gap: 30px;
+}
+
+.btn {
+  --border-size: 1px;
+  --border-angle: 0turn;
+  width: 50px;
+  height: 80px;
+  background-image: conic-gradient(from var(--border-angle), #576574, #576574),
+    conic-gradient(from var(--border-angle), #00ffa3, #00cc88);
+  // transparent 5%
+  background-size:
+    calc(100% - (var(--border-size) * 2)) calc(100% - (var(--border-size) * 2)),
+    cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  animation: bg-spin 3s linear infinite;
+  @keyframes bg-spin {
+    to {
+      --border-angle: 1turn;
+    }
+  }
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0turn;
+}
