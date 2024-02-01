@@ -11,11 +11,13 @@ export default function PayComponent({
   money,
   currentPlayer,
   generalBalance,
+  onLose,
 }: {
   onPay: (money: number) => void;
   money: number;
   currentPlayer: Doc<"players">;
   generalBalance: number;
+  onLose: () => void;
 }) {
   const lose = useMutation(api.players.lose);
   return (
@@ -34,14 +36,7 @@ export default function PayComponent({
         </button>
       )}
 
-      <button
-        className={styles.lose}
-        onClick={() => {
-          lose({
-            players_id: currentPlayer._id,
-          });
-        }}
-      >
+      <button className={styles.lose} onClick={onLose}>
         Сдаться
       </button>
     </div>

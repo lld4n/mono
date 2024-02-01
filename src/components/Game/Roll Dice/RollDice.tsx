@@ -32,7 +32,9 @@ export default function RollDice({
           behavior: "smooth",
         });
       }
-      rolling([value1, value2]);
+      setTimeout(() => {
+        rolling([value1, value2]);
+      }, 1000);
     }
   }, [value1, value2]);
 
