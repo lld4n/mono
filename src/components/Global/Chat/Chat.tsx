@@ -9,6 +9,8 @@ import { GetPlayerFromId } from "@/utils/GetPlayerFromId";
 import { CheckCircle, Send } from "lucide-react";
 import styles from "./Chat.module.scss";
 import { GetFigureFromSelected } from "@/utils/GetFigureFromSelected";
+import { toast } from "sonner";
+import IconButton from "@/components/Global/IconButton/IconButton";
 
 export default function Chat({
   players,
@@ -72,32 +74,45 @@ export default function Chat({
           onKeyUp={(e) => {
             if (e.key === "Enter") {
               if (value.length > 0) {
-                send({
-                  games_id: games_id,
-                  players_id: playerId,
-                  message: value,
-                });
+                toast.promise(
+                  send({
+                    games_id: games_id,
+                    players_id: playerId,
+                    message: value,
+                  }),
+                  {
+                    loading: "Отправляем сообщение",
+                    success: "Сообщение отправлено",
+                    error: (error) => error,
+                  },
+                );
                 setValue("");
               }
             }
           }}
         />
-        <button
-          className={styles.btn}
+        <IconButton
           disabled={!value}
           onClick={() => {
             if (value.length > 0) {
-              send({
-                games_id: games_id,
-                players_id: playerId,
-                message: value,
-              });
+              toast.promise(
+                send({
+                  games_id: games_id,
+                  players_id: playerId,
+                  message: value,
+                }),
+                {
+                  loading: "Отправляем сообщение",
+                  success: "Сообщение отправлено",
+                  error: (error) => error,
+                },
+              );
               setValue("");
             }
           }}
         >
           <Send size={20} color="#ffffff" />
-        </button>
+        </IconButton>
       </div>
     </div>
   );

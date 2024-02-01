@@ -8,6 +8,9 @@ import styles from "./RoomPlayersList.module.scss";
 import Admin from "@/components/Room/RoomPlayersList/Admin/Admin";
 import NoAdmin from "@/components/Room/RoomPlayersList/NoAdmin/NoAdmin";
 import MiniLoading from "@/components/Global/MiniLoading/MiniLoading";
+import { toast } from "sonner";
+import MiniButton from "@/components/Global/MiniButton/MiniButton";
+import { useRouter } from "next/navigation";
 
 type PropsType = {
   players: PlayersGetType[];
@@ -27,17 +30,11 @@ export default function RoomPlayersList({
   const [admin, setAdmin] = useState<PlayersGetType | undefined>();
   const [isStarted, setIsStarted] = useState<boolean>(false);
 
+  const router = useRouter();
+
   useEffect(() => {
     setAdmin(getPlayerAdmin(players, game));
   }, [admin, game, players]);
-
-  async function leave() {
-    await leaveGame({ players_id: playerId });
-  }
-
-  async function del() {
-    await delGame({ games_id: game._id });
-  }
 
   if (!admin || !userId) {
     return (
@@ -60,12 +57,33 @@ export default function RoomPlayersList({
         <NoAdmin players={players} adminId={admin.user?._id} game={game} />
       )}
       {!isStarted && (
-        <button
+        <MiniButton
+          danger
           className={styles.delete}
-          onClick={userId === admin.user?._id ? () => del() : () => leave()}
+          onClick={() => {
+            if (userId === admin.user?._id) {
+              toast.promise(delGame({ games_id: game._id }), {
+                loading: "Удаляем игру",
+                success: () => {
+                  router.push("/");
+                  return "Игра удалена";
+                },
+                error: (error) => error,
+              });
+            } else {
+              toast.promise(leaveGame({ players_id: playerId }), {
+                loading: "Покидаем игру",
+                success: () => {
+                  router.push("/");
+                  return "Игра покинута";
+                },
+                error: (error) => error,
+              });
+            }
+          }}
         >
           {admin.user?._id === userId ? "Удалить" : "Покинуть"} игру
-        </button>
+        </MiniButton>
       )}
     </div>
   );
