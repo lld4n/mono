@@ -24,7 +24,7 @@ export const getByGames = query({
   handler: async (ctx, args) => {
     return await ctx.db
       .query("messages")
-      .filter((q) => q.eq(q.field("games_id"), args.games_id))
+      .withIndex("by_games", (q) => q.eq("games_id", args.games_id))
       .order("desc")
       .take(200);
   },

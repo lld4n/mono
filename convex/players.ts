@@ -22,12 +22,8 @@ export const add = mutation({
 
     const player = await ctx.db
       .query("players")
-      .filter((q) =>
-        q.and(
-          q.eq(q.field("user"), user_id),
-          q.eq(q.field("games_id"), args.games_id),
-        ),
-      )
+      .withIndex("by_games", (q) => q.eq("games_id", args.games_id))
+      .filter((q) => q.eq(q.field("user"), user_id))
       .first();
     if (!player) {
       const game = await ctx.db.get(args.games_id);
@@ -71,7 +67,7 @@ export const remove = mutation({
     await ctx.db.delete(args.players_id);
     const messages = await ctx.db
       .query("messages")
-      .filter((q) => q.eq(q.field("games_id"), game._id))
+      .withIndex("by_games", (q) => q.eq("games_id", game._id))
       .collect();
 
     for (const message of messages) {
@@ -94,7 +90,7 @@ export const select = mutation({
   handler: async (ctx, args) => {
     const players = await ctx.db
       .query("players")
-      .filter((q) => q.eq(q.field("games_id"), args.games_id))
+      .withIndex("by_games", (q) => q.eq("games_id", args.games_id))
       .collect();
     const filterPlayers = players.filter(
       (player) => player.selected === args.selected,
@@ -116,7 +112,7 @@ export const getAllByGames = query({
   handler: async (ctx, args) => {
     let players = await ctx.db
       .query("players")
-      .filter((q) => q.eq(q.field("games_id"), args.games_id))
+      .withIndex("by_games", (q) => q.eq("games_id", args.games_id))
       .collect();
     const result: PlayersGetType[] = await Promise.all(
       players.map(async (players) => {
@@ -150,12 +146,8 @@ export const getByGames = query({
     const user_id = user._id;
     return await ctx.db
       .query("players")
-      .filter((q) =>
-        q.and(
-          q.eq(q.field("user"), user_id),
-          q.eq(q.field("games_id"), args.games_id),
-        ),
-      )
+      .withIndex("by_games", (q) => q.eq("games_id", args.games_id))
+      .filter((q) => q.eq(q.field("games_id"), args.games_id))
       .first();
   },
 });
@@ -173,12 +165,8 @@ export const lose = mutation({
 
     const players = await ctx.db
       .query("players")
-      .filter((q) =>
-        q.and(
-          q.eq(q.field("games_id"), game._id),
-          q.eq(q.field("loser"), false),
-        ),
-      )
+      .withIndex("by_games", (q) => q.eq("games_id", game._id))
+      .filter((q) => q.eq(q.field("loser"), false))
       .collect();
 
     if (players.length === 1) {
@@ -201,12 +189,8 @@ export const lose = mutation({
 
     const cards = await ctx.db
       .query("cards")
-      .filter((q) =>
-        q.and(
-          q.eq(q.field("games_id"), game._id),
-          q.eq(q.field("owner"), player._id),
-        ),
-      )
+      .withIndex("by_games", (q) => q.eq("games_id", game._id))
+      .filter((q) => q.eq(q.field("owner"), player._id))
       .collect();
     for (let card of cards) {
       await ctx.db.patch(card._id, {

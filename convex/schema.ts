@@ -28,12 +28,12 @@ export default defineSchema({
     order: v.number(),
     user: v.id("users"),
     games_id: v.id("games"),
-  }),
+  }).index("by_games", ["games_id"]),
   messages: defineTable({
     message: v.string(),
     player: v.optional(v.id("players")),
     games_id: v.id("games"),
-  }),
+  }).index("by_games", ["games_id"]),
   cards: defineTable({
     games_id: v.id("games"),
     index: v.number(),
@@ -41,5 +41,5 @@ export default defineSchema({
     status: v.number(),
     buy: v.boolean(),
     mortgage: v.boolean(),
-  }),
+  }).index("by_games", ["games_id"]),
 });
