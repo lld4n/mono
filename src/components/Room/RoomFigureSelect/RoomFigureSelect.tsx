@@ -7,6 +7,8 @@ import styles from "./RoomFigureSelect.module.scss";
 import Image from "next/image";
 import { useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
+import { toast } from "sonner";
+import { Simulate } from "react-dom/test-utils";
 
 type PropsType = {
   players: PlayersGetType[];
@@ -20,11 +22,6 @@ export default function RoomFigureSelect({
   players_id,
 }: PropsType) {
   const playersSelect = useMutation(api.players.select);
-  async function select(figureIndex: number, isSelected: boolean) {
-    if (!isSelected) {
-      await playersSelect({ players_id, games_id, selected: figureIndex });
-    }
-  }
 
   return (
     <div className={styles.wrapper}>
@@ -42,7 +39,22 @@ export default function RoomFigureSelect({
             <button
               key={figure.index}
               className={isSelected ? styles.disabled : styles.active}
-              onClick={() => select(figure.index, isSelected)}
+              onClick={() => {
+                if (!isSelected) {
+                  toast.promise(
+                    playersSelect({
+                      players_id,
+                      games_id,
+                      selected: figure.index,
+                    }),
+                    {
+                      loading: "Выбираем фигуру",
+                      success: "Фигура выбрана",
+                      error: (error) => error,
+                    },
+                  );
+                }
+              }}
             >
               <Image src={figure.svg} alt={String(figure.index)} />
             </button>

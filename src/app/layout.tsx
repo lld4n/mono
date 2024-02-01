@@ -26,7 +26,7 @@ export default function RootLayout({
               <LogoOverlay>{children}</LogoOverlay>
             </SizeOverlay>
           </ConvexClientProvider>
-          <Toaster position="top-right" richColors theme="dark" />
+          <Toaster position="top-right" richColors />
         </body>
       </html>
     </ClerkProvider>

@@ -10,6 +10,7 @@ import Loading from "@/components/Global/Loading/Loading";
 import Chat from "@/components/Global/Chat/Chat";
 import RoomPlayersList from "@/components/Room/RoomPlayersList/RoomPlayersList";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function Game({
   params,
@@ -39,9 +40,14 @@ export default function Game({
 
   const addPlayer = useMutation(api.players.add);
   useEffect(() => {
-    addPlayer({ games_id: params.games_id }).then((player_id) =>
-      setPlayerId(player_id),
-    );
+    toast.promise(addPlayer({ games_id: params.games_id }), {
+      loading: "Добавляем игрока",
+      success: (data) => {
+        setPlayerId(data);
+        return "Игрок добавлен";
+      },
+      error: (error) => error,
+    });
   }, [addPlayer, params.games_id]);
 
   useEffect(() => {
