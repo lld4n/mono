@@ -35,7 +35,7 @@ export default function NoAdmin({ players, adminId, game }: PropsType) {
                   height={30}
                   className={styles.avatar}
                 />
-                <span>{player.user?.name}</span>
+                <div className={styles.playerName}>{player.user?.name}</div>
               </div>
             );
           } else {
@@ -54,7 +54,7 @@ export default function NoAdmin({ players, adminId, game }: PropsType) {
                   height={30}
                   className={styles.avatar}
                 />
-                <span className={styles.playerName}>{player.user?.name}</span>
+                <div className={styles.playerName}>{player.user?.name}</div>
               </div>
             );
           }
