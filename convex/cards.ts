@@ -11,7 +11,7 @@ export const getByGames = query({
   handler: async (ctx, args) => {
     const convexCards = await ctx.db
       .query("cards")
-      .filter((q) => q.eq(q.field("games_id"), args.games_id))
+      .withIndex("by_games", (q) => q.eq("games_id", args.games_id))
       .collect();
     if (convexCards.length === 0) {
       throw new Error("Карточек нет");
@@ -66,9 +66,9 @@ export const buy = mutation({
       });
       const cardsGroup = await ctx.db
         .query("cards")
+        .withIndex("by_games", (q) => q.eq("games_id", card.games_id))
         .filter((q) =>
           q.and(
-            q.eq(q.field("games_id"), card.games_id),
             q.eq(q.field("owner"), player._id),
             q.eq(q.field("mortgage"), false),
           ),
@@ -126,7 +126,7 @@ export const build = mutation({
     const group = CardGroupObject[card.index];
     const convexCards = await ctx.db
       .query("cards")
-      .filter((q) => q.eq(q.field("games_id"), card.games_id))
+      .withIndex("by_games", (q) => q.eq("games_id", card.games_id))
       .collect();
     const cardsGroup: Doc<"cards">[] = [];
     for (const item of convexCards) {
@@ -223,9 +223,9 @@ export const mortgage = mutation({
       }
       const cardsGroup = await ctx.db
         .query("cards")
+        .withIndex("by_games", (q) => q.eq("games_id", card.games_id))
         .filter((q) =>
           q.and(
-            q.eq(q.field("games_id"), card.games_id),
             q.eq(q.field("owner"), player._id),
             q.eq(q.field("mortgage"), false),
           ),
@@ -301,9 +301,9 @@ export const unmortgage = mutation({
       }
       const cardsGroup = await ctx.db
         .query("cards")
+        .withIndex("by_games", (q) => q.eq("games_id", card.games_id))
         .filter((q) =>
           q.and(
-            q.eq(q.field("games_id"), card.games_id),
             q.eq(q.field("owner"), player._id),
             q.eq(q.field("mortgage"), false),
           ),

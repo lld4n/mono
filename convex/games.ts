@@ -79,7 +79,7 @@ export const start = mutation({
   handler: async (ctx, args) => {
     const players = await ctx.db
       .query("players")
-      .filter((q) => q.eq(q.field("games_id"), args.games_id))
+      .withIndex("by_games", (q) => q.eq("games_id", args.games_id))
       .collect();
     const game = await ctx.db.get(args.games_id);
     if (players.length === 0) {
@@ -146,7 +146,7 @@ export const removePlayers = mutation({
   handler: async (ctx, args) => {
     const players = await ctx.db
       .query("players")
-      .filter((q) => q.eq(q.field("games_id"), args.games_id))
+      .withIndex("by_games", (q) => q.eq("games_id", args.games_id))
       .collect();
     for (let player of players) {
       await ctx.db.delete(player._id);
@@ -160,7 +160,7 @@ export const removeMessages = mutation({
   handler: async (ctx, args) => {
     const messages = await ctx.db
       .query("messages")
-      .filter((q) => q.eq(q.field("games_id"), args.games_id))
+      .withIndex("by_games", (q) => q.eq("games_id", args.games_id))
       .collect();
     for (let message of messages) {
       await ctx.db.delete(message._id);
@@ -173,7 +173,7 @@ export const removeCards = mutation({
   handler: async (ctx, args) => {
     const cards = await ctx.db
       .query("cards")
-      .filter((q) => q.eq(q.field("games_id"), args.games_id))
+      .withIndex("by_games", (q) => q.eq("games_id", args.games_id))
       .collect();
     for (let card of cards) {
       await ctx.db.delete(card._id);
@@ -195,7 +195,7 @@ export const updateTimer = mutation({
   args: { games_id: v.id("games") },
   handler: async (ctx, args) => {
     await ctx.db.patch(args.games_id, {
-      timer: Date.now() + 90 * 1000, //вот тут чёт не уверен, ну вроде 90 секунд это 90_000 мс
+      timer: Date.now() + 90 * 1000,
     });
   },
 });
@@ -210,12 +210,8 @@ export const updateCurrent = mutation({
     if (!currentPlayer) throw new Error("Такого игрока не существует");
     const players = await ctx.db
       .query("players")
-      .filter((q) =>
-        q.and(
-          q.eq(q.field("games_id"), args.games_id),
-          q.eq(q.field("loser"), false),
-        ),
-      )
+      .withIndex("by_games", (q) => q.eq("games_id", args.games_id))
+      .filter((q) => q.eq(q.field("loser"), false))
       .collect();
     //короче начинаем со следующего игрока, но так как наш игрок уже может быть последним в массиве, пришлось исполнять немного
     let nextPlayer = null;
