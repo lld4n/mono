@@ -88,22 +88,38 @@ export const start = mutation({
     if (game === null) {
       throw new Error("Игра не найдена");
     }
+    if (game.players_count === 1 || game.players_count > 5) {
+      throw new Error("Игроков слишком мало или слишком много");
+    }
     if (!players.every((p) => p.selected !== -1)) {
       throw new Error("Не все выбрали фигуру");
     }
     await ctx.db.patch(game._id, {
       started: new Date().getTime(),
     });
-    for (let i = 1; i < players.length + 1; i++) {
-      if (i === 1) {
-        await ctx.db.patch(game._id, {
-          current: players[i - 1]._id,
-        });
-      }
-      await ctx.db.patch(players[i - 1]._id, {
-        order: i,
+    for (let i = 0; i < players.length - 1; i++) {
+      await ctx.db.patch(players[i]._id, {
+        next: players[i + 1]._id,
       });
     }
+
+    for (let i = players.length - 1; i >= 1; i--) {
+      await ctx.db.patch(players[i]._id, {
+        prev: players[i - 1]._id,
+      });
+    }
+
+    await ctx.db.patch(players[players.length - 1]._id, {
+      next: players[0]._id,
+    });
+
+    await ctx.db.patch(players[0]._id, {
+      prev: players[players.length - 1]._id,
+    });
+    await ctx.db.patch(game._id, {
+      current: players[0]._id,
+    });
+
     for (const index of cardsIndexList) {
       await ctx.db.insert("cards", {
         games_id: game._id,
@@ -114,7 +130,7 @@ export const start = mutation({
       });
     }
     await ctx.db.patch(game._id, {
-      timer: Date.now() + 120 * 1000, //вот тут чёт не уверен, ну вроде 120 секунд это 120_000 мс
+      timer: Date.now() + 120 * 1000,
     });
   },
 });
@@ -208,25 +224,9 @@ export const updateCurrent = mutation({
     if (!game.current) throw new Error("Текущий игрок не найден");
     const currentPlayer = await ctx.db.get(game.current);
     if (!currentPlayer) throw new Error("Такого игрока не существует");
-    const players = await ctx.db
-      .query("players")
-      .withIndex("by_games", (q) => q.eq("games_id", args.games_id))
-      .filter((q) => q.eq(q.field("loser"), false))
-      .collect();
-    //короче начинаем со следующего игрока, но так как наш игрок уже может быть последним в массиве, пришлось исполнять немного
-    let nextPlayer = null;
-    let index = currentPlayer.order;
-    while (!nextPlayer) {
-      if (index >= players.length) index = 0;
-      if (players[index]._id && players[index].order > 0) {
-        nextPlayer = players[index]._id;
-      }
-      index++;
-    }
-
-    await ctx.db.patch(args.games_id, {
-      current: nextPlayer,
-      timer: Date.now() + 90 * 1000, //вот тут чёт не уверен, ну вроде 90 секунд это 90_000 мс
+    if (!currentPlayer.next) throw new Error("Следующего игрока не существует");
+    await ctx.db.patch(game._id, {
+      current: currentPlayer.next,
     });
   },
 });
