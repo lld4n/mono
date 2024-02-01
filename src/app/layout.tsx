@@ -18,12 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html
-        lang="ru"
-        style={{
-          colorScheme: "dark",
-        }}
-      >
+      <html lang="ru">
         <body>
           <ConvexClientProvider>
             <SizeOverlay>
