@@ -2,7 +2,7 @@ import React from "react";
 import clover from "@/assets/emojis/clover.svg";
 import styles from "./LuckyComponent.module.scss";
 import Image from "next/image";
-type choiceType = {
+export type choiceType = {
   type: "pay" | "get";
   value: number;
 };

@@ -3,7 +3,7 @@ import Dice from "@/components/Game/Dice/Dice";
 import styles from "./RollDice.module.scss";
 import { useEffect, useRef, useState } from "react";
 
-type RollDiceType = [number, number];
+export type RollDiceType = [number, number];
 
 export default function RollDice({
   rolling,
