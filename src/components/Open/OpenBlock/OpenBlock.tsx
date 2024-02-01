@@ -8,6 +8,7 @@ import MiniLoading from "@/components/Global/MiniLoading/MiniLoading";
 import { ReformatDate } from "@/utils/ReformatDate";
 import Link from "next/link";
 import { getPlayerAdmin } from "@/utils/GetPlayerAdmin";
+import Button from "@/components/Global/Button/Button";
 
 export default function OpenBlock({ game }: { game: Doc<"games"> }) {
   const players = useQuery(api.players.getAllByGames, {
@@ -50,8 +51,8 @@ export default function OpenBlock({ game }: { game: Doc<"games"> }) {
         <div className={styles.text}>Время создания</div>
         <div className={styles.block}>{ReformatDate(game._creationTime)}</div>
       </div>
-      <Link href={"/room/" + game._id} className={styles.link}>
-        Присоединиться
+      <Link href={"/room/" + game._id}>
+        <Button>Присоединиться</Button>
       </Link>
     </div>
   );
