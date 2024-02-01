@@ -59,11 +59,12 @@ export default function GamePlayersList({
                     <PlayerTimer
                       game={game}
                       onFinish={() => {
-                        if (currentPlayer._id === game.current) {
-                          lose({
-                            players_id: game.current,
-                          });
-                        }
+                        console.log("finish");
+                        // if (currentPlayer._id === game.current) {
+                        //   lose({
+                        //     players_id: game.current,
+                        //   });
+                        // }
                       }}
                     />
                   )}
