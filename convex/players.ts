@@ -254,7 +254,7 @@ export const lose = mutation({
   },
 });
 
-const updateBalance = mutation({
+export const updateBalance = mutation({
   args: {
     players_id: v.id("players"),
     money: v.number(),
@@ -270,7 +270,7 @@ const updateBalance = mutation({
   },
 });
 
-const updatePosition = mutation({
+export const updatePosition = mutation({
   args: {
     players_id: v.id("players"),
     position: v.number(),
