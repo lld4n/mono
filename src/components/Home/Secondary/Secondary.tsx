@@ -5,36 +5,38 @@ import UserInfo from "@/components/Home/UserInfo/UserInfo";
 import { api } from "../../../../convex/_generated/api";
 import { useMutation } from "convex/react";
 import { Id } from "../../../../convex/_generated/dataModel";
+import Button from "@/components/Global/Button/Button";
+import { toast } from "sonner";
 
 export default function Secondary() {
-  const mutation = useMutation(api.users.store);
+  const store = useMutation(api.users.store);
   const [userId, setUserId] = useState<Id<"users">>();
   useEffect(() => {
-    const getUser = async () => {
-      const userId = await mutation();
-      setUserId(userId);
-    };
-    getUser();
+    toast.promise(store, {
+      loading: "Определяем пользователя",
+      success: (data) => {
+        setUserId(data);
+        return "Пользователь определен";
+      },
+      error: (error) => error,
+    });
   }, []);
   return (
-    <div className={styles.content}>
-      <Link href={"/rules"} className={styles.item}>
-        Правила
+    <>
+      <Link href="/open">
+        <Button>Открытые комнаты</Button>
       </Link>
-      <Link href={"/open"} className={styles.item}>
-        Открытые комнаты
+      <Link href="/come">
+        <Button>Войти в комнату</Button>
       </Link>
-      <Link href={"/come"} className={styles.item}>
-        Войти в комнату
-      </Link>
-      <Link href={"/room"} className={styles.item}>
-        Создать комнату
+      <Link href="/room">
+        <Button>Создать комнату</Button>
       </Link>
       {userId && (
         <div className={styles.user}>
           <UserInfo users_id={userId} />
         </div>
       )}
-    </div>
+    </>
   );
 }

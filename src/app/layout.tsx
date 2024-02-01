@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import ConvexClientProvider from "@/providers/ConvexClientProvider";
 import LogoOverlay from "@/components/Global/LogoOverlay/LogoOverlay";
 import SizeOverlay from "@/components/Global/SizeOverlay/SizeOverlay";
+import { Toaster } from "sonner";
 export const metadata: Metadata = {
   title: "mono",
   description: "created by lldan",
@@ -25,6 +26,7 @@ export default function RootLayout({
               <LogoOverlay>{children}</LogoOverlay>
             </SizeOverlay>
           </ConvexClientProvider>
+          <Toaster position="top-right" richColors theme="dark" />
         </body>
       </html>
     </ClerkProvider>
