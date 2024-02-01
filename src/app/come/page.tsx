@@ -3,6 +3,7 @@ import React from "react";
 import styles from "./page.module.scss";
 import { BadgeCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
+import IconButton from "@/components/Global/IconButton/IconButton";
 export default function Come() {
   const [value, setValue] = React.useState("");
   const router = useRouter();
@@ -23,8 +24,7 @@ export default function Come() {
           }
         }}
       />
-      <button
-        className={styles.btn}
+      <IconButton
         disabled={!value}
         onClick={() => {
           if (value) {
@@ -33,7 +33,7 @@ export default function Come() {
         }}
       >
         <BadgeCheck size={20} color="#ffffff" />
-      </button>
+      </IconButton>
     </div>
   );
 }
