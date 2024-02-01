@@ -1,6 +1,7 @@
-import { mutation, query } from "./_generated/server";
+import { internalMutation, mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { PlayersGetType } from "../src/types/PlayersGetType";
+import { internal } from "./_generated/api";
 
 export const add = mutation({
   args: {
@@ -150,6 +151,94 @@ export const getByGames = query({
   },
 });
 
+export const internalLose = internalMutation({
+  args: { players_id: v.id("players") },
+  handler: async (ctx, args) => {
+    const player = await ctx.db.get(args.players_id);
+    if (!player) throw new Error("Игрок не найден");
+    const game = await ctx.db.get(player?.games_id);
+    if (!game) throw new Error("Игра не найдена");
+    await ctx.db.patch(player._id, {
+      loser: true,
+    });
+
+    const players = await ctx.db
+      .query("players")
+      .withIndex("by_games", (q) => q.eq("games_id", game._id))
+      .filter((q) => q.eq(q.field("loser"), false))
+      .collect();
+
+    if (players.length === 1) {
+      const winner = await ctx.db.get(players[0]._id);
+      if (!winner) throw new Error("Победитель не найден");
+
+      await ctx.db.patch(game._id, {
+        winner: winner.user,
+      });
+
+      const user = await ctx.db.get(winner.user);
+
+      if (!user) throw new Error("Пользователь не найден");
+
+      await ctx.db.patch(winner.user, {
+        wins: user.wins + 1,
+      });
+      return;
+    }
+
+    const cards = await ctx.db
+      .query("cards")
+      .withIndex("by_games", (q) => q.eq("games_id", game._id))
+      .filter((q) => q.eq(q.field("owner"), player._id))
+      .collect();
+    for (let card of cards) {
+      await ctx.db.patch(card._id, {
+        status: -1,
+        buy: true,
+        mortgage: false,
+        owner: undefined,
+      });
+    }
+
+    if (game.current === player._id) {
+      const sch = await ctx.db.system.query("_scheduled_functions").collect();
+      for (const s of sch) {
+        await ctx.scheduler.cancel(s._id);
+      }
+      await ctx.db.patch(game._id, {
+        timer: Date.now() + 120 * 1000,
+        current: player.next,
+      });
+      await ctx.scheduler.runAfter(120000, internal.players.internalLose, {
+        players_id: game.current,
+      });
+    }
+    const nextPlayerId = player.next;
+    const prevPlayerId = player.prev;
+    if (!nextPlayerId) throw new Error("Следующий игрок не найден");
+    if (!prevPlayerId) throw new Error("Предыдущий игрок не найден");
+
+    await ctx.db.patch(nextPlayerId, {
+      prev: prevPlayerId,
+    });
+    await ctx.db.patch(prevPlayerId, {
+      next: nextPlayerId,
+    });
+
+    await ctx.db.patch(player._id, {
+      balance: 0,
+    });
+
+    const loser = await ctx.db.get(player.user);
+
+    if (!loser) throw new Error("Проигравший не найден");
+
+    await ctx.db.patch(loser._id, {
+      losers: loser.losers - 1,
+    });
+  },
+});
+
 export const lose = mutation({
   args: { players_id: v.id("players") },
   handler: async (ctx, args) => {
@@ -200,9 +289,16 @@ export const lose = mutation({
     }
 
     if (game.current === player._id) {
+      const sch = await ctx.db.system.query("_scheduled_functions").collect();
+      for (const s of sch) {
+        await ctx.scheduler.cancel(s._id);
+      }
       await ctx.db.patch(game._id, {
         timer: Date.now() + 120 * 1000,
         current: player.next,
+      });
+      await ctx.scheduler.runAfter(120000, internal.players.internalLose, {
+        players_id: game.current,
       });
     }
     const nextPlayerId = player.next;

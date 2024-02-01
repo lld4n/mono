@@ -1,6 +1,6 @@
 import { action, mutation, query } from "./_generated/server";
 import { v } from "convex/values";
-import { api } from "./_generated/api";
+import { api, internal } from "./_generated/api";
 
 const cardsIndexList = [
   1, 3, 6, 8, 9, 11, 13, 14, 16, 18, 19, 21, 23, 24, 26, 27, 29, 31, 32, 34, 37,
@@ -132,6 +132,9 @@ export const start = mutation({
     await ctx.db.patch(game._id, {
       timer: Date.now() + 120 * 1000,
     });
+    await ctx.scheduler.runAfter(120000, internal.players.internalLose, {
+      players_id: players[0]._id,
+    });
   },
 });
 
@@ -210,8 +213,18 @@ export const del = mutation({
 export const updateTimer = mutation({
   args: { games_id: v.id("games") },
   handler: async (ctx, args) => {
+    const game = await ctx.db.get(args.games_id);
+    const sch = await ctx.db.system.query("_scheduled_functions").collect();
+    if (!game) throw new Error("Игра не найдена");
+    if (!game.current) throw new Error("Текущий игрок не найден");
+    for (const s of sch) {
+      await ctx.scheduler.cancel(s._id);
+    }
     await ctx.db.patch(args.games_id, {
       timer: Date.now() + 90 * 1000,
+    });
+    await ctx.scheduler.runAfter(90000, internal.players.internalLose, {
+      players_id: game.current,
     });
   },
 });
@@ -225,8 +238,16 @@ export const updateCurrent = mutation({
     const currentPlayer = await ctx.db.get(game.current);
     if (!currentPlayer) throw new Error("Такого игрока не существует");
     if (!currentPlayer.next) throw new Error("Следующего игрока не существует");
+    const sch = await ctx.db.system.query("_scheduled_functions").collect();
+    for (const s of sch) {
+      await ctx.scheduler.cancel(s._id);
+    }
     await ctx.db.patch(game._id, {
       current: currentPlayer.next,
+      timer: Date.now() + 90 * 1000,
+    });
+    await ctx.scheduler.runAfter(90000, internal.players.internalLose, {
+      players_id: game.current,
     });
   },
 });
