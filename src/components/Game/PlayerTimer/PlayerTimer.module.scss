@@ -5,8 +5,9 @@
   align-items: center;
   gap: 5px;
   border-radius: 5px;
-  width: 60px;
+  width: 52px;
   background-color: black;
+  align-self: stretch;
 }
 .danger {
   display: flex;
@@ -16,9 +17,11 @@
   gap: 5px;
   border-radius: 5px;
   background: #230000;
-  width: 80px;
+  width: 74px;
   color: #f85149;
+  align-self: stretch;
 }
 .ms {
   font-size: 10px;
+  width: 18px;
 }

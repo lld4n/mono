@@ -6,18 +6,11 @@ import { Timer } from "lucide-react";
 
 const REFRESH_INTERVAL = 1000 / 30;
 
-export default function PlayerTimer({
-  game,
-  onFinish,
-}: {
-  game: Doc<"games">;
-  onFinish: () => void;
-}) {
+export default function PlayerTimer({ game }: { game: Doc<"games"> }) {
   const countdown = React.useRef<ReturnType<typeof setInterval> | null>(null);
   const [time, setTime] = React.useState(-1);
 
   const stopTimer = () => {
-    onFinish();
     if (countdown.current) {
       clearInterval(countdown.current);
       countdown.current = null;
