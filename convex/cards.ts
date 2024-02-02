@@ -264,6 +264,10 @@ export const unmortgage = mutation({
     } else if (cardClass === "street") {
       await ctx.db.patch(card._id, {
         status: 0,
+        mortgage: false,
+      });
+      await ctx.db.patch(player._id, {
+        balance: player.balance - args.money,
       });
     }
   },
