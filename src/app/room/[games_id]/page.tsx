@@ -12,11 +12,7 @@ import RoomPlayersList from "@/components/Room/RoomPlayersList/RoomPlayersList";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-export default function Game({
-  params,
-}: {
-  params: { games_id: Id<"games"> };
-}) {
+export default function Game({ params }: { params: { games_id: Id<"games"> } }) {
   const [playerId, setPlayerId] = useState<Id<"players">>();
   const players = useQuery(api.players.getAllByGames, {
     games_id: params.games_id,
@@ -27,16 +23,6 @@ export default function Game({
   });
 
   const router = useRouter();
-
-  useEffect(() => {
-    if (
-      players &&
-      playerId &&
-      players.filter((player) => player._id === playerId).length === 0
-    ) {
-      router.push("/");
-    }
-  }, [playerId, players, router]);
 
   const addPlayer = useMutation(api.players.add);
   useEffect(() => {
@@ -50,6 +36,19 @@ export default function Game({
     });
   }, [addPlayer, params.games_id]);
 
+  // useEffect, если игра удалилась и ее не получилось получить
+  useEffect(() => {
+    if (game === null) router.push("/");
+  }, []);
+
+  // useEffect, если игрока выгнали
+  useEffect(() => {
+    if (players && playerId && !players.map((pl) => pl._id).includes(playerId)) {
+      router.push("/");
+    }
+  }, [playerId, players, router]);
+
+  // useEffect, если игра началась
   useEffect(() => {
     if (game && game.started !== 0) router.push(`/game/${game._id}`);
   }, [game, router]);
