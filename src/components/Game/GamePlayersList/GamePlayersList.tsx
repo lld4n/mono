@@ -15,7 +15,7 @@ export default function GamePlayersList({ players, game }: PropsType) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.players}>
-        {players.map((player, i) => {
+        {players.map((player) => {
           const figure = GetFigureFromSelected(player);
           if (player.loser) {
             return (
