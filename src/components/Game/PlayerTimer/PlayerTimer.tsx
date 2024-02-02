@@ -37,7 +37,7 @@ export default function PlayerTimer({ game }: { game: Doc<"games"> }) {
         countdown.current = null;
       }
     };
-  }, []);
+  }, [game]);
 
   if (time < 0) {
     return <></>;

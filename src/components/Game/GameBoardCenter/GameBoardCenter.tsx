@@ -360,6 +360,7 @@ export default function GameBoardCenter({
           openIndex={openIndex}
           setOpenIndex={setOpenIndex}
           currentPlayer={currentPlayer}
+          game={game}
         />
       )}
       <Chat players={players} games_id={game._id} playerId={currentPlayer._id} />

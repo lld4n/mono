@@ -4,27 +4,12 @@ import { Doc } from "../../../../convex/_generated/dataModel";
 import { CardsGetType } from "@/types/CardsGetType";
 import React from "react";
 import { cardsList } from "@/constants/cards";
-import styles from "./GameBoardCardInfo.module.scss";
-import {
-  Eye,
-  EyeOff,
-  X,
-  Lock,
-  ShoppingCart,
-  Unlock,
-  Home,
-  Dices,
-} from "lucide-react";
-import Image from "next/image";
-import Money from "@/components/Game/Money/Money";
-import { GetPlayerFromId } from "@/utils/GetPlayerFromId";
-import { GetFigureFromSelected } from "@/utils/GetFigureFromSelected";
 import { useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import mini_train_right from "@/assets/emojis/mini_train_right.svg";
-import mini_train_left from "@/assets/emojis/mini_train_left.svg";
-import mini_train_top from "@/assets/emojis/mini_train_top.svg";
-import mini_train_bottom from "@/assets/emojis/mini_train_bottom.svg";
+import GameBoardCardInfoRender from "@/components/Game/GameBoardCardInfo/GameBoardCardInfoRender/GameBoardCardInfoRender";
+import MiniButton from "@/components/Global/MiniButton/MiniButton";
+import { toast } from "sonner";
+import { GetOwnerGroupCards } from "@/utils/GetOwnerGroupCards";
 
 type PropsType = {
   players: PlayersGetType[];
@@ -32,32 +17,8 @@ type PropsType = {
   openIndex: number;
   setOpenIndex: React.Dispatch<React.SetStateAction<number>>;
   currentPlayer: Doc<"players">;
+  game: Doc<"games">;
 };
-
-const imagesTrain = [
-  mini_train_right,
-  mini_train_left,
-  mini_train_top,
-  mini_train_bottom,
-];
-
-const statusStreet = [
-  "Рента без домов",
-  "Рента c 1 домом",
-  "Рента с 2 домами",
-  "Рента с 3 домами",
-  "Рента с 4 домами",
-  "Рента с отелем",
-];
-
-const statusTrain = [
-  "Рента с одним поездом",
-  "Рента с двумя поездами",
-  "Рента с тремя поездами",
-  "Рента с четырьмя поездами",
-];
-
-const statusNature = ["Рента с одной карточкой", "Рента с двумя карточками"];
 
 export default function GameBoardCardInfo({
   players,
@@ -65,81 +26,91 @@ export default function GameBoardCardInfo({
   openIndex,
   setOpenIndex,
   currentPlayer,
+  game,
 }: PropsType) {
-  const [off, setOff] = React.useState(false);
   const mortgage = useMutation(api.cards.mortgage);
   const unmortgage = useMutation(api.cards.unmortgage);
   const build = useMutation(api.cards.build);
   const unbuild = useMutation(api.cards.unbuild);
+
   const currentCard = cardsList[openIndex];
   const bdCard = cards[openIndex];
 
-  if (bdCard === null) {
-    return (
-      <div className={styles.top}>
-        <div className={styles.top_section}>
-          <div className={styles.name}>{currentCard.name}</div>
-          <div className={styles.mini_btns}>
-            <button
-              className={styles.mini_btn}
-              onClick={() => setOpenIndex(-1)}
-            >
-              <X size={16} color="#ffffff" />
-            </button>
-          </div>
-        </div>
-        <div className={styles.desc}>{currentCard.desc}</div>
-      </div>
-    );
-  }
   const renderBtnStreet = () => {
-    if (bdCard.owner !== currentPlayer._id) {
+    if (
+      bdCard === null ||
+      bdCard.owner !== currentPlayer._id ||
+      game.current !== currentPlayer._id
+    ) {
       return "";
     }
     if (currentCard.class === "street" && bdCard) {
       if (bdCard.mortgage) {
         return (
-          <button
-            className={styles.btn}
+          <MiniButton
             onClick={() => {
-              unmortgage({
-                players_id: currentPlayer._id,
-                cards_id: bdCard._id,
-                money: currentCard.unlock,
-              });
+              toast.promise(
+                unmortgage({
+                  players_id: currentPlayer._id,
+                  cards_id: bdCard._id,
+                  money: currentCard.unlock,
+                }),
+                {
+                  loading: "Выкупаем карточку",
+                  success: "Карточка выкуплена",
+                  error: (error) => error,
+                },
+              );
             }}
           >
             Выкупить
-          </button>
+          </MiniButton>
         );
       }
-      if (currentPlayer.balance >= currentCard.build && bdCard.status === 0) {
+      if (
+        currentPlayer.balance >= currentCard.build &&
+        bdCard.status === 0 &&
+        GetOwnerGroupCards(cards, currentCard)
+      ) {
         return (
           <>
-            <button
-              className={styles.btn}
+            <MiniButton
+              danger
               onClick={() => {
-                mortgage({
-                  players_id: currentPlayer._id,
-                  cards_id: bdCard._id,
-                  money: currentCard.buy / 2,
-                });
+                toast.promise(
+                  mortgage({
+                    players_id: currentPlayer._id,
+                    cards_id: bdCard._id,
+                    money: currentCard.buy / 2,
+                  }),
+                  {
+                    loading: "Закладываем карточку",
+                    success: "Карточка заложена",
+                    error: (error) => error,
+                  },
+                );
               }}
             >
               Заложить
-            </button>
-            <button
-              className={styles.btn}
+            </MiniButton>
+            <MiniButton
               onClick={() => {
-                build({
-                  players_id: currentPlayer._id,
-                  cards_id: bdCard._id,
-                  money: currentCard.build,
-                });
+                toast.promise(
+                  build({
+                    players_id: currentPlayer._id,
+                    cards_id: bdCard._id,
+                    money: currentCard.build,
+                  }),
+                  {
+                    loading: "Покупаем дом",
+                    success: "Дом куплен",
+                    error: (error) => error,
+                  },
+                );
               }}
             >
               Купить дом
-            </button>
+            </MiniButton>
           </>
         );
       }
@@ -147,34 +118,48 @@ export default function GameBoardCardInfo({
       if (
         currentPlayer.balance >= currentCard.build &&
         bdCard.status > 0 &&
-        bdCard.status < 4
+        bdCard.status < 4 &&
+        GetOwnerGroupCards(cards, currentCard)
       ) {
         return (
           <>
-            <button
-              className={styles.btn}
+            <MiniButton
+              danger
               onClick={() => {
-                unbuild({
-                  players_id: currentPlayer._id,
-                  cards_id: bdCard._id,
-                  money: currentCard.build,
-                });
+                toast.promise(
+                  unbuild({
+                    players_id: currentPlayer._id,
+                    cards_id: bdCard._id,
+                    money: currentCard.build,
+                  }),
+                  {
+                    loading: "Продаем дом",
+                    success: "Дом продан",
+                    error: (error) => error,
+                  },
+                );
               }}
             >
               Продать дом
-            </button>
-            <button
-              className={styles.btn}
+            </MiniButton>
+            <MiniButton
               onClick={() => {
-                build({
-                  players_id: currentPlayer._id,
-                  cards_id: bdCard._id,
-                  money: currentCard.build,
-                });
+                toast.promise(
+                  build({
+                    players_id: currentPlayer._id,
+                    cards_id: bdCard._id,
+                    money: currentCard.build,
+                  }),
+                  {
+                    loading: "Покупаем дом",
+                    success: "Дом куплен",
+                    error: (error) => error,
+                  },
+                );
               }}
             >
               Купить дом
-            </button>
+            </MiniButton>
           </>
         );
       }
@@ -182,494 +167,194 @@ export default function GameBoardCardInfo({
       if (
         currentPlayer.balance < currentCard.build &&
         bdCard.status > 0 &&
-        bdCard.status < 4
+        bdCard.status < 4 &&
+        GetOwnerGroupCards(cards, currentCard)
+      ) {
+        return (
+          <MiniButton
+            danger
+            onClick={() => {
+              toast.promise(
+                unbuild({
+                  players_id: currentPlayer._id,
+                  cards_id: bdCard._id,
+                  money: currentCard.build,
+                }),
+                {
+                  loading: "Продаем дом",
+                  success: "Дом продан",
+                  error: (error) => error,
+                },
+              );
+            }}
+          >
+            Продать дом
+          </MiniButton>
+        );
+      }
+
+      if (
+        currentPlayer.balance >= currentCard.build &&
+        bdCard.status === 4 &&
+        GetOwnerGroupCards(cards, currentCard)
       ) {
         return (
           <>
-            <button
-              className={styles.btn}
+            <MiniButton
+              danger
               onClick={() => {
-                unbuild({
-                  players_id: currentPlayer._id,
-                  cards_id: bdCard._id,
-                  money: currentCard.build,
-                });
+                toast.promise(
+                  unbuild({
+                    players_id: currentPlayer._id,
+                    cards_id: bdCard._id,
+                    money: currentCard.build,
+                  }),
+                  {
+                    loading: "Продаем дом",
+                    success: "Дом продан",
+                    error: (error) => error,
+                  },
+                );
               }}
             >
               Продать дом
-            </button>
-          </>
-        );
-      }
-
-      if (currentPlayer.balance >= currentCard.build && bdCard.status === 4) {
-        return (
-          <>
-            <button
-              className={styles.btn}
+            </MiniButton>
+            <MiniButton
               onClick={() => {
-                unbuild({
-                  players_id: currentPlayer._id,
-                  cards_id: bdCard._id,
-                  money: currentCard.build,
-                });
-              }}
-            >
-              Продать дом
-            </button>
-            <button
-              className={styles.btn}
-              onClick={() => {
-                build({
-                  players_id: currentPlayer._id,
-                  cards_id: bdCard._id,
-                  money: currentCard.build,
-                });
+                toast.promise(
+                  build({
+                    players_id: currentPlayer._id,
+                    cards_id: bdCard._id,
+                    money: currentCard.build,
+                  }),
+                  {
+                    loading: "Покупаем отель",
+                    success: "Отель куплен",
+                    error: (error) => error,
+                  },
+                );
               }}
             >
               Купить отель
-            </button>
+            </MiniButton>
           </>
         );
       }
 
-      if (bdCard.status === 5) {
+      if (bdCard.status === 5 && GetOwnerGroupCards(cards, currentCard)) {
         return (
-          <button
-            className={styles.btn}
+          <MiniButton
+            danger
             onClick={() => {
-              unbuild({
-                players_id: currentPlayer._id,
-                cards_id: bdCard._id,
-                money: currentCard.build,
-              });
+              toast.promise(
+                unbuild({
+                  players_id: currentPlayer._id,
+                  cards_id: bdCard._id,
+                  money: currentCard.build,
+                }),
+                {
+                  loading: "Продаем отель",
+                  success: "Отель продан",
+                  error: (error) => error,
+                },
+              );
             }}
           >
             Продать отель
-          </button>
+          </MiniButton>
         );
       }
 
       return (
-        <button
-          className={styles.btn}
+        <MiniButton
+          danger
           onClick={() => {
-            mortgage({
-              players_id: currentPlayer._id,
-              cards_id: bdCard._id,
-              money: currentCard.buy / 2,
-            });
+            toast.promise(
+              mortgage({
+                players_id: currentPlayer._id,
+                cards_id: bdCard._id,
+                money: currentCard.buy / 2,
+              }),
+              {
+                loading: "Закладываем карточку",
+                success: "Карточка заложена",
+                error: (error) => error,
+              },
+            );
           }}
         >
           Заложить
-        </button>
+        </MiniButton>
       );
     }
     return "че";
   };
 
   const renderBtnTrainNature = () => {
-    if (bdCard.owner !== currentPlayer._id) {
+    if (
+      bdCard === null ||
+      bdCard.owner !== currentPlayer._id ||
+      game.current !== currentPlayer._id
+    ) {
       return "";
     }
-    if (
-      (currentCard.class === "train" || currentCard.class === "nature") &&
-      bdCard
-    ) {
+    if ((currentCard.class === "train" || currentCard.class === "nature") && bdCard) {
       if (bdCard.mortgage) {
         return (
-          <button
-            className={styles.btn}
+          <MiniButton
             onClick={() => {
-              unmortgage({
-                players_id: currentPlayer._id,
-                cards_id: bdCard._id,
-                money: currentCard.unlock,
-              });
+              toast.promise(
+                unmortgage({
+                  players_id: currentPlayer._id,
+                  cards_id: bdCard._id,
+                  money: currentCard.unlock,
+                }),
+                {
+                  loading: "Выкупаем карточку",
+                  success: "Карточка выкуплена",
+                  error: (error) => error,
+                },
+              );
             }}
           >
             Выкупить
-          </button>
+          </MiniButton>
         );
       }
       return (
-        <button
-          className={styles.btn}
+        <MiniButton
+          danger
           onClick={() => {
-            mortgage({
-              players_id: currentPlayer._id,
-              cards_id: bdCard._id,
-              money: currentCard.buy / 2,
-            });
+            toast.promise(
+              mortgage({
+                players_id: currentPlayer._id,
+                cards_id: bdCard._id,
+                money: currentCard.buy / 2,
+              }),
+              {
+                loading: "Закладываем карточку",
+                success: "Карточка заложена",
+                error: (error) => error,
+              },
+            );
           }}
         >
           Заложить
-        </button>
+        </MiniButton>
       );
     } else {
       return "";
     }
   };
 
-  if (currentCard.class === "street") {
-    return (
-      <div className={styles.card}>
-        <div className={styles.top}>
-          <div className={styles.top_section}>
-            <div className={styles.name}>{currentCard.name}</div>
-            <div className={styles.mini_btns}>
-              <button className={styles.mini_btn} onClick={() => setOff(!off)}>
-                {off ? (
-                  <EyeOff size={16} color="#ffffff" />
-                ) : (
-                  <Eye size={16} color="#ffffff" />
-                )}
-              </button>
-              <button
-                className={styles.mini_btn}
-                onClick={() => setOpenIndex(-1)}
-              >
-                <X size={16} color="#ffffff" />
-              </button>
-            </div>
-          </div>
-          {off && <div className={styles.desc}>{currentCard.desc}</div>}
-        </div>
-        <div className={styles.bottom}>
-          <div className={styles.group}>
-            {currentCard.group.map((i) => {
-              return (
-                <Image
-                  key={i}
-                  src={cardsList[i].svg}
-                  alt={cardsList[i].name}
-                  width={22}
-                  height={22}
-                />
-              );
-            })}
-          </div>
-          <div className={styles.table}>
-            <Image src={currentCard.svg} alt={currentCard.name} />
-            <div className={styles.rent}>
-              {statusStreet.map((el, index) => {
-                return (
-                  <div
-                    key={index}
-                    className={
-                      index === bdCard.status && !bdCard.mortgage
-                        ? styles.status + " " + styles.status_active
-                        : styles.status
-                    }
-                  >
-                    <div className={styles.status_title}>{el}</div>
-                    <div className={styles.money}>
-                      <Money value={currentCard.rent[index]} />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className={styles.third}>
-              <div
-                className={
-                  bdCard.mortgage
-                    ? styles.status + " " + styles.status_active
-                    : styles.status
-                }
-              >
-                <div className={styles.status_title}>
-                  <Lock size={16} color="#ffffff" />
-                  Залог
-                </div>
-                <div className={styles.money}>
-                  <Money value={currentCard.buy / 2} />
-                </div>
-              </div>
-              <div
-                className={
-                  bdCard.buy
-                    ? styles.status + " " + styles.status_active
-                    : styles.status
-                }
-              >
-                <div className={styles.status_title}>
-                  <ShoppingCart size={16} color="#ffffff" />
-                  Купить
-                </div>
-                <div className={styles.money}>
-                  <Money value={currentCard.buy} />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className={styles.bottom_section}>
-            <div className={styles.block}>
-              <div className={styles.money}>
-                <Unlock size={16} color="#ffffff" />
-                <Money value={currentCard.unlock} />
-              </div>
-              <div className={styles.money}>
-                <Home size={16} color="#ffffff" />
-                <Money value={currentCard.build} />
-              </div>
-              {bdCard.owner && (
-                <div
-                  className={styles.owner}
-                  style={{
-                    backgroundColor: GetFigureFromSelected(
-                      GetPlayerFromId(players, bdCard.owner)!,
-                    ).bg,
-                    color: GetFigureFromSelected(
-                      GetPlayerFromId(players, bdCard.owner)!,
-                    ).color,
-                  }}
-                >
-                  {GetPlayerFromId(players, bdCard.owner)!.user?.name}
-                </div>
-              )}
-            </div>
-            <div className={styles.block}>{renderBtnStreet()}</div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (currentCard.class === "train") {
-    return (
-      <div className={styles.card}>
-        <div className={styles.top}>
-          <div className={styles.top_section}>
-            <div className={styles.name}>{currentCard.name}</div>
-            <div className={styles.mini_btns}>
-              <button className={styles.mini_btn} onClick={() => setOff(!off)}>
-                {off ? (
-                  <EyeOff size={16} color="#ffffff" />
-                ) : (
-                  <Eye size={16} color="#ffffff" />
-                )}
-              </button>
-              <button
-                className={styles.mini_btn}
-                onClick={() => setOpenIndex(-1)}
-              >
-                <X size={16} color="#ffffff" />
-              </button>
-            </div>
-          </div>
-          {off && <div className={styles.desc}>{currentCard.desc}</div>}
-        </div>
-        <div className={styles.bottom}>
-          <div className={styles.group}>
-            {imagesTrain.map((el, i) => {
-              return <Image key={i} src={el} alt={el} />;
-            })}
-          </div>
-          <div className={styles.table}>
-            <Image src={currentCard.svg} alt={currentCard.name} />
-            <div className={styles.rent}>
-              {statusTrain.map((el, index) => {
-                return (
-                  <div
-                    key={index}
-                    className={
-                      index === bdCard.status && !bdCard.mortgage
-                        ? styles.status + " " + styles.status_active
-                        : styles.status
-                    }
-                  >
-                    <div className={styles.status_title}>{el}</div>
-                    <div className={styles.money}>
-                      <Money value={currentCard.rent[index]} />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className={styles.third}>
-              <div
-                className={
-                  bdCard.mortgage
-                    ? styles.status + " " + styles.status_active
-                    : styles.status
-                }
-              >
-                <div className={styles.status_title}>
-                  <Lock size={16} color="#ffffff" />
-                  Залог
-                </div>
-                <div className={styles.money}>
-                  <Money value={currentCard.buy / 2} />
-                </div>
-              </div>
-              <div
-                className={
-                  bdCard.buy
-                    ? styles.status + " " + styles.status_active
-                    : styles.status
-                }
-              >
-                <div className={styles.status_title}>
-                  <ShoppingCart size={16} color="#ffffff" />
-                  Купить
-                </div>
-                <div className={styles.money}>
-                  <Money value={currentCard.buy} />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className={styles.bottom_section}>
-            <div className={styles.block}>
-              <div className={styles.money}>
-                <Unlock size={16} color="#ffffff" />
-                <Money value={currentCard.unlock} />
-              </div>
-              {bdCard.owner && (
-                <div
-                  className={styles.owner}
-                  style={{
-                    backgroundColor: GetFigureFromSelected(
-                      GetPlayerFromId(players, bdCard.owner)!,
-                    ).bg,
-                    color: GetFigureFromSelected(
-                      GetPlayerFromId(players, bdCard.owner)!,
-                    ).color,
-                  }}
-                >
-                  {GetPlayerFromId(players, bdCard.owner)!.user?.name}
-                </div>
-              )}
-            </div>
-            <div className={styles.block}>{renderBtnTrainNature()}</div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (currentCard.class === "nature") {
-    return (
-      <div className={styles.card}>
-        <div className={styles.top}>
-          <div className={styles.top_section}>
-            <div className={styles.name}>{currentCard.name}</div>
-            <div className={styles.mini_btns}>
-              <button className={styles.mini_btn} onClick={() => setOff(!off)}>
-                {off ? (
-                  <EyeOff size={16} color="#ffffff" />
-                ) : (
-                  <Eye size={16} color="#ffffff" />
-                )}
-              </button>
-              <button
-                className={styles.mini_btn}
-                onClick={() => setOpenIndex(-1)}
-              >
-                <X size={16} color="#ffffff" />
-              </button>
-            </div>
-          </div>
-          {off && <div className={styles.desc}>{currentCard.desc}</div>}
-        </div>
-        <div className={styles.bottom}>
-          <div className={styles.group}>
-            {currentCard.group.map((i) => {
-              return (
-                <Image
-                  key={i}
-                  src={cardsList[i].svg}
-                  alt={cardsList[i].name}
-                  width={22}
-                  height={22}
-                />
-              );
-            })}
-          </div>
-          <div className={styles.table}>
-            <Image src={currentCard.svg} alt={currentCard.name} />
-            <div className={styles.rent}>
-              {statusNature.map((el, index) => {
-                return (
-                  <div
-                    key={index}
-                    className={
-                      index === bdCard.status && !bdCard.mortgage
-                        ? styles.status + " " + styles.status_active
-                        : styles.status
-                    }
-                  >
-                    <div className={styles.status_title}>{el}</div>
-                    <div className={styles.money}>
-                      x{currentCard.rent[index]}
-                      <Dices size={14} color="#ffffff" />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className={styles.third}>
-              <div
-                className={
-                  bdCard.mortgage
-                    ? styles.status + " " + styles.status_active
-                    : styles.status
-                }
-              >
-                <div className={styles.status_title}>
-                  <Lock size={16} color="#ffffff" />
-                  Залог
-                </div>
-                <div className={styles.money}>
-                  <Money value={currentCard.buy / 2} />
-                </div>
-              </div>
-              <div
-                className={
-                  bdCard.buy
-                    ? styles.status + " " + styles.status_active
-                    : styles.status
-                }
-              >
-                <div className={styles.status_title}>
-                  <ShoppingCart size={16} color="#ffffff" />
-                  Купить
-                </div>
-                <div className={styles.money}>
-                  <Money value={currentCard.buy} />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className={styles.bottom_section}>
-            <div className={styles.block}>
-              <div className={styles.money}>
-                <Unlock size={16} color="#ffffff" />
-                <Money value={currentCard.unlock} />
-              </div>
-              {bdCard.owner && (
-                <div
-                  className={styles.owner}
-                  style={{
-                    backgroundColor: GetFigureFromSelected(
-                      GetPlayerFromId(players, bdCard.owner)!,
-                    ).bg,
-                    color: GetFigureFromSelected(
-                      GetPlayerFromId(players, bdCard.owner)!,
-                    ).color,
-                  }}
-                >
-                  {GetPlayerFromId(players, bdCard.owner)!.user?.name}
-                </div>
-              )}
-            </div>
-            <div className={styles.block}>{renderBtnTrainNature()}</div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return <div></div>;
+  return (
+    <GameBoardCardInfoRender
+      bdCard={bdCard}
+      currentCard={currentCard}
+      setOpenIndex={setOpenIndex}
+      players={players}
+      renderBtnStreet={renderBtnStreet}
+      renderBtnTrainNature={renderBtnTrainNature}
+    />
+  );
 }
