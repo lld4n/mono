@@ -10,12 +10,9 @@ import Loading from "@/components/Global/Loading/Loading";
 import Chat from "@/components/Global/Chat/Chat";
 import RoomPlayersList from "@/components/Room/RoomPlayersList/RoomPlayersList";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
-export default function Game({
-  params,
-}: {
-  params: { games_id: Id<"games"> };
-}) {
+export default function Game({ params }: { params: { games_id: Id<"games"> } }) {
   const [playerId, setPlayerId] = useState<Id<"players">>();
   const players = useQuery(api.players.getAllByGames, {
     games_id: params.games_id,
@@ -27,23 +24,31 @@ export default function Game({
 
   const router = useRouter();
 
+  const addPlayer = useMutation(api.players.add);
   useEffect(() => {
-    if (
-      players &&
-      playerId &&
-      players.filter((player) => player._id === playerId).length === 0
-    ) {
+    toast.promise(addPlayer({ games_id: params.games_id }), {
+      loading: "Добавляем игрока",
+      success: (data) => {
+        setPlayerId(data);
+        return "Игрок добавлен";
+      },
+      error: (error) => error,
+    });
+  }, [addPlayer, params.games_id]);
+
+  // useEffect, если игра удалилась и ее не получилось получить
+  useEffect(() => {
+    if (game === null) router.push("/");
+  }, []);
+
+  // useEffect, если игрока выгнали
+  useEffect(() => {
+    if (players && playerId && !players.map((pl) => pl._id).includes(playerId)) {
       router.push("/");
     }
   }, [playerId, players, router]);
 
-  const addPlayer = useMutation(api.players.add);
-  useEffect(() => {
-    addPlayer({ games_id: params.games_id }).then((player_id) =>
-      setPlayerId(player_id),
-    );
-  }, [addPlayer, params.games_id]);
-
+  // useEffect, если игра началась
   useEffect(() => {
     if (game && game.started !== 0) router.push(`/game/${game._id}`);
   }, [game, router]);

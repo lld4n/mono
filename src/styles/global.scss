@@ -1,14 +1,14 @@
 @import "reset";
-
+html {
+  color-scheme: dark;
+}
 html,
 body {
   background: #1a1a1c;
   height: 100%;
   color: white;
-  font-weight: 500;
   font-size: 16px;
 }
 input {
   font-size: 16px;
-  font-weight: 500;
 }

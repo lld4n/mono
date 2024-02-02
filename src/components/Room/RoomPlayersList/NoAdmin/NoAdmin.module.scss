@@ -27,10 +27,17 @@
 }
 
 .playerName {
-  flex: 1 1 auto;
+  background-color: black;
   word-break: break-all;
+  padding: 0 10px;
+  align-self: stretch;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
 }
 
 .open {
   margin-top: 20px;
+  font-size: 12px;
 }

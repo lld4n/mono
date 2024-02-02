@@ -15,6 +15,7 @@ import RollDice, { RollDiceType } from "@/components/Game/Roll Dice/RollDice";
 import { useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { cardsList } from "@/constants/cards";
+import { toast } from "sonner";
 
 type PropsType = {
   players: PlayersGetType[];
@@ -33,6 +34,7 @@ export default function GameBoardCenter({
   setOpenIndex,
   openIndex,
 }: PropsType) {
+  const [finishActions, setFinishActions] = React.useState(false);
   const [convexCard, setConvexCard] = React.useState<CardsGetType>();
   const [buyState, setBuyState] = React.useState(0);
   const [payState, setPayState] = React.useState(0);
@@ -45,109 +47,219 @@ export default function GameBoardCenter({
   const updateCurrent = useMutation(api.games.updateCurrent);
   const buy = useMutation(api.cards.buy);
   const lose = useMutation(api.players.lose);
-  console.log(players);
-  console.log(game);
 
-  const baseLose = async () => {
+  React.useEffect(() => {
+    if (game.current !== currentPlayer._id && finishActions) {
+      setFinishActions(false);
+    }
+  }, [game]);
+
+  const baseLose = () => {
     setPayState(0);
     setBuyState(0);
     setNatureState(0);
     setConvexCard(undefined);
     setLuckyState(false);
-    await lose({
-      players_id: currentPlayer._id,
-    });
+    toast.promise(
+      lose({
+        players_id: currentPlayer._id,
+      }),
+      {
+        loading: "Обнуляем игрока, который сейчас ходил",
+        success: "Игрок, который сейчас ходил проиграл",
+        error: (error) => error,
+      },
+    );
   };
-  const baseAuction = async () => {
+  const baseAuction = () => {
     setPayState(0);
     setBuyState(0);
     setNatureState(0);
     setConvexCard(undefined);
     setLuckyState(false);
-    await updateCurrent({
-      games_id: game._id,
-    });
+    toast.promise(
+      updateCurrent({
+        games_id: game._id,
+      }),
+      {
+        loading: "Определяем следующего игрока",
+        success: "Следующий игрок определен",
+        error: (error) => error,
+      },
+    );
   };
-  const baseBuy = async (m: number) => {
+  const baseBuy = (m: number) => {
     setBuyState(0);
     if (!convexCard) return;
-    await buy({
-      cards_id: convexCard._id,
-      players_id: currentPlayer._id,
-      money: m,
-    });
-    await updateCurrent({
-      games_id: game._id,
-    });
+    toast.promise(
+      buy({
+        cards_id: convexCard._id,
+        players_id: currentPlayer._id,
+        money: m,
+      }),
+      {
+        loading: "Покупаем карточку",
+        success: "Карточка куплена",
+        error: (error) => error,
+      },
+    );
+    toast.promise(
+      updateCurrent({
+        games_id: game._id,
+      }),
+      {
+        loading: "Определяем следующего игрока",
+        success: "Игрок определен",
+        error: (error) => error,
+      },
+    );
     setConvexCard(undefined);
   };
 
-  const basePay = async (m: number) => {
+  const basePay = (m: number) => {
     setPayState(0);
-    await updateBalance({
-      players_id: currentPlayer._id,
-      money: -m,
-    });
-    await updateCurrent({
-      games_id: game._id,
-    });
+    toast.promise(
+      updateBalance({
+        players_id: currentPlayer._id,
+        money: -m,
+      }),
+      {
+        loading: "Обновляем баланс игрока",
+        success: "Баланс обновлен",
+        error: (error) => error,
+      },
+    );
+    toast.promise(
+      updateCurrent({
+        games_id: game._id,
+      }),
+      {
+        loading: "Определяем следующего игрока",
+        success: "Игрок определен",
+        error: (error) => error,
+      },
+    );
     setConvexCard(undefined);
   };
 
-  const baseLucky = async (choice: choiceType) => {
+  const baseLucky = (choice: choiceType) => {
     setLuckyState(false);
-    await updateTimer({
-      games_id: game._id,
-    });
+    toast.promise(
+      updateTimer({
+        games_id: game._id,
+      }),
+      {
+        loading: "Обновляем таймер",
+        success: "Таймер обновлен",
+        error: (error) => error,
+      },
+    );
     if (choice.type === "pay") {
       setPayState(choice.value);
     } else if (choice.type === "get") {
-      await updateBalance({
-        players_id: currentPlayer._id,
-        money: choice.value,
-      });
-      await updateCurrent({
-        games_id: game._id,
-      });
+      toast.promise(
+        updateBalance({
+          players_id: currentPlayer._id,
+          money: choice.value,
+        }),
+        {
+          loading: "Обновляем баланс игрока",
+          success: "Баланс обновлен",
+          error: (error) => error,
+        },
+      );
+      toast.promise(
+        updateCurrent({
+          games_id: game._id,
+        }),
+        {
+          loading: "Определяем следующего игрока",
+          success: "Игрок определен",
+          error: (error) => error,
+        },
+      );
     }
     setConvexCard(undefined);
   };
 
-  const baseNature = async (r: RollDiceType) => {
-    await updateTimer({
-      games_id: game._id,
-    });
+  const baseNature = (r: RollDiceType) => {
+    toast.promise(
+      updateTimer({
+        games_id: game._id,
+      }),
+      {
+        loading: "Обновляем таймер",
+        success: "Таймер обновлен",
+        error: (error) => error,
+      },
+    );
     setPayState((r[0] + r[1]) * natureState);
     setNatureState(0);
     setConvexCard(undefined);
   };
-  const baseRoll = async (r: RollDiceType) => {
+
+  const baseRoll = (r: RollDiceType) => {
     const curPosition = currentPlayer.position + r[0] + r[1];
     if (curPosition > 39) {
-      await updateBalance({
-        players_id: currentPlayer._id,
-        money: 1000,
-      });
+      toast.promise(
+        updateBalance({
+          players_id: currentPlayer._id,
+          money: 1000,
+        }),
+        {
+          loading: "Обновляем баланс игрока",
+          success: "Баланс обновлен",
+          error: (error) => error,
+        },
+      );
     }
-    await updatePosition({
-      players_id: currentPlayer._id,
-      position: curPosition % 40,
-    });
-    await updateTimer({
-      games_id: game._id,
-    });
+    toast.promise(
+      updatePosition({
+        players_id: currentPlayer._id,
+        position: curPosition % 40,
+      }),
+      {
+        loading: "Обновляем позицию игрока",
+        success: "Позиция обновлена",
+        error: (error) => error,
+      },
+    );
+    toast.promise(
+      updateTimer({
+        games_id: game._id,
+      }),
+      {
+        loading: "Обновляем таймер",
+        success: "Таймер обновлен",
+        error: (error) => error,
+      },
+    );
     const bdCard = cards[curPosition % 40];
     setConvexCard(bdCard);
     const currentCard = cardsList[curPosition % 40];
     if (currentCard.class === "street" || currentCard.class === "train") {
       if (bdCard!.mortgage) {
-        await updateCurrent({
-          games_id: game._id,
-        });
+        toast.promise(
+          updateCurrent({
+            games_id: game._id,
+          }),
+          {
+            loading: "Определяем следующего игрока",
+            success: "Игрок определен",
+            error: (error) => error,
+          },
+        );
       } else if (bdCard!.owner === currentPlayer._id) {
-        await updateCurrent({
-          games_id: game._id,
-        });
+        toast.promise(
+          updateCurrent({
+            games_id: game._id,
+          }),
+          {
+            loading: "Определяем следующего игрока",
+            success: "Игрок определен",
+            error: (error) => error,
+          },
+        );
       } else if (bdCard!.owner === undefined) {
         setBuyState(currentCard.buy);
       } else {
@@ -155,13 +267,27 @@ export default function GameBoardCenter({
       }
     } else if (currentCard.class === "nature") {
       if (bdCard!.mortgage) {
-        await updateCurrent({
-          games_id: game._id,
-        });
+        toast.promise(
+          updateCurrent({
+            games_id: game._id,
+          }),
+          {
+            loading: "Определяем следующего игрока",
+            success: "Игрок определен",
+            error: (error) => error,
+          },
+        );
       } else if (bdCard!.owner === currentPlayer._id) {
-        await updateCurrent({
-          games_id: game._id,
-        });
+        toast.promise(
+          updateCurrent({
+            games_id: game._id,
+          }),
+          {
+            loading: "Определяем следующего игрока",
+            success: "Игрок определен",
+            error: (error) => error,
+          },
+        );
       } else if (bdCard!.owner === undefined) {
         setBuyState(currentCard.buy);
       } else {
@@ -172,20 +298,36 @@ export default function GameBoardCenter({
     } else if (currentCard.class === "tax") {
       setPayState(currentCard.pay);
     } else if (currentCard.class === "empty") {
-      await updateCurrent({
-        games_id: game._id,
-      });
+      toast.promise(
+        updateCurrent({
+          games_id: game._id,
+        }),
+        {
+          loading: "Определяем следующего игрока",
+          success: "Игрок определен",
+          error: (error) => error,
+        },
+      );
     } else {
       // тестовая тема
-      await updateCurrent({
-        games_id: game._id,
-      });
+      toast.promise(
+        updateCurrent({
+          games_id: game._id,
+        }),
+        {
+          loading: "Определяем следующего игрока",
+          success: "Игрок определен",
+          error: (error) => error,
+        },
+      );
     }
+    setFinishActions(true);
   };
 
   return (
     <div className={styles.center}>
       {game.current === currentPlayer._id &&
+        !finishActions &&
         buyState === 0 &&
         payState === 0 &&
         !luckyState &&
@@ -218,13 +360,10 @@ export default function GameBoardCenter({
           openIndex={openIndex}
           setOpenIndex={setOpenIndex}
           currentPlayer={currentPlayer}
+          game={game}
         />
       )}
-      <Chat
-        players={players}
-        games_id={game._id}
-        playerId={currentPlayer._id}
-      />
+      <Chat players={players} games_id={game._id} playerId={currentPlayer._id} />
     </div>
   );
 }

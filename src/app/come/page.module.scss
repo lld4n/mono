@@ -21,18 +21,3 @@
     color: #6a6a6a;
   }
 }
-.btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px;
-  border-radius: 5px;
-  background-color: #1a1a1c;
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  &:hover {
-    background-color: #202020;
-  }
-}

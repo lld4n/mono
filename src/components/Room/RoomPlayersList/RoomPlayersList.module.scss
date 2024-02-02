@@ -5,23 +5,12 @@
   flex-direction: column;
   width: 250px;
   align-items: center;
+  gap: 20px;
 }
 
 .delete {
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  padding: 5px;
-  color: #f85149;
-  font-size: 10px;
   position: fixed;
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
-
-  &:hover {
-    background: #230000;
-  }
 }
