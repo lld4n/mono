@@ -3,12 +3,10 @@ import { PlayersGetType } from "@/types/PlayersGetType";
 import { Doc } from "../../../../../convex/_generated/dataModel";
 import { CardsGetType } from "@/types/CardsGetType";
 import { cardsList } from "@/constants/cards";
-import { useMutation } from "convex/react";
-import { api } from "../../../../../convex/_generated/api";
 import CardInfoRender from "@/components/Game/Center/CardInfo/CardInfoRender/CardInfoRender";
 import MiniButton from "@/components/Buttons/MiniButton/MiniButton";
-import { toast } from "sonner";
 import { GetOwnerGroupCards } from "@/utils/GetOwnerGroupCards";
+import { useCards } from "@/hooks/useCards";
 
 export default function CardInfo({
   players,
@@ -25,10 +23,7 @@ export default function CardInfo({
   currentPlayer: Doc<"players">;
   game: Doc<"games">;
 }) {
-  const mortgage = useMutation(api.cards.mortgage);
-  const unmortgage = useMutation(api.cards.unmortgage);
-  const build = useMutation(api.cards.build);
-  const unbuild = useMutation(api.cards.unbuild);
+  const { toastUnmortgage, toastMortgage, toastBuild, toastUnbuild } = useCards();
 
   const currentCard = cardsList[openIndex];
   const bdCard = cards[openIndex];
@@ -45,20 +40,9 @@ export default function CardInfo({
       if (bdCard.mortgage) {
         return (
           <MiniButton
-            onClick={() => {
-              toast.promise(
-                unmortgage({
-                  players_id: currentPlayer._id,
-                  cards_id: bdCard._id,
-                  money: currentCard.unlock,
-                }),
-                {
-                  loading: "Выкупаем карточку",
-                  success: "Карточка выкуплена",
-                  error: (error) => error,
-                },
-              );
-            }}
+            onClick={() =>
+              toastUnmortgage(currentPlayer._id, bdCard._id, currentCard.unlock)
+            }
           >
             Выкупить
           </MiniButton>
@@ -73,38 +57,16 @@ export default function CardInfo({
           <>
             <MiniButton
               danger
-              onClick={() => {
-                toast.promise(
-                  mortgage({
-                    players_id: currentPlayer._id,
-                    cards_id: bdCard._id,
-                    money: currentCard.buy / 2,
-                  }),
-                  {
-                    loading: "Закладываем карточку",
-                    success: "Карточка заложена",
-                    error: (error) => error,
-                  },
-                );
-              }}
+              onClick={() =>
+                toastMortgage(currentPlayer._id, bdCard._id, currentCard.buy / 2)
+              }
             >
               Заложить
             </MiniButton>
             <MiniButton
-              onClick={() => {
-                toast.promise(
-                  build({
-                    players_id: currentPlayer._id,
-                    cards_id: bdCard._id,
-                    money: currentCard.build,
-                  }),
-                  {
-                    loading: "Покупаем дом",
-                    success: "Дом куплен",
-                    error: (error) => error,
-                  },
-                );
-              }}
+              onClick={() =>
+                toastBuild(currentPlayer._id, bdCard._id, currentCard.build)
+              }
             >
               Купить дом
             </MiniButton>
@@ -122,38 +84,16 @@ export default function CardInfo({
           <>
             <MiniButton
               danger
-              onClick={() => {
-                toast.promise(
-                  unbuild({
-                    players_id: currentPlayer._id,
-                    cards_id: bdCard._id,
-                    money: currentCard.build,
-                  }),
-                  {
-                    loading: "Продаем дом",
-                    success: "Дом продан",
-                    error: (error) => error,
-                  },
-                );
-              }}
+              onClick={() =>
+                toastUnbuild(currentPlayer._id, bdCard._id, currentCard.build)
+              }
             >
               Продать дом
             </MiniButton>
             <MiniButton
-              onClick={() => {
-                toast.promise(
-                  build({
-                    players_id: currentPlayer._id,
-                    cards_id: bdCard._id,
-                    money: currentCard.build,
-                  }),
-                  {
-                    loading: "Покупаем дом",
-                    success: "Дом куплен",
-                    error: (error) => error,
-                  },
-                );
-              }}
+              onClick={() =>
+                toastBuild(currentPlayer._id, bdCard._id, currentCard.build)
+              }
             >
               Купить дом
             </MiniButton>
@@ -170,20 +110,9 @@ export default function CardInfo({
         return (
           <MiniButton
             danger
-            onClick={() => {
-              toast.promise(
-                unbuild({
-                  players_id: currentPlayer._id,
-                  cards_id: bdCard._id,
-                  money: currentCard.build,
-                }),
-                {
-                  loading: "Продаем дом",
-                  success: "Дом продан",
-                  error: (error) => error,
-                },
-              );
-            }}
+            onClick={() =>
+              toastUnbuild(currentPlayer._id, bdCard._id, currentCard.build)
+            }
           >
             Продать дом
           </MiniButton>
@@ -199,38 +128,16 @@ export default function CardInfo({
           <>
             <MiniButton
               danger
-              onClick={() => {
-                toast.promise(
-                  unbuild({
-                    players_id: currentPlayer._id,
-                    cards_id: bdCard._id,
-                    money: currentCard.build,
-                  }),
-                  {
-                    loading: "Продаем дом",
-                    success: "Дом продан",
-                    error: (error) => error,
-                  },
-                );
-              }}
+              onClick={() =>
+                toastUnbuild(currentPlayer._id, bdCard._id, currentCard.build)
+              }
             >
               Продать дом
             </MiniButton>
             <MiniButton
-              onClick={() => {
-                toast.promise(
-                  build({
-                    players_id: currentPlayer._id,
-                    cards_id: bdCard._id,
-                    money: currentCard.build,
-                  }),
-                  {
-                    loading: "Покупаем отель",
-                    success: "Отель куплен",
-                    error: (error) => error,
-                  },
-                );
-              }}
+              onClick={() =>
+                toastBuild(currentPlayer._id, bdCard._id, currentCard.build)
+              }
             >
               Купить отель
             </MiniButton>
@@ -242,20 +149,9 @@ export default function CardInfo({
         return (
           <MiniButton
             danger
-            onClick={() => {
-              toast.promise(
-                unbuild({
-                  players_id: currentPlayer._id,
-                  cards_id: bdCard._id,
-                  money: currentCard.build,
-                }),
-                {
-                  loading: "Продаем отель",
-                  success: "Отель продан",
-                  error: (error) => error,
-                },
-              );
-            }}
+            onClick={() =>
+              toastUnbuild(currentPlayer._id, bdCard._id, currentCard.build)
+            }
           >
             Продать отель
           </MiniButton>
@@ -265,20 +161,9 @@ export default function CardInfo({
       return (
         <MiniButton
           danger
-          onClick={() => {
-            toast.promise(
-              mortgage({
-                players_id: currentPlayer._id,
-                cards_id: bdCard._id,
-                money: currentCard.buy / 2,
-              }),
-              {
-                loading: "Закладываем карточку",
-                success: "Карточка заложена",
-                error: (error) => error,
-              },
-            );
-          }}
+          onClick={() =>
+            toastMortgage(currentPlayer._id, bdCard._id, currentCard.buy / 2)
+          }
         >
           Заложить
         </MiniButton>
@@ -299,20 +184,9 @@ export default function CardInfo({
       if (bdCard.mortgage) {
         return (
           <MiniButton
-            onClick={() => {
-              toast.promise(
-                unmortgage({
-                  players_id: currentPlayer._id,
-                  cards_id: bdCard._id,
-                  money: currentCard.unlock,
-                }),
-                {
-                  loading: "Выкупаем карточку",
-                  success: "Карточка выкуплена",
-                  error: (error) => error,
-                },
-              );
-            }}
+            onClick={() =>
+              toastUnmortgage(currentPlayer._id, bdCard._id, currentCard.unlock)
+            }
           >
             Выкупить
           </MiniButton>
@@ -321,20 +195,9 @@ export default function CardInfo({
       return (
         <MiniButton
           danger
-          onClick={() => {
-            toast.promise(
-              mortgage({
-                players_id: currentPlayer._id,
-                cards_id: bdCard._id,
-                money: currentCard.buy / 2,
-              }),
-              {
-                loading: "Закладываем карточку",
-                success: "Карточка заложена",
-                error: (error) => error,
-              },
-            );
-          }}
+          onClick={() =>
+            toastMortgage(currentPlayer._id, bdCard._id, currentCard.buy / 2)
+          }
         >
           Заложить
         </MiniButton>
