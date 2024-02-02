@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./page.module.scss";
 import { BadgeCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
-import IconButton from "@/components/Global/IconButton/IconButton";
+import IconButton from "@/components/Buttons/IconButton/IconButton";
 export default function Come() {
   const [value, setValue] = React.useState("");
   const router = useRouter();
