@@ -33,7 +33,7 @@ export const add = mutation({
       const player_id = await ctx.db.insert("players", {
         selected: -1,
         position: 0,
-        balance: 1500,
+        balance: 1500000,
         loser: false,
         user: user._id,
         games_id: args.games_id,
