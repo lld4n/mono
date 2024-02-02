@@ -5,9 +5,7 @@ export const store = mutation({
   args: {},
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Ошибочка");
-    }
+    if (!identity) throw new Error("Пользователь не найден");
     const user = await ctx.db
       .query("users")
       .withIndex("by_token", (q) => q.eq("token", identity.tokenIdentifier))
@@ -44,9 +42,7 @@ export const get = query({
   args: { users_id: v.id("users") },
   handler: async (ctx, args) => {
     const user = await ctx.db.get(args.users_id);
-    if (user === null) {
-      throw new Error("Ошибочка");
-    }
+    if (user === null) throw new Error("Пользователь не найден");
     return user;
   },
 });
@@ -55,16 +51,12 @@ export const identify = query({
   args: {},
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error("Пользователь не идентифицирован");
-    }
+    if (!identity) throw new Error("Пользователь не идентифицирован");
     const user = await ctx.db
       .query("users")
       .withIndex("by_token", (q) => q.eq("token", identity.tokenIdentifier))
       .unique();
-    if (user === null) {
-      throw new Error("Пользователь не найден");
-    }
+    if (user === null) throw new Error("Пользователь не найден");
     return user._id;
   },
 });
