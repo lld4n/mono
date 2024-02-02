@@ -4,12 +4,19 @@ import Money from "@/components/Game/Money/Money";
 import Timer from "@/components/Game/Timer/Timer";
 import Image from "next/image";
 import micro_logo from "@/assets/micro-logo.svg";
+import MiniButton from "@/components/Global/MiniButton/MiniButton";
+import { useMutation } from "convex/react";
+import { api } from "../../../../convex/_generated/api";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 type PropsType = {
   currentPlayer: Doc<"players">;
   game: Doc<"games">;
 };
 
 export default function GameFooter({ currentPlayer, game }: PropsType) {
+  const lose = useMutation(api.players.lose);
+  const router = useRouter();
   return (
     <div className={styles.wrapper}>
       <div className={styles.block}>
@@ -22,8 +29,27 @@ export default function GameFooter({ currentPlayer, game }: PropsType) {
         </div>
       </div>
       <div className={styles.block}>
-        <div className={styles.item}>Обмен</div>
-        <div className={styles.delete}>Покинуть игру</div>
+        <MiniButton>Обмен</MiniButton>
+        <MiniButton
+          danger
+          onClick={() => {
+            toast.promise(
+              lose({
+                players_id: currentPlayer._id,
+              }),
+              {
+                loading: "Выходим из игры",
+                success: () => {
+                  router.push("/");
+                  return "Вы покинули игру";
+                },
+                error: (error) => error,
+              },
+            );
+          }}
+        >
+          Покинуть игру
+        </MiniButton>
       </div>
     </div>
   );

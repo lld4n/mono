@@ -10,11 +10,7 @@ import Loading from "@/components/Global/Loading/Loading";
 import React from "react";
 import { useRouter } from "next/navigation";
 
-export default function Game({
-  params,
-}: {
-  params: { games_id: Id<"games"> };
-}) {
+export default function Game({ params }: { params: { games_id: Id<"games"> } }) {
   const game = useQuery(api.games.get, {
     games_id: params.games_id,
   });
@@ -30,8 +26,10 @@ export default function Game({
     games_id: params.games_id,
   });
   const router = useRouter();
+
+  // useEffect, если победитель определен
   React.useEffect(() => {
-    if (game?.winner !== undefined) {
+    if (game && game.winner !== undefined) {
       router.push("/finish/" + params.games_id);
     }
   }, [game]);
@@ -48,11 +46,7 @@ export default function Game({
         game={game}
         currentPlayer={currentPlayer}
       />
-      <GamePlayersList
-        players={players}
-        game={game}
-        currentPlayer={currentPlayer}
-      />
+      <GamePlayersList players={players} game={game} currentPlayer={currentPlayer} />
       <GameFooter currentPlayer={currentPlayer} game={game} />
     </div>
   );
