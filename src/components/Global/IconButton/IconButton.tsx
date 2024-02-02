@@ -6,15 +6,21 @@ export default function IconButton({
   className,
   onClick,
   disabled,
+  danger,
 }: {
   children: React.ReactNode;
   className?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
+  danger?: boolean;
 }) {
   return (
     <button
-      className={styles.wrapper + " " + className}
+      className={
+        danger
+          ? styles.danger + " " + className
+          : styles.wrapper + " " + className
+      }
       onClick={onClick}
       disabled={disabled}
     >

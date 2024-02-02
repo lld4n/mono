@@ -52,7 +52,7 @@ export default function RoomPlayersList({
           players={players}
           adminId={userId}
           setIsStarted={setIsStarted}
-        ></Admin>
+        />
       ) : (
         <NoAdmin players={players} adminId={admin.user?._id} game={game} />
       )}

@@ -7,6 +7,9 @@ import { useMutation } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 import React, { useState } from "react";
 import { GetFigureFromSelected } from "@/utils/GetFigureFromSelected";
+import IconButton from "@/components/Global/IconButton/IconButton";
+import { toast } from "sonner";
+import Button from "@/components/Global/Button/Button";
 
 type PropsType = {
   players: PlayersGetType[];
@@ -26,24 +29,6 @@ export default function Admin({
   const startGame = useMutation(api.games.start);
 
   const [isOpen, setIsOpen] = useState<boolean>(game.open);
-
-  async function remove(playerId: Id<"players">) {
-    await removePlayer({
-      players_id: playerId,
-    });
-  }
-
-  async function toggleRoom() {
-    setIsOpen(!isOpen);
-    await openGame({
-      games_id: game._id,
-    });
-  }
-
-  async function start() {
-    setIsStarted(true);
-    await startGame({ games_id: game._id });
-  }
 
   return (
     <>
@@ -68,7 +53,7 @@ export default function Admin({
                   height={30}
                   className={styles.avatar}
                 />
-                <span className={styles.playerName}>{player.user?.name}</span>
+                <div className={styles.playerName}>{player.user?.name}</div>
               </div>
             );
           } else {
@@ -79,7 +64,7 @@ export default function Admin({
                   style={{
                     backgroundColor: figure.bg,
                   }}
-                ></div>
+                />
                 <Image
                   src={player.user?.picture!}
                   alt={"avatar"}
@@ -88,14 +73,23 @@ export default function Admin({
                   className={styles.avatar}
                 />
                 <span className={styles.playerName}>{player.user?.name}</span>
-                <button className={styles.remove}>
-                  <Trash2
-                    size={20}
-                    color={"#fff"}
-                    cursor={"pointer"}
-                    onClick={() => remove(player?._id)}
-                  />
-                </button>
+                <IconButton
+                  danger
+                  onClick={() => {
+                    toast.promise(
+                      removePlayer({
+                        players_id: player?._id,
+                      }),
+                      {
+                        loading: "Удаляем игрока",
+                        success: "Игрок удален",
+                        error: (error) => error,
+                      },
+                    );
+                  }}
+                >
+                  <Trash2 size={20} color="#fff" />
+                </IconButton>
               </div>
             );
           }
@@ -110,7 +104,19 @@ export default function Admin({
               ? { backgroundColor: "#fff" }
               : { backgroundColor: "#a5a5a5" }
           }
-          onClick={() => toggleRoom()}
+          onClick={() => {
+            setIsOpen(!isOpen);
+            toast.promise(
+              openGame({
+                games_id: game._id,
+              }),
+              {
+                loading: isOpen ? "Закрываем комнату" : "Открываем комнату",
+                success: isOpen ? "Комната закрыта" : "Комната открыта",
+                error: (error) => error,
+              },
+            );
+          }}
         >
           <div
             className={
@@ -121,11 +127,26 @@ export default function Admin({
           ></div>
         </div>
       </div>
-      {players.every((pl) => pl.selected !== -1) && game.players_count > 1 && (
-        <button className={styles.btn} onClick={() => start()}>
-          Начать игру
-        </button>
-      )}
+      <Button
+        onClick={() => {
+          if (
+            players.every((pl) => pl.selected !== -1) &&
+            game.players_count > 1
+          ) {
+            setIsStarted(true);
+            toast.promise(startGame({ games_id: game._id }), {
+              loading: "Запускаем игру",
+              success: "Игра запущена",
+              error: (error) => error,
+            });
+          }
+        }}
+        disabled={
+          !players.every((pl) => pl.selected !== -1) || game.players_count === 1
+        }
+      >
+        Начать игру
+      </Button>
     </>
   );
 }
