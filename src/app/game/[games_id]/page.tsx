@@ -1,13 +1,17 @@
 "use client";
+import React from "react";
+import styles from "./page.module.scss";
+
 import { Id } from "../../../../convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import styles from "./page.module.scss";
+
 import Board from "@/components/Game/Board/Board";
 import PlayersList from "@/components/Game/PlayersList/PlayersList";
 import Footer from "@/components/Game/Footer/Footer";
+
 import Loading from "@/components/Loading/Loading/Loading";
-import React from "react";
+
 import { useRouter } from "next/navigation";
 
 export default function Game({ params }: { params: { games_id: Id<"games"> } }) {

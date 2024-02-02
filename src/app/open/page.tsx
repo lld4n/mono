@@ -1,8 +1,11 @@
 "use client";
+import styles from "./page.module.scss";
+
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+
 import Loading from "@/components/Loading/Loading/Loading";
-import styles from "./page.module.scss";
+
 import OpenBlock from "@/components/OpenBlock/OpenBlock";
 export default function Open() {
   const games = useQuery(api.games.getOpen);

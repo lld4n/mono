@@ -1,8 +1,7 @@
-"use client";
+import React from "react";
 import { PlayersGetType } from "@/types/PlayersGetType";
 import { Doc } from "../../../../../convex/_generated/dataModel";
 import { CardsGetType } from "@/types/CardsGetType";
-import React from "react";
 import { cardsList } from "@/constants/cards";
 import { useMutation } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
@@ -11,15 +10,6 @@ import MiniButton from "@/components/Buttons/MiniButton/MiniButton";
 import { toast } from "sonner";
 import { GetOwnerGroupCards } from "@/utils/GetOwnerGroupCards";
 
-type PropsType = {
-  players: PlayersGetType[];
-  cards: CardsGetType[];
-  openIndex: number;
-  setOpenIndex: React.Dispatch<React.SetStateAction<number>>;
-  currentPlayer: Doc<"players">;
-  game: Doc<"games">;
-};
-
 export default function CardInfo({
   players,
   cards,
@@ -27,7 +17,14 @@ export default function CardInfo({
   setOpenIndex,
   currentPlayer,
   game,
-}: PropsType) {
+}: {
+  players: PlayersGetType[];
+  cards: CardsGetType[];
+  openIndex: number;
+  setOpenIndex: React.Dispatch<React.SetStateAction<number>>;
+  currentPlayer: Doc<"players">;
+  game: Doc<"games">;
+}) {
   const mortgage = useMutation(api.cards.mortgage);
   const unmortgage = useMutation(api.cards.unmortgage);
   const build = useMutation(api.cards.build);
