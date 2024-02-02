@@ -1,4 +1,4 @@
-export const getCoordinates = (position: number) => {
+export const getCoordinates = (position: number, count: number, players: number[]) => {
   let currentTopPosition = 0;
   let currentLeftPosition = 0;
   if (position === 0) {
@@ -26,8 +26,238 @@ export const getCoordinates = (position: number) => {
     currentTopPosition = 730 - 66 * (position % 30);
     currentLeftPosition = 45;
   }
+
+  if (count === 1) {
+    return {
+      top: currentTopPosition,
+      left: currentLeftPosition,
+    };
+  } else {
+    return move(count, position, currentTopPosition, currentLeftPosition, players);
+  }
+};
+
+let proceeded: number[] = [];
+const move = (
+  count: number,
+  position: number,
+  top: number,
+  left: number,
+  players: number[],
+) => {
+  if (count === 2) {
+    for (let player of players) {
+      if ((position >= 0 && position <= 10) || (position >= 20 && position <= 30)) {
+        if (player === 0 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top: top - 25,
+            left,
+          };
+        } else if (player === 1 && !proceeded.includes(player)) {
+          proceeded = [];
+          return {
+            top: top + 25,
+            left,
+          };
+        }
+      } else if (
+        (position >= 11 && position <= 19) ||
+        (position >= 31 && position <= 39)
+      ) {
+        if (player === 0 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top,
+            left: left - 25,
+          };
+        } else if (player === 1 && !proceeded.includes(player)) {
+          proceeded = [];
+          return {
+            top,
+            left: left + 25,
+          };
+        }
+      }
+    }
+  }
+  if (count === 3) {
+    for (let player of players) {
+      if ((position >= 0 && position <= 10) || (position >= 20 && position <= 30)) {
+        if (player === 0 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top: top - 35,
+            left,
+          };
+        } else if (player === 1 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top: top + 35,
+            left,
+          };
+        } else if (player === 2) {
+          proceeded = [];
+          return {
+            top,
+            left,
+          };
+        }
+      } else if (
+        (position >= 11 && position <= 19) ||
+        (position >= 31 && position <= 39)
+      ) {
+        if (player === 0 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top,
+            left: left - 30,
+          };
+        } else if (player === 1 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top,
+            left: left + 30,
+          };
+        } else if (player === 2) {
+          proceeded = [];
+          return {
+            top,
+            left,
+          };
+        }
+      }
+    }
+  }
+
+  if (count === 4) {
+    for (let player of players) {
+      if ((position >= 0 && position <= 10) || (position >= 20 && position <= 30)) {
+        if (player === 0 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top: top - 35,
+            left: left - 35,
+          };
+        } else if (player === 1 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top: top + 35,
+            left: left + 35,
+          };
+        } else if (player === 2 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top: top - 35,
+            left: left + 35,
+          };
+        } else if (player === 3) {
+          proceeded = [];
+          return {
+            top: top + 35,
+            left: left - 35,
+          };
+        }
+      } else if (
+        (position >= 11 && position <= 19) ||
+        (position >= 31 && position <= 39)
+      ) {
+        if (player === 0 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top: top - 15,
+            left: left - 30,
+          };
+        } else if (player === 1 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top: top + 15,
+            left: left + 30,
+          };
+        } else if (player === 2 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top: top - 15,
+            left: left + 30,
+          };
+        } else if (player === 3) {
+          proceeded = [];
+          return {
+            top: top + 15,
+            left: left - 30,
+          };
+        }
+      }
+    }
+  }
+  if (count === 5) {
+    for (let player of players) {
+      if ((position >= 0 && position <= 10) || (position >= 20 && position <= 30)) {
+        if (player === 0 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top: top - 35,
+            left: left - 35,
+          };
+        } else if (player === 1 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top: top + 35,
+            left: left + 35,
+          };
+        } else if (player === 2 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top: top - 35,
+            left: left + 35,
+          };
+        } else if (player === 3) {
+          proceeded = [];
+          return {
+            top: top + 35,
+            left: left - 35,
+          };
+        }
+      } else if (
+        (position >= 11 && position <= 19) ||
+        (position >= 31 && position <= 39)
+      ) {
+        if (player === 0 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top: top - 15,
+            left: left - 30,
+          };
+        } else if (player === 1 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top: top + 15,
+            left: left + 30,
+          };
+        } else if (player === 2 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top: top - 15,
+            left: left + 30,
+          };
+        } else if (player === 3 && !proceeded.includes(player)) {
+          proceeded.push(player);
+          return {
+            top: top + 15,
+            left: left - 30,
+          };
+        } else if (player === 4) {
+          proceeded = [];
+          return {
+            top,
+            left,
+          };
+        }
+      }
+    }
+  }
   return {
-    top: currentTopPosition,
-    left: currentLeftPosition,
+    top,
+    left,
   };
 };
