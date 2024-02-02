@@ -60,6 +60,7 @@ export default function GameBoardCenter({
     setNatureState(0);
     setConvexCard(undefined);
     setLuckyState(false);
+
     toast.promise(
       lose({
         players_id: currentPlayer._id,
@@ -77,6 +78,7 @@ export default function GameBoardCenter({
     setNatureState(0);
     setConvexCard(undefined);
     setLuckyState(false);
+
     toast.promise(
       updateCurrent({
         games_id: game._id,
@@ -103,6 +105,7 @@ export default function GameBoardCenter({
         error: (error) => error,
       },
     );
+
     toast.promise(
       updateCurrent({
         games_id: game._id,
@@ -113,6 +116,7 @@ export default function GameBoardCenter({
         error: (error) => error,
       },
     );
+
     setConvexCard(undefined);
   };
 
@@ -129,6 +133,7 @@ export default function GameBoardCenter({
         error: (error) => error,
       },
     );
+
     toast.promise(
       updateCurrent({
         games_id: game._id,
@@ -139,6 +144,7 @@ export default function GameBoardCenter({
         error: (error) => error,
       },
     );
+
     setConvexCard(undefined);
   };
 
@@ -168,6 +174,7 @@ export default function GameBoardCenter({
           error: (error) => error,
         },
       );
+
       toast.promise(
         updateCurrent({
           games_id: game._id,
@@ -224,6 +231,7 @@ export default function GameBoardCenter({
         error: (error) => error,
       },
     );
+
     toast.promise(
       updateTimer({
         games_id: game._id,
