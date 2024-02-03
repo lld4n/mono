@@ -46,7 +46,7 @@ export default function RenderFigures({
           return getCoordinates(player.position, count, playersInCurrentPosition);
         }),
       );
-    }, 1000);
+    }, 100);
   }, [players]);
 
   return (
@@ -101,7 +101,7 @@ export default function RenderFigures({
                   position: "absolute",
                   top: bufferCoordinates.top,
                   left: bufferCoordinates.left,
-                  transition: "0.5s all",
+                  transition: "0.1s all",
                 }}
               />
             );
@@ -115,7 +115,7 @@ export default function RenderFigures({
                 position: "absolute",
                 top: coordinates[index].top,
                 left: coordinates[index].left,
-                transition: "0.5s all",
+                transition: "0.1s all",
               }}
             />
           );
