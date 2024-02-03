@@ -25,10 +25,12 @@ export default function RenderFigures({ players }: { players: PlayersGetType[] }
         players
           .filter((player) => !player.loser)
           .map((player, index) => {
-            const count = players.reduce((accum, item) => {
-              if (player.position === item.position) accum++;
-              return accum;
-            }, 0);
+            const count = players
+              .filter((player) => !player.loser)
+              .reduce((accum, item) => {
+                if (player.position === item.position) accum++;
+                return accum;
+              }, 0);
             const playersInCurrentPosition = players
               .filter((player) => !player.loser)
               .filter((item) => item.position === player.position)
@@ -41,12 +43,15 @@ export default function RenderFigures({ players }: { players: PlayersGetType[] }
 
   return (
     <div className={styles.wrapper}>
-      {players.map((player, index) => {
-        if (!player.loser) {
-          const count = players.reduce((accum, item) => {
-            if (player.position === item.position) accum++;
-            return accum;
-          }, 0);
+      {players
+        .filter((player) => !player.loser)
+        .map((player, index) => {
+          const count = players
+            .filter((player) => !player.loser)
+            .reduce((accum, item) => {
+              if (player.position === item.position) accum++;
+              return accum;
+            }, 0);
           const playersInCurrentPosition = players
             .filter((player) => !player.loser)
             .filter((item) => item.position === player.position)
@@ -110,8 +115,7 @@ export default function RenderFigures({ players }: { players: PlayersGetType[] }
               }}
             />
           );
-        }
-      })}
+        })}
     </div>
   );
 }
