@@ -1,0 +1,101 @@
+.wrapper {
+  width: 574px;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  background: rgba(26, 26, 28, 1);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.head {
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.timer {
+  flex: 1 1 auto;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.sender, .recipient {
+  width: 259px;
+  border-radius: 5px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #000000;
+}
+
+.info {
+  display: flex;
+  gap: 10px;
+}
+
+.swap {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.choose {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input[type="number"]::-webkit-outer-spin-button,
+.input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none; // Yeah, yeah everybody write about it
+}
+
+.input[type='number'],
+.input[type="number"]:hover,
+.input[type="number"]:focus {
+  appearance: none;
+  -moz-appearance: textfield;
+}
+
+.input {
+  padding: 5px 10px;
+  border-radius: 5px;
+  width: 75px;
+  height: 25px;
+  font-size: 12px;
+
+  &::placeholder {
+    font-weight: 500;
+    color: rgba(106, 106, 106, 1)
+  }
+}
+
+.send {
+  align-self: flex-end;
+}
+
+.chooseText {
+  font-size: 12px;
+}
+
+.chosenCard {
+  background: #858585;
+}
+
+.disabled {
+  align-self: flex-end;
+  cursor: not-allowed;
+  color: #cccccc;
+}

@@ -8,14 +8,17 @@ import { useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GetTimeGame } from "@/utils/GetTimeGame";
+
 type PropsType = {
   currentPlayer: Doc<"players">;
   game: Doc<"games">;
+  swap: Doc<"swaps"> | null | undefined;
+  setOpenSwap: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function Footer({ currentPlayer, game }: PropsType) {
+export default function Footer({ currentPlayer, game, swap, setOpenSwap }: PropsType) {
   const [currentTime, setCurrentTime] = useState<string>(GetTimeGame(game.started));
   const lose = useMutation(api.players.lose);
   const router = useRouter();
@@ -39,7 +42,9 @@ export default function Footer({ currentPlayer, game }: PropsType) {
         </div>
       </div>
       <div className={styles.block}>
-        <MiniButton>Обмен</MiniButton>
+        {!swap && game.current === currentPlayer._id && (
+          <MiniButton onClick={() => setOpenSwap(true)}>Обмен</MiniButton>
+        )}
         <MiniButton
           danger
           onClick={() => {

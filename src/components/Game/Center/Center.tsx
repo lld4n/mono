@@ -14,6 +14,8 @@ import { cardsList } from "@/constants/cards";
 import { useCards } from "@/hooks/useCards";
 import { usePlayers } from "@/hooks/usePlayers";
 import { useGames } from "@/hooks/useGames";
+import SwapRecipient from "@/components/Game/Swap/SwapRecipient";
+import SwapSender from "@/components/Game/Swap/SwapSender";
 
 type PropsType = {
   players: PlayersGetType[];
@@ -22,6 +24,9 @@ type PropsType = {
   game: Doc<"games">;
   setOpenIndex: React.Dispatch<React.SetStateAction<number>>;
   openIndex: number;
+  swap: Doc<"swaps"> | undefined | null;
+  openSwap: boolean;
+  setOpenSwap: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function Center({
@@ -31,6 +36,9 @@ export default function Center({
   game,
   setOpenIndex,
   openIndex,
+  swap,
+  openSwap,
+  setOpenSwap,
 }: PropsType) {
   const [finishActions, setFinishActions] = React.useState(false);
   const [convexCard, setConvexCard] = React.useState<CardsGetType>();
@@ -149,14 +157,31 @@ export default function Center({
 
   return (
     <div className={styles.center}>
+      {swap && currentPlayer._id === swap.recipient && (
+        <SwapRecipient
+          swap={swap}
+          players={players}
+          cards={cards}
+          currentPlayer={currentPlayer}
+        />
+      )}
+      {openSwap && (
+        <SwapSender
+          players={players}
+          cards={cards}
+          currentPlayer={currentPlayer}
+          setOpenSwap={setOpenSwap}
+        />
+      )}
       {game.current === currentPlayer._id &&
         !finishActions &&
         buyState === 0 &&
         payState === 0 &&
         !luckyState &&
-        natureState === 0 && <RollDice rolling={baseRoll} />}
+        natureState === 0 &&
+        !swap && <RollDice rolling={baseRoll} />}
 
-      {buyState !== 0 && (
+      {buyState !== 0 && !swap && (
         <Buy
           onBuy={baseBuy}
           money={buyState}
@@ -165,7 +190,7 @@ export default function Center({
           onAuction={baseAuction}
         />
       )}
-      {payState !== 0 && (
+      {payState !== 0 && !swap && (
         <Pay
           onPay={basePay}
           money={payState}
@@ -174,8 +199,8 @@ export default function Center({
           onLose={baseLose}
         />
       )}
-      {luckyState && <Lucky onChoice={baseLucky} />}
-      {natureState !== 0 && <RollDice rolling={baseNature} />}
+      {luckyState && !swap && <Lucky onChoice={baseLucky} />}
+      {natureState !== 0 && !swap && <RollDice rolling={baseNature} />}
       {openIndex !== -1 && (
         <CardInfo
           players={players}
