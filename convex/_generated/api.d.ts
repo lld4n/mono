@@ -18,6 +18,7 @@ import type * as cards from "../cards.js";
 import type * as games from "../games.js";
 import type * as messages from "../messages.js";
 import type * as players from "../players.js";
+import type * as system from "../system.js";
 import type * as users from "../users.js";
 
 /**
@@ -33,6 +34,7 @@ declare const fullApi: ApiFromModules<{
   games: typeof games;
   messages: typeof messages;
   players: typeof players;
+  system: typeof system;
   users: typeof users;
 }>;
 export declare const api: FilterApi<

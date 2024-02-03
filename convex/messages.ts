@@ -29,16 +29,3 @@ export const getByGames = query({
       .take(200);
   },
 });
-
-export const sendTech = mutation({
-  args: {
-    games_id: v.id("games"),
-    message: v.string(),
-  },
-  handler: async (ctx, args) => {
-    return await ctx.db.insert("messages", {
-      games_id: args.games_id,
-      message: args.message,
-    });
-  },
-});
