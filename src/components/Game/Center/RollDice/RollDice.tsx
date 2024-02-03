@@ -29,7 +29,8 @@ export default function RollDice({ rolling }: { rolling: (r: RollDiceType) => vo
         });
       }
       setTimeout(() => {
-        rolling([value1, value2]);
+        // rolling([value1, value2]);
+        rolling([6, 6]);
       }, 1000);
     }
   }, [value1, value2]);
