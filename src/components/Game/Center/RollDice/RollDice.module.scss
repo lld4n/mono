@@ -1,4 +1,4 @@
-.wrapper{
+.wrapper {
   padding: 10px;
   background: #576574;
   display: flex;
@@ -8,21 +8,26 @@
   border-radius: 5px;
 }
 
-.dices{
+.dices {
   display: flex;
   gap: 10px;
 }
 
-.dice{
+.dice {
   border-radius: 5px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  &::-webkit-scrollbar{
+  &::-webkit-scrollbar {
     width: 0;
     height: 0;
   }
   overflow-y: scroll;
   width: 80px;
   height: 80px;
+}
+.block {
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #1a1a1c;
 }
