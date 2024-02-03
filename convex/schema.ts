@@ -49,4 +49,14 @@ export default defineSchema({
     players: v.id("players"),
     money: v.optional(v.number()),
   }).index("by_games", ["games_id"]),
+  swaps: defineTable({
+    games_id: v.id("games"),
+    timer: v.number(),
+    sender: v.id("players"),
+    recipient: v.id("players"),
+    sender_money: v.number(),
+    recipient_money: v.number(),
+    sender_cards: v.array(v.id("cards")),
+    recipient_cards: v.array(v.id("cards")),
+  }).index("by_games", ["games_id"]),
 });
