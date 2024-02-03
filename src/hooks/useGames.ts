@@ -45,10 +45,11 @@ export function useGames() {
       },
     );
   };
-  const toastUpdateCurrent = (games_id: Id<"games">) => {
+  const toastUpdateCurrent = (games_id: Id<"games">, skip: boolean = false) => {
     toast.promise(
       updateCurrent({
         games_id,
+        skip,
       }),
       {
         loading: "Определяем следующего игрока",

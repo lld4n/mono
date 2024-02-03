@@ -35,6 +35,7 @@ export default function Center({
   const [finishActions, setFinishActions] = React.useState(false);
   const [convexCard, setConvexCard] = React.useState<CardsGetType>();
   const [getMoneyPlayer, setGetMoneyPlayer] = React.useState<Id<"players">>();
+  const [doubleCount, setDoubleCount] = React.useState(0);
 
   const [buyState, setBuyState] = React.useState(0);
   const [payState, setPayState] = React.useState(0);
@@ -55,6 +56,7 @@ export default function Center({
     setPayState(0);
     setBuyState(0);
     setNatureState(0);
+    setDoubleCount(0);
     setConvexCard(undefined);
     setGetMoneyPlayer(undefined);
     setLuckyState(false);
@@ -68,13 +70,13 @@ export default function Center({
     setGetMoneyPlayer(undefined);
     setLuckyState(false);
     // тестовая тема
-    toastUpdateCurrent(game._id);
+    toastUpdateCurrent(game._id, !finishActions);
   };
   const baseBuy = (m: number) => {
     setBuyState(0);
     if (!convexCard) return;
     toastBuy(convexCard._id, currentPlayer._id, m);
-    toastUpdateCurrent(game._id);
+    toastUpdateCurrent(game._id, !finishActions);
     setConvexCard(undefined);
   };
 
@@ -83,7 +85,7 @@ export default function Center({
     setConvexCard(undefined);
     toastUpdateBalance(currentPlayer._id, -m);
     if (getMoneyPlayer) toastUpdateBalance(getMoneyPlayer, m);
-    toastUpdateCurrent(game._id);
+    toastUpdateCurrent(game._id, !finishActions);
     setGetMoneyPlayer(undefined);
   };
 
@@ -95,7 +97,7 @@ export default function Center({
       setPayState(choice.value);
     } else if (choice.type === "get") {
       toastUpdateBalance(currentPlayer._id, choice.value);
-      toastUpdateCurrent(game._id);
+      toastUpdateCurrent(game._id, !finishActions);
     }
   };
 
@@ -113,12 +115,16 @@ export default function Center({
     toastUpdatePosition(currentPlayer._id, curPosition % 40);
     toastUpdateTimer(game._id);
 
+    if (r[0] !== r[1]) {
+      setFinishActions(true);
+    }
+
     const bdCard = cards[curPosition % 40];
     setConvexCard(bdCard);
     const currentCard = cardsList[curPosition % 40];
     if (currentCard.class === "street" || currentCard.class === "train") {
       if (bdCard!.mortgage || bdCard!.owner === currentPlayer._id) {
-        toastUpdateCurrent(game._id);
+        toastUpdateCurrent(game._id, r[0] === r[1]);
       } else if (bdCard!.owner === undefined) {
         setBuyState(currentCard.buy);
       } else {
@@ -127,7 +133,7 @@ export default function Center({
       }
     } else if (currentCard.class === "nature") {
       if (bdCard!.mortgage || bdCard!.owner === currentPlayer._id) {
-        toastUpdateCurrent(game._id);
+        toastUpdateCurrent(game._id, r[0] === r[1]);
       } else if (bdCard!.owner === undefined) {
         setBuyState(currentCard.buy);
       } else {
@@ -138,12 +144,11 @@ export default function Center({
     } else if (currentCard.class === "tax") {
       setPayState(currentCard.pay);
     } else if (currentCard.class === "empty") {
-      toastUpdateCurrent(game._id);
+      toastUpdateCurrent(game._id, r[0] === r[1]);
     } else {
       // тестовая тема
-      toastUpdateCurrent(game._id);
+      toastUpdateCurrent(game._id, r[0] === r[1]);
     }
-    setFinishActions(true);
   };
 
   return (

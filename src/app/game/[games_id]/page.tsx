@@ -31,8 +31,8 @@ export default function Game({ params }: { params: { games_id: Id<"games"> } }) 
   });
   const router = useRouter();
 
-  console.log("players", players);
-  console.log("game", game);
+  // console.log("players", players);
+  // console.log("game", game);
 
   // useEffect, если победитель определен
   React.useEffect(() => {
