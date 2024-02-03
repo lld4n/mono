@@ -5,22 +5,13 @@ import styles from "./RenderFigures.module.scss";
 import { useEffect, useState } from "react";
 import { figuresList } from "@/constants/figures";
 import Image from "next/image";
-import { api } from "../../../../convex/_generated/api";
-import { useQuery } from "convex/react";
 import { getCoordinates } from "@/utils/GetCoordinates";
-import { Id } from "../../../../convex/_generated/dataModel";
 
 type CoordinatesType = {
   left: number;
   top: number;
 };
-export default function RenderFigures({
-  players,
-  gameId,
-}: {
-  players: PlayersGetType[];
-  gameId: Id<"games">;
-}) {
+export default function RenderFigures({ players }: { players: PlayersGetType[] }) {
   const [coordinates, setCoordinates] = useState<CoordinatesType[]>([
     ...new Array(players.filter((player) => !player.loser).length).fill({
       left: 0,
@@ -28,23 +19,22 @@ export default function RenderFigures({
     }),
   ]);
 
-  const currentPlayer = useQuery(api.players.getByGames, {
-    games_id: gameId,
-  });
-
   useEffect(() => {
     setTimeout(() => {
       setCoordinates(
-        players.map((player, index) => {
-          const count = players.reduce((accum, item) => {
-            if (player.position === item.position) accum++;
-            return accum;
-          }, 0);
-          const playersInCurrentPosition = players
-            .filter((item) => item.position === player.position)
-            .map((_, index) => index);
-          return getCoordinates(player.position, count, playersInCurrentPosition);
-        }),
+        players
+          .filter((player) => !player.loser)
+          .map((player, index) => {
+            const count = players.reduce((accum, item) => {
+              if (player.position === item.position) accum++;
+              return accum;
+            }, 0);
+            const playersInCurrentPosition = players
+              .filter((player) => !player.loser)
+              .filter((item) => item.position === player.position)
+              .map((_, index) => index);
+            return getCoordinates(player.position, count, playersInCurrentPosition);
+          }),
       );
     }, 100);
   }, [players]);
@@ -58,6 +48,7 @@ export default function RenderFigures({
             return accum;
           }, 0);
           const playersInCurrentPosition = players
+            .filter((player) => !player.loser)
             .filter((item) => item.position === player.position)
             .map((_, index) => index);
           let currentCoordinates = getCoordinates(
