@@ -9,6 +9,7 @@ import GameFooter from "@/components/Game/GameFooter/GameFooter";
 import Loading from "@/components/Global/Loading/Loading";
 import React from "react";
 import { useRouter } from "next/navigation";
+import System from "@/components/Game/System/System";
 
 export default function Game({ params }: { params: { games_id: Id<"games"> } }) {
   const game = useQuery(api.games.get, {
@@ -51,6 +52,7 @@ export default function Game({ params }: { params: { games_id: Id<"games"> } }) 
       />
       <GamePlayersList players={players} game={game} currentPlayer={currentPlayer} />
       <GameFooter currentPlayer={currentPlayer} game={game} />
+      <System game={game} players={players} />
     </div>
   );
 }
