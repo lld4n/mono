@@ -6,7 +6,7 @@ import { Timer } from "lucide-react";
 
 const REFRESH_INTERVAL = 1000 / 30;
 
-export default function PlayerTimer({ game }: { game: Doc<"games"> }) {
+export default function PlayerTimer({ timer }: { timer: number }) {
   const countdown = React.useRef<ReturnType<typeof setInterval> | null>(null);
   const [time, setTime] = React.useState(-1);
 
@@ -17,7 +17,7 @@ export default function PlayerTimer({ game }: { game: Doc<"games"> }) {
     }
   };
   const syncTimer = () => {
-    const timestamp = new Date(game.timer).getTime();
+    const timestamp = new Date(timer).getTime();
     if (timestamp >= Date.now()) {
       countdown.current = setInterval(() => {
         setTime(timestamp - Date.now());
@@ -37,7 +37,7 @@ export default function PlayerTimer({ game }: { game: Doc<"games"> }) {
         countdown.current = null;
       }
     };
-  }, [game]);
+  }, [timer]);
 
   if (time < 0) {
     return <></>;

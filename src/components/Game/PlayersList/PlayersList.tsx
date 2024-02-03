@@ -59,7 +59,7 @@ export default function PlayersList({ players, game }: PropsType) {
               <div className={styles.balance}>
                 <Money value={player.balance} />
               </div>
-              {player._id === game.current && <PlayerTimer game={game} />}
+              {player._id === game.current && <PlayerTimer timer={game.timer} />}
             </div>
           );
         })}
