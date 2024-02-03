@@ -142,7 +142,7 @@ export const updateTimer = mutation({
 });
 
 export const updateCurrent = mutation({
-  args: { games_id: v.id("games"), skip: v.boolean() },
+  args: { games_id: v.id("games") },
   handler: async (ctx, args) => {
     const game = await ctx.db.get(args.games_id);
 
@@ -156,16 +156,11 @@ export const updateCurrent = mutation({
 
     const sch = await ctx.db.system.query("_scheduled_functions").collect();
     for (const s of sch) await ctx.scheduler.cancel(s._id);
-    if (args.skip) {
-      await ctx.db.patch(game._id, {
-        timer: Date.now() + 90 * 1000,
-      });
-    } else {
-      await ctx.db.patch(game._id, {
-        current: currentPlayer.next,
-        timer: Date.now() + 90 * 1000,
-      });
-    }
+
+    await ctx.db.patch(game._id, {
+      current: currentPlayer.next,
+      timer: Date.now() + 90 * 1000,
+    });
     await ctx.scheduler.runAfter(90000, internal.players.internalLose, {
       players_id: game.current,
     });
