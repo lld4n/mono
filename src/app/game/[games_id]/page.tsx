@@ -41,6 +41,13 @@ export default function Game({ params }: { params: { games_id: Id<"games"> } }) 
     }
   }, [game, params.games_id, router]);
 
+  // useEffect, если игрок проиграл
+  React.useEffect(() => {
+    if (currentPlayer && currentPlayer.loser) {
+      router.push("/");
+    }
+  }, [currentPlayer]);
+
   if (!cards || !currentPlayer || !players || !game) {
     return <Loading />;
   }

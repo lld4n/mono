@@ -90,9 +90,14 @@ export default function CardItem({ players, cards, index, setOpenIndex }: PropsT
             backgroundColor: fig.bg,
           }}
         >
-          <div className={styles.money}>
-            <Money value={currentCard.buy} />
-          </div>
+          {currentCard.class === "train" ? (
+            <div className={styles.money}>
+              <Money value={currentCard.rent[bdCard.status]} />
+            </div>
+          ) : (
+            ""
+          )}
+
           <Image src={currentCard.svg} alt={currentCard.name} />
         </div>
       );

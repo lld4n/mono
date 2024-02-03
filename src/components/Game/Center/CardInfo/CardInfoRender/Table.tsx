@@ -3,7 +3,7 @@ import Image from "next/image";
 import Money from "@/components/Game/Money/Money";
 import { CardsGetType } from "@/types/CardsGetType";
 import { CardListType } from "@/types/card/CardListType";
-import { ShoppingCart, Lock } from "lucide-react";
+import { ShoppingCart, Lock, Dices } from "lucide-react";
 const statusStreet = [
   "Рента без домов",
   "Рента c 1 домом",
@@ -57,9 +57,16 @@ export default function Table({
                 }
               >
                 <div className={styles.status_title}>{el}</div>
-                <div className={styles.money}>
-                  <Money value={currentCard.rent[index]} />
-                </div>
+                {currentCard.class === "nature" ? (
+                  <div className={styles.money}>
+                    x{currentCard.rent[index]}
+                    <Dices size={16} />
+                  </div>
+                ) : (
+                  <div className={styles.money}>
+                    <Money value={currentCard.rent[index]} />
+                  </div>
+                )}
               </div>
             );
           })}
