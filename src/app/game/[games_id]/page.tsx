@@ -61,14 +61,9 @@ export default function Game({ params }: { params: { games_id: Id<"games"> } }) 
         game={game}
         currentPlayer={currentPlayer}
       />
-<<<<<<< HEAD
-      <GamePlayersList players={players} game={game} currentPlayer={currentPlayer} />
-      <GameFooter currentPlayer={currentPlayer} game={game} />
       <System game={game} players={players} />
-=======
       <PlayersList players={players} game={game} currentPlayer={currentPlayer} />
       <Footer currentPlayer={currentPlayer} game={game} />
->>>>>>> origin
     </div>
   );
 }
