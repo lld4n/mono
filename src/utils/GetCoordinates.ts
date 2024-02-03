@@ -129,7 +129,6 @@ const move = (
       }
     }
   }
-
   if (count === 4) {
     for (let player of players) {
       if ((position >= 0 && position <= 10) || (position >= 20 && position <= 30)) {
@@ -211,11 +210,17 @@ const move = (
             top: top - 35,
             left: left + 35,
           };
-        } else if (player === 3) {
-          proceeded = [];
+        } else if (player === 3 && !proceeded.includes(player)) {
+          proceeded.push(player);
           return {
             top: top + 35,
             left: left - 35,
+          };
+        } else if (player === 4) {
+          proceeded = [];
+          return {
+            top,
+            left,
           };
         }
       } else if (
