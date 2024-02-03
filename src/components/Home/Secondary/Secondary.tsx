@@ -5,7 +5,7 @@ import UserInfo from "@/components/Home/UserInfo/UserInfo";
 import { api } from "../../../../convex/_generated/api";
 import { useMutation } from "convex/react";
 import { Id } from "../../../../convex/_generated/dataModel";
-import Button from "@/components/Global/Button/Button";
+import Button from "@/components/Buttons/Button/Button";
 import { toast } from "sonner";
 
 export default function Secondary() {

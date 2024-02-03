@@ -7,6 +7,7 @@ import { useState } from "react";
 import { figuresList } from "@/constants/figures";
 import { ReformatDate } from "@/utils/ReformatDate";
 import { PlayersGetType } from "@/types/PlayersGetType";
+import IconButton from "@/components/Global/IconButton/IconButton";
 
 type PropsType = {
   game: Doc<"games">;
@@ -25,9 +26,9 @@ export default function System({ game, players }: PropsType) {
 
   return (
     <>
-      <button className={!isOpen ? styles.arrow : styles.openArrow} onClick={open}>
+      <IconButton className={!isOpen ? styles.arrow : styles.openArrow} onClick={open}>
         <ArrowLeftFromLine size={20} color="#ffffff" />
-      </button>
+      </IconButton>
       <div className={!isOpen ? styles.wrapper : styles.openWrapper}>
         {messages?.map((message) => {
           return (

@@ -2,8 +2,6 @@ import { internalMutation, mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { PlayersGetType } from "../src/types/PlayersGetType";
 import { internal } from "./_generated/api";
-import { Simulate } from "react-dom/test-utils";
-import play = Simulate.play;
 
 export const add = mutation({
   args: {
@@ -33,7 +31,7 @@ export const add = mutation({
       const player_id = await ctx.db.insert("players", {
         selected: -1,
         position: 0,
-        balance: 1500000,
+        balance: 15000,
         loser: false,
         user: user._id,
         games_id: args.games_id,

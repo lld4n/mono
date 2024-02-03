@@ -3,8 +3,8 @@ import React from "react";
 import "@/styles/global.scss";
 import { ClerkProvider } from "@clerk/nextjs";
 import ConvexClientProvider from "@/providers/ConvexClientProvider";
-import LogoOverlay from "@/components/Global/LogoOverlay/LogoOverlay";
-import SizeOverlay from "@/components/Global/SizeOverlay/SizeOverlay";
+import LogoOverlay from "@/components/Overlay/Logo/LogoOverlay";
+import SizeOverlay from "@/components/Overlay/Size/SizeOverlay";
 import { Toaster } from "sonner";
 export const metadata: Metadata = {
   title: "mono",
