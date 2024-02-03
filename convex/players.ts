@@ -2,8 +2,6 @@ import { internalMutation, mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { PlayersGetType } from "../src/types/PlayersGetType";
 import { internal } from "./_generated/api";
-import { Simulate } from "react-dom/test-utils";
-import play = Simulate.play;
 
 export const add = mutation({
   args: {

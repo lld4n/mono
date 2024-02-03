@@ -1,6 +1,6 @@
 import React from "react";
 import { SignInButton } from "@clerk/nextjs";
-import Button from "@/components/Global/Button/Button";
+import Button from "@/components/Buttons/Button/Button";
 
 export default function Primary() {
   return (

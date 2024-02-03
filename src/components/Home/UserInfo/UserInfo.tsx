@@ -6,8 +6,8 @@ import { api } from "../../../../convex/_generated/api";
 import { Award, BookmarkX, LogOut } from "lucide-react";
 import { SignOutButton } from "@clerk/nextjs";
 import Image from "next/image";
-import MiniLoading from "@/components/Global/MiniLoading/MiniLoading";
-import IconButton from "@/components/Global/IconButton/IconButton";
+import MiniLoading from "@/components/Loading/MiniLoading/MiniLoading";
+import IconButton from "@/components/Buttons/IconButton/IconButton";
 
 export default function UserInfo({ users_id }: { users_id: Id<"users"> }) {
   const user = useQuery(api.users.get, {

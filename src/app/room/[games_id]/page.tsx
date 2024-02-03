@@ -1,14 +1,14 @@
 "use client";
-import RoomFigureSelect from "@/components/Room/RoomFigureSelect/RoomFigureSelect";
+import FigureSelect from "@/components/Room/FigureSelect/FigureSelect";
 import Copy from "@/components/Room/Copy/Copy";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 import styles from "./page.module.scss";
-import Loading from "@/components/Global/Loading/Loading";
-import Chat from "@/components/Global/Chat/Chat";
-import RoomPlayersList from "@/components/Room/RoomPlayersList/RoomPlayersList";
+import Loading from "@/components/Loading/Loading/Loading";
+import Chat from "@/components/Chat/Chat";
+import PlayersList from "@/components/Room/PlayersList/PlayersList";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -60,13 +60,13 @@ export default function Game({ params }: { params: { games_id: Id<"games"> } }) 
   return (
     <div className={styles.wrapper}>
       <Copy value={params.games_id} />
-      <RoomFigureSelect
+      <FigureSelect
         games_id={params.games_id}
         players_id={playerId}
         players={players}
       />
       <Chat players={players} playerId={playerId} games_id={params.games_id} />
-      <RoomPlayersList players={players} game={game} playerId={playerId} />
+      <PlayersList players={players} game={game} playerId={playerId} />
     </div>
   );
 }

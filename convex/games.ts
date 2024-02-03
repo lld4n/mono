@@ -112,10 +112,11 @@ export const start = mutation({
         mortgage: false,
       });
     }
+    // НЕ ЗАБЫТЬ УБРАТЬ
     await ctx.db.patch(game._id, {
-      timer: Date.now() + 120 * 1000,
+      timer: Date.now() + 12000000,
     });
-    await ctx.scheduler.runAfter(120000, internal.players.internalLose, {
+    await ctx.scheduler.runAfter(12000000, internal.players.internalLose, {
       players_id: players[0]._id,
     });
   },
