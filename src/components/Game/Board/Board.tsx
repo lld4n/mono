@@ -45,7 +45,7 @@ export default function Board({ cards, players, game, currentPlayer }: PropsType
           />
         );
       })}
-      <RenderFigures players={players} gameId={game._id} />
+      <RenderFigures players={players} />
     </div>
   );
 }
