@@ -7,7 +7,7 @@ import { useState } from "react";
 import { figuresList } from "@/constants/figures";
 import { ReformatDate } from "@/utils/ReformatDate";
 import { PlayersGetType } from "@/types/PlayersGetType";
-import IconButton from "@/components/Global/IconButton/IconButton";
+import IconButton from "@/components/Buttons/IconButton/IconButton";
 
 type PropsType = {
   game: Doc<"games">;
