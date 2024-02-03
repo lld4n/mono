@@ -9,6 +9,27 @@ export function useCards() {
   const build = useMutation(api.cards.build);
   const unbuild = useMutation(api.cards.unbuild);
 
+  const buy = useMutation(api.cards.buy);
+
+  const toastBuy = (
+    cards_id: Id<"cards">,
+    players_id: Id<"players">,
+    money: number,
+  ) => {
+    toast.promise(
+      buy({
+        cards_id,
+        players_id,
+        money,
+      }),
+      {
+        loading: "Покупаем карточку",
+        success: "Карточка куплена",
+        error: (error) => error,
+      },
+    );
+  };
+
   const toastUnbuild = (
     players_id: Id<"players">,
     cards_id: Id<"cards">,
@@ -84,5 +105,5 @@ export function useCards() {
     );
   };
 
-  return { toastUnmortgage, toastMortgage, toastBuild, toastUnbuild };
+  return { toastUnmortgage, toastMortgage, toastBuild, toastUnbuild, toastBuy };
 }

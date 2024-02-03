@@ -10,10 +10,10 @@ import { GetGeneralBalance } from "@/utils/GetGeneralBalance";
 import Buy from "@/components/Game/Center/Buy/Buy";
 import Lucky, { choiceType } from "@/components/Game/Center/Lucky/Lucky";
 import RollDice, { RollDiceType } from "@/components/Game/Center/RollDice/RollDice";
-import { useMutation } from "convex/react";
-import { api } from "../../../../convex/_generated/api";
 import { cardsList } from "@/constants/cards";
-import { toast } from "sonner";
+import { useCards } from "@/hooks/useCards";
+import { usePlayers } from "@/hooks/usePlayers";
+import { useGames } from "@/hooks/useGames";
 
 type PropsType = {
   players: PlayersGetType[];
@@ -39,12 +39,9 @@ export default function Center({
   const [luckyState, setLuckyState] = React.useState(false);
   const [natureState, setNatureState] = React.useState(0);
 
-  const updateBalance = useMutation(api.players.updateBalance);
-  const updatePosition = useMutation(api.players.updatePosition);
-  const updateTimer = useMutation(api.games.updateTimer);
-  const updateCurrent = useMutation(api.games.updateCurrent);
-  const buy = useMutation(api.cards.buy);
-  const lose = useMutation(api.players.lose);
+  const { toastLose, toastUpdatePosition, toastUpdateBalance } = usePlayers();
+  const { toastUpdateCurrent, toastUpdateTimer } = useGames();
+  const { toastBuy } = useCards();
 
   React.useEffect(() => {
     if (game.current !== currentPlayer._id && finishActions) {
@@ -59,16 +56,7 @@ export default function Center({
     setConvexCard(undefined);
     setLuckyState(false);
 
-    toast.promise(
-      lose({
-        players_id: currentPlayer._id,
-      }),
-      {
-        loading: "Обнуляем игрока, который сейчас ходил",
-        success: "Игрок, который сейчас ходил проиграл",
-        error: (error) => error,
-      },
-    );
+    toastLose(currentPlayer._id);
   };
   const baseAuction = () => {
     setPayState(0);
@@ -77,127 +65,41 @@ export default function Center({
     setConvexCard(undefined);
     setLuckyState(false);
 
-    toast.promise(
-      updateCurrent({
-        games_id: game._id,
-      }),
-      {
-        loading: "Определяем следующего игрока",
-        success: "Следующий игрок определен",
-        error: (error) => error,
-      },
-    );
+    toastUpdateCurrent(game._id);
   };
   const baseBuy = (m: number) => {
     setBuyState(0);
     if (!convexCard) return;
-    toast.promise(
-      buy({
-        cards_id: convexCard._id,
-        players_id: currentPlayer._id,
-        money: m,
-      }),
-      {
-        loading: "Покупаем карточку",
-        success: "Карточка куплена",
-        error: (error) => error,
-      },
-    );
-
-    toast.promise(
-      updateCurrent({
-        games_id: game._id,
-      }),
-      {
-        loading: "Определяем следующего игрока",
-        success: "Игрок определен",
-        error: (error) => error,
-      },
-    );
+    toastBuy(convexCard._id, currentPlayer._id, m);
+    toastUpdateCurrent(game._id);
 
     setConvexCard(undefined);
   };
 
   const basePay = (m: number) => {
     setPayState(0);
-    toast.promise(
-      updateBalance({
-        players_id: currentPlayer._id,
-        money: -m,
-      }),
-      {
-        loading: "Обновляем баланс игрока",
-        success: "Баланс обновлен",
-        error: (error) => error,
-      },
-    );
-
-    toast.promise(
-      updateCurrent({
-        games_id: game._id,
-      }),
-      {
-        loading: "Определяем следующего игрока",
-        success: "Игрок определен",
-        error: (error) => error,
-      },
-    );
+    toastUpdateBalance(currentPlayer._id, -m);
+    toastUpdateCurrent(game._id);
 
     setConvexCard(undefined);
   };
 
   const baseLucky = (choice: choiceType) => {
     setLuckyState(false);
-    toast.promise(
-      updateTimer({
-        games_id: game._id,
-      }),
-      {
-        loading: "Обновляем таймер",
-        success: "Таймер обновлен",
-        error: (error) => error,
-      },
-    );
+    toastUpdateTimer(game._id);
+
     if (choice.type === "pay") {
       setPayState(choice.value);
     } else if (choice.type === "get") {
-      toast.promise(
-        updateBalance({
-          players_id: currentPlayer._id,
-          money: choice.value,
-        }),
-        {
-          loading: "Обновляем баланс игрока",
-          success: "Баланс обновлен",
-          error: (error) => error,
-        },
-      );
-
-      toast.promise(
-        updateCurrent({
-          games_id: game._id,
-        }),
-        {
-          loading: "Определяем следующего игрока",
-          success: "Игрок определен",
-          error: (error) => error,
-        },
-      );
+      toastUpdateBalance(currentPlayer._id, choice.value);
+      toastUpdateCurrent(game._id);
     }
     setConvexCard(undefined);
   };
 
   const baseNature = (r: RollDiceType) => {
-    toast.promise(
-      updateTimer({
-        games_id: game._id,
-      }),
-      {
-        loading: "Обновляем таймер",
-        success: "Таймер обновлен",
-        error: (error) => error,
-      },
-    );
+    toastUpdateTimer(game._id);
+
     setPayState((r[0] + r[1]) * natureState);
     setNatureState(0);
     setConvexCard(undefined);
@@ -206,66 +108,19 @@ export default function Center({
   const baseRoll = (r: RollDiceType) => {
     const curPosition = currentPlayer.position + r[0] + r[1];
     if (curPosition > 39) {
-      toast.promise(
-        updateBalance({
-          players_id: currentPlayer._id,
-          money: 1000,
-        }),
-        {
-          loading: "Обновляем баланс игрока",
-          success: "Баланс обновлен",
-          error: (error) => error,
-        },
-      );
+      toastUpdateBalance(currentPlayer._id, 1000);
     }
-    toast.promise(
-      updatePosition({
-        players_id: currentPlayer._id,
-        position: curPosition % 40,
-      }),
-      {
-        loading: "Обновляем позицию игрока",
-        success: "Позиция обновлена",
-        error: (error) => error,
-      },
-    );
+    toastUpdatePosition(currentPlayer._id, curPosition % 40);
+    toastUpdateTimer(game._id);
 
-    toast.promise(
-      updateTimer({
-        games_id: game._id,
-      }),
-      {
-        loading: "Обновляем таймер",
-        success: "Таймер обновлен",
-        error: (error) => error,
-      },
-    );
     const bdCard = cards[curPosition % 40];
     setConvexCard(bdCard);
     const currentCard = cardsList[curPosition % 40];
     if (currentCard.class === "street" || currentCard.class === "train") {
       if (bdCard!.mortgage) {
-        toast.promise(
-          updateCurrent({
-            games_id: game._id,
-          }),
-          {
-            loading: "Определяем следующего игрока",
-            success: "Игрок определен",
-            error: (error) => error,
-          },
-        );
+        toastUpdateCurrent(game._id);
       } else if (bdCard!.owner === currentPlayer._id) {
-        toast.promise(
-          updateCurrent({
-            games_id: game._id,
-          }),
-          {
-            loading: "Определяем следующего игрока",
-            success: "Игрок определен",
-            error: (error) => error,
-          },
-        );
+        toastUpdateCurrent(game._id);
       } else if (bdCard!.owner === undefined) {
         setBuyState(currentCard.buy);
       } else {
@@ -273,27 +128,9 @@ export default function Center({
       }
     } else if (currentCard.class === "nature") {
       if (bdCard!.mortgage) {
-        toast.promise(
-          updateCurrent({
-            games_id: game._id,
-          }),
-          {
-            loading: "Определяем следующего игрока",
-            success: "Игрок определен",
-            error: (error) => error,
-          },
-        );
+        toastUpdateCurrent(game._id);
       } else if (bdCard!.owner === currentPlayer._id) {
-        toast.promise(
-          updateCurrent({
-            games_id: game._id,
-          }),
-          {
-            loading: "Определяем следующего игрока",
-            success: "Игрок определен",
-            error: (error) => error,
-          },
-        );
+        toastUpdateCurrent(game._id);
       } else if (bdCard!.owner === undefined) {
         setBuyState(currentCard.buy);
       } else {
@@ -304,28 +141,10 @@ export default function Center({
     } else if (currentCard.class === "tax") {
       setPayState(currentCard.pay);
     } else if (currentCard.class === "empty") {
-      toast.promise(
-        updateCurrent({
-          games_id: game._id,
-        }),
-        {
-          loading: "Определяем следующего игрока",
-          success: "Игрок определен",
-          error: (error) => error,
-        },
-      );
+      toastUpdateCurrent(game._id);
     } else {
       // тестовая тема
-      toast.promise(
-        updateCurrent({
-          games_id: game._id,
-        }),
-        {
-          loading: "Определяем следующего игрока",
-          success: "Игрок определен",
-          error: (error) => error,
-        },
-      );
+      toastUpdateCurrent(game._id);
     }
     setFinishActions(true);
   };

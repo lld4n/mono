@@ -3,13 +3,12 @@ import { Doc, Id } from "../../../../../convex/_generated/dataModel";
 import styles from "./Admin.module.scss";
 import { Crown, Trash2 } from "lucide-react";
 import Image from "next/image";
-import { useMutation } from "convex/react";
-import { api } from "../../../../../convex/_generated/api";
 import React, { useState } from "react";
 import { GetFigureFromSelected } from "@/utils/GetFigureFromSelected";
 import IconButton from "@/components/Buttons/IconButton/IconButton";
-import { toast } from "sonner";
 import Button from "@/components/Buttons/Button/Button";
+import { usePlayers } from "@/hooks/usePlayers";
+import { useGames } from "@/hooks/useGames";
 
 type PropsType = {
   players: PlayersGetType[];
@@ -19,9 +18,8 @@ type PropsType = {
 };
 
 export default function Admin({ players, adminId, game, setIsStarted }: PropsType) {
-  const removePlayer = useMutation(api.players.remove);
-  const openGame = useMutation(api.games.open);
-  const startGame = useMutation(api.games.start);
+  const { toastRemove } = usePlayers();
+  const { toastOpen, toastStart } = useGames();
 
   const [isOpen, setIsOpen] = useState<boolean>(game.open);
 
@@ -71,16 +69,7 @@ export default function Admin({ players, adminId, game, setIsStarted }: PropsTyp
                 <IconButton
                   danger
                   onClick={() => {
-                    toast.promise(
-                      removePlayer({
-                        players_id: player?._id,
-                      }),
-                      {
-                        loading: "Удаляем игрока",
-                        success: "Игрок удален",
-                        error: (error) => error,
-                      },
-                    );
+                    toastRemove(player?._id);
                   }}
                 >
                   <Trash2 size={20} color="#fff" />
@@ -96,17 +85,8 @@ export default function Admin({ players, adminId, game, setIsStarted }: PropsTyp
           className={styles.select}
           style={isOpen ? { backgroundColor: "#fff" } : { backgroundColor: "#a5a5a5" }}
           onClick={() => {
+            toastOpen(game._id, isOpen);
             setIsOpen(!isOpen);
-            toast.promise(
-              openGame({
-                games_id: game._id,
-              }),
-              {
-                loading: isOpen ? "Закрываем комнату" : "Открываем комнату",
-                success: isOpen ? "Комната закрыта" : "Комната открыта",
-                error: (error) => error,
-              },
-            );
           }}
         >
           <div
@@ -122,11 +102,7 @@ export default function Admin({ players, adminId, game, setIsStarted }: PropsTyp
         onClick={() => {
           if (players.every((pl) => pl.selected !== -1) && game.players_count > 1) {
             setIsStarted(true);
-            toast.promise(startGame({ games_id: game._id }), {
-              loading: "Запускаем игру",
-              success: "Игра запущена",
-              error: (error) => error,
-            });
+            toastStart(game._id);
           }
         }}
         disabled={
