@@ -14,11 +14,13 @@ import { cardsList } from "@/constants/cards";
 import { useCards } from "@/hooks/useCards";
 import { usePlayers } from "@/hooks/usePlayers";
 import { useGames } from "@/hooks/useGames";
+import { useAuctions } from "@/hooks/useAuctions";
 
 import Jail from "@/components/Game/Center/Jail/Jail";
 import SwapRecipient from "@/components/Game/Swap/SwapRecipient";
 import SwapSender from "@/components/Game/Swap/SwapSender";
-import { useSystem } from "@/hooks/useSystem";
+import Auction from "@/components/Game/Auction/Auction";
+
 
 type PropsType = {
   players: PlayersGetType[];
@@ -30,6 +32,7 @@ type PropsType = {
   swap: Doc<"swaps"> | null;
   openSwap: boolean;
   setOpenSwap: React.Dispatch<React.SetStateAction<boolean>>;
+  auction: Doc<"auctions"> | null;
 };
 
 export default function Center({
@@ -42,6 +45,7 @@ export default function Center({
   swap,
   openSwap,
   setOpenSwap,
+  auction,
 }: PropsType) {
   const [finishActions, setFinishActions] = React.useState(false);
   const [convexCard, setConvexCard] = React.useState<CardsGetType>();
@@ -63,6 +67,8 @@ export default function Center({
   } = usePlayers();
   const { toastUpdateCurrent, toastUpdateTimer } = useGames();
   const { toastBuy } = useCards();
+
+  const { toastCreateAuction } = useAuctions();
 
   React.useEffect(() => {
     if (game.current !== currentPlayer._id && finishActions) {
@@ -97,11 +103,10 @@ export default function Center({
     setPayState(0);
     setBuyState(0);
     setNatureState(0);
+    toastCreateAuction(game._id, convexCard?._id!); //тут не очень уверен
     setConvexCard(undefined);
     setGetMoneyPlayer(undefined);
     setLuckyState(false);
-    // тестовая тема
-    toastUpdateCurrent(game._id);
   };
   const baseBuy = (m: number) => {
     setBuyState(0);
@@ -199,17 +204,27 @@ export default function Center({
           setOpenSwap={setOpenSwap}
         />
       )}
+      {auction && (
+        <Auction
+          players={players}
+          cards={cards}
+          currentPlayer={currentPlayer}
+          auction={auction}
+        />
+      )}
       {game.current === currentPlayer._id &&
         !finishActions &&
         !currentPlayer.jail &&
         buyState === 0 &&
         payState === 0 &&
         !luckyState &&
+        !auction &&
         natureState === 0 &&
         swap?.sender !== currentPlayer._id && <RollDice rolling={baseRoll} />}
       {game.current === currentPlayer._id &&
         currentPlayer.jail &&
         !tryState &&
+        !auction &&
         payState === 0 && (
           <Jail
             onPayJail={basePayJail}
@@ -219,7 +234,7 @@ export default function Center({
         )}
       {tryState && <RollDice rolling={baseTry} />}
 
-      {buyState !== 0 && !currentPlayer.jail && (
+      {buyState !== 0 && !currentPlayer.jail && !auction && (
         <Buy
           onBuy={baseBuy}
           money={buyState}
@@ -228,7 +243,7 @@ export default function Center({
           onAuction={baseAuction}
         />
       )}
-      {payState !== 0 && !swap && (
+      {payState !== 0 && !swap && !auction && (
         <Pay
           onPay={basePay}
           money={payState}
@@ -237,8 +252,10 @@ export default function Center({
           onLose={baseLose}
         />
       )}
-      {luckyState && !currentPlayer.jail && <Lucky onChoice={baseLucky} />}
-      {natureState !== 0 && !currentPlayer.jail && <RollDice rolling={baseNature} />}
+      {luckyState && !currentPlayer.jail && !auction && <Lucky onChoice={baseLucky} />}
+      {natureState !== 0 && !currentPlayer.jail && !auction && (
+        <RollDice rolling={baseNature} />
+      )}
       {openIndex !== -1 && (
         <CardInfo
           players={players}

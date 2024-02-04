@@ -61,4 +61,11 @@ export default defineSchema({
     sender_cards: v.array(v.id("cards")),
     recipient_cards: v.array(v.id("cards")),
   }).index("by_games", ["games_id"]),
+  auctions: defineTable({
+    games_id: v.id("games"),
+    timer: v.number(),
+    players_id: v.optional(v.id("players")),
+    money: v.number(),
+    cards_id: v.id("cards"),
+  }).index("by_games", ["games_id"]),
 });
