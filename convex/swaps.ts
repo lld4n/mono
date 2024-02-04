@@ -27,8 +27,10 @@ export const refuse = mutation({
     const game = await ctx.db.get(swap.games_id);
     if (!game) throw new Error("Такой игры не существует");
     if (!game.current) throw new Error("Текущий ход никому не принадлежит");
+
     const sch = await ctx.db.system.query("_scheduled_functions").collect();
     for (const s of sch) await ctx.scheduler.cancel(s._id);
+
     await ctx.db.patch(swap.games_id, {
       timer: Date.now() + 90 * 1000,
     });
@@ -49,8 +51,10 @@ export const internalRefuse = internalMutation({
     const game = await ctx.db.get(swap.games_id);
     if (!game) throw new Error("Такой игры не существует");
     if (!game.current) throw new Error("Текущий ход никому не принадлежит");
+
     const sch = await ctx.db.system.query("_scheduled_functions").collect();
     for (const s of sch) await ctx.scheduler.cancel(s._id);
+
     await ctx.db.patch(swap.games_id, {
       timer: Date.now() + 90 * 1000,
     });
@@ -71,17 +75,21 @@ export const concur = mutation({
     const game = await ctx.db.get(swap.games_id);
     if (!game) throw new Error("Такой игры не существует");
     if (!game.current) throw new Error("Текущий ход никому не принадлежит");
+
     const sch = await ctx.db.system.query("_scheduled_functions").collect();
     for (const s of sch) await ctx.scheduler.cancel(s._id);
+
     const sender = await ctx.db.get(swap.sender);
     const recipient = await ctx.db.get(swap.recipient);
     if (!sender || !recipient) throw new Error("Что-то пошло не так!");
+
     await ctx.db.patch(sender._id, {
       balance: sender.balance - swap.sender_money + swap.recipient_money,
     });
     await ctx.db.patch(recipient._id, {
       balance: recipient.balance + swap.sender_money - swap.recipient_money,
     });
+
     const senderCards = await ctx.db
       .query("cards")
       .withIndex("by_games", (q) => q.eq("games_id", swap.games_id))
@@ -134,17 +142,15 @@ export const create = mutation({
       .withIndex("by_games", (q) => q.eq("games_id", args.games_id))
       .collect();
 
-    const game = await ctx.db.get(args.games_id);
-    if (!game) throw new Error("Такой игры не существует");
     if (swaps.length > 0) throw new Error("Критическая ошибка с обменами!");
-    await ctx.db.patch(game._id, {
+    await ctx.db.patch(args.games_id, {
       timer: 0,
     });
     const swaps_id = await ctx.db.insert("swaps", {
-      timer: 90,
+      timer: Date.now() + 90000,
       sender: args.sender,
       recipient: args.recipient,
-      games_id: game._id,
+      games_id: args.games_id,
       sender_cards: args.sender_cards,
       recipient_cards: args.recipient_cards,
       sender_money: args.sender_money,

@@ -12,7 +12,7 @@ type PropsType = {
   game: Doc<"games">;
   cards: CardsGetType[];
   currentPlayer: Doc<"players">;
-  swap: Doc<"swaps"> | null | undefined;
+  swap: Doc<"swaps"> | null;
   openSwap: boolean;
   setOpenSwap: React.Dispatch<React.SetStateAction<boolean>>;
 };

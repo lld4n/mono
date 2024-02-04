@@ -4,13 +4,13 @@ import React, { useState } from "react";
 import { Doc, Id } from "../../../../convex/_generated/dataModel";
 import styles from "./Swap.module.scss";
 import { figuresList } from "@/constants/figures";
-import { ArrowLeftRight, X } from "lucide-react";
+import { ArrowLeftRight } from "lucide-react";
 import IconButton from "@/components/Buttons/IconButton/IconButton";
-import { cardsList } from "@/constants/cards";
-import Image from "next/image";
-import Money from "@/components/Game/Money/Money";
 import { useSwaps } from "@/hooks/useSwaps";
 import MiniButton from "@/components/Buttons/MiniButton/MiniButton";
+import Top from "@/components/Game/Swap/Top";
+import Inventory from "@/components/Game/Swap/Inventory";
+import { GetPlayerFromId } from "@/utils/GetPlayerFromId";
 
 type PropsType = {
   players: PlayersGetType[];
@@ -36,173 +36,70 @@ export default function SwapSender({
   const { toastCreateSwaps } = useSwaps();
 
   function chooseSender(cardId: Id<"cards">) {
-    console.log(cardId);
-    console.log(senderCards, recipientCards);
     if (senderCards?.includes(cardId)) {
-      const buffer = senderCards.filter((card) => card !== cardId);
+      const buffer = [...senderCards].filter((card) => card !== cardId);
       setSenderCards(buffer);
     } else {
-      const buffer = senderCards;
+      const buffer = [...senderCards];
       buffer.push(cardId);
       setSenderCards(buffer);
     }
   }
 
   function chooseRecipient(cardId: Id<"cards">) {
-    console.log(cardId);
     if (recipientCards?.includes(cardId)) {
-      const buffer = recipientCards.filter((card) => card !== cardId);
+      const buffer = [...recipientCards].filter((card) => card !== cardId);
       setRecipientCards(buffer);
     } else {
-      const buffer = recipientCards;
+      const buffer = [...recipientCards];
       buffer.push(cardId);
       setRecipientCards(buffer);
     }
   }
 
-  function start() {
-    toastCreateSwaps(
-      currentPlayer.games_id,
-      currentPlayer._id,
-      recipient?._id!,
-      senderMoney,
-      recipientMoney,
-      senderCards,
-      recipientCards,
-    );
-  }
-
   return (
     <div className={styles.wrapper}>
-      <div className={styles.top}>
-        <h1 className={styles.head}>Обмен</h1>
-        <IconButton onClick={() => setOpenSwap(false)}>
-          <X size={16} color="#ffffff" />
-        </IconButton>
-      </div>
+      <Top setOpenSwap={setOpenSwap} title="Обмен" functionalComponent={true} />
       {!recipient && (
         <div className={styles.choose}>
-          <span className={styles.chooseText}>Выберите, с кем хотите обменяться</span>
+          <span>Выберите, с кем хотите обменяться</span>
           {players
             .filter((player) => !player.loser && player._id !== currentPlayer._id)
             .map((player) => (
-              <div
-                key={player._id}
-                style={{
-                  backgroundColor: figuresList[player.selected].bg,
-                  borderRadius: 5,
-                  width: 20,
-                  height: 20,
-                  cursor: "pointer",
-                }}
-                onClick={() => setRecipient(player)}
-              ></div>
+              <IconButton onClick={() => setRecipient(player)}>
+                <div
+                  key={player._id}
+                  className={styles.figure}
+                  style={{
+                    backgroundColor: figuresList[player.selected].bg,
+                  }}
+                />
+              </IconButton>
             ))}
         </div>
       )}
 
       {recipient && (
         <div className={styles.swap}>
-          <div key={currentPlayer._id} className={styles.sender}>
-            <div
-              style={{
-                backgroundColor: figuresList[currentPlayer.selected].bg,
-                width: 40,
-                height: 10,
-                borderRadius: 5,
-              }}
-            ></div>
-            <div className={styles.info}>
-              {cards
-                .filter((card) => {
-                  if (card?.owner === currentPlayer._id) {
-                    if (cardsList[card.index].class === "street" && card.status !== 0)
-                      return false;
-                    return true;
-                  }
-                  return false;
-                })
-                .map((card) => (
-                  <>
-                    {card && (
-                      <IconButton
-                        key={card._id}
-                        className={
-                          senderCards.includes(card._id) ? styles.chosenCard : ""
-                        }
-                        onClick={() => chooseSender(card._id)}
-                      >
-                        <Image src={cardsList[card.index].svg} alt={"card"} />
-                      </IconButton>
-                    )}
-                  </>
-                ))}
-            </div>
-            <input
-              type="number"
-              className={styles.input}
-              value={senderMoney !== 0 ? senderMoney : ""}
-              onInput={(event: React.ChangeEvent<HTMLInputElement>) =>
-                setSenderMoney(+event.target.value)
-              }
-              placeholder={"Сумма ✦"}
-            />
-          </div>
-          <IconButton>
-            <ArrowLeftRight size={16} color={"#ffffff"} />
-          </IconButton>
-          {players
-            .filter((player) => recipient._id === player._id)
-            .map((player) => (
-              <div key={player._id} className={styles.recipient}>
-                <div
-                  style={{
-                    backgroundColor: figuresList[player.selected].bg,
-                    width: 40,
-                    height: 10,
-                    borderRadius: 5,
-                  }}
-                ></div>
-                <div className={styles.info}>
-                  {cards
-                    .filter((card) => {
-                      if (card?.owner === player._id) {
-                        if (
-                          cardsList[card.index].class === "street" &&
-                          card.status !== 0
-                        )
-                          return false;
-                        return true;
-                      }
-                      return false;
-                    })
-                    .map((card) => (
-                      <>
-                        {card && (
-                          <IconButton
-                            key={card._id}
-                            className={
-                              recipientCards.includes(card._id) ? styles.chosenCard : ""
-                            }
-                            onClick={() => chooseRecipient(card._id)}
-                          >
-                            <Image src={cardsList[card.index].svg} alt={"card"} />
-                          </IconButton>
-                        )}
-                      </>
-                    ))}
-                </div>
-                <input
-                  type="number"
-                  className={styles.input}
-                  value={recipientMoney !== 0 ? recipientMoney : ""}
-                  onInput={(event: React.ChangeEvent<HTMLInputElement>) =>
-                    setRecipientMoney(+event.target.value)
-                  }
-                  placeholder={"Сумма ✦"}
-                />
-              </div>
-            ))}
+          <Inventory
+            functionalComponent={true}
+            player={GetPlayerFromId(players, currentPlayer._id)!}
+            cards={cards}
+            choose={chooseSender}
+            chooseCards={senderCards}
+            money={senderMoney}
+            setMoney={setSenderMoney}
+          />
+          <ArrowLeftRight size={16} color={"#ffffff"} />
+          <Inventory
+            functionalComponent={true}
+            player={GetPlayerFromId(players, recipient._id)!}
+            cards={cards}
+            choose={chooseRecipient}
+            chooseCards={recipientCards}
+            money={recipientMoney}
+            setMoney={setRecipientMoney}
+          />
         </div>
       )}
       {recipient && (
@@ -213,12 +110,24 @@ export default function SwapSender({
               ? styles.send
               : styles.disabled
           }
-          onClick={
-            (senderCards.length !== 0 || senderMoney !== 0) &&
-            (recipientCards.length !== 0 || recipientMoney !== 0)
-              ? () => start()
-              : () => console.log()
-          }
+          onClick={() => {
+            if (
+              recipient &&
+              (senderCards.length !== 0 || senderMoney !== 0) &&
+              (recipientCards.length !== 0 || recipientMoney !== 0)
+            ) {
+              setOpenSwap(false);
+              toastCreateSwaps(
+                currentPlayer.games_id,
+                currentPlayer._id,
+                recipient._id,
+                senderMoney,
+                recipientMoney,
+                senderCards,
+                recipientCards,
+              );
+            }
+          }}
         >
           Отправить
         </MiniButton>

@@ -24,7 +24,7 @@ type PropsType = {
   game: Doc<"games">;
   setOpenIndex: React.Dispatch<React.SetStateAction<number>>;
   openIndex: number;
-  swap: Doc<"swaps"> | undefined | null;
+  swap: Doc<"swaps"> | null;
   openSwap: boolean;
   setOpenSwap: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -201,7 +201,7 @@ export default function Center({
       )}
       {luckyState && !swap && <Lucky onChoice={baseLucky} />}
       {natureState !== 0 && !swap && <RollDice rolling={baseNature} />}
-      {openIndex !== -1 && (
+      {openIndex !== -1 && !openSwap && (
         <CardInfo
           players={players}
           cards={cards}

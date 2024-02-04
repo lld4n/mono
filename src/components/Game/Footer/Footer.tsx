@@ -14,7 +14,7 @@ import { GetTimeGame } from "@/utils/GetTimeGame";
 type PropsType = {
   currentPlayer: Doc<"players">;
   game: Doc<"games">;
-  swap: Doc<"swaps"> | null | undefined;
+  swap: Doc<"swaps"> | null;
   setOpenSwap: React.Dispatch<React.SetStateAction<boolean>>;
 };
 

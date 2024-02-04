@@ -55,7 +55,7 @@ export default function Game({ params }: { params: { games_id: Id<"games"> } }) 
     }
   }, [currentPlayer]);
 
-  if (!cards || !currentPlayer || !players || !game) {
+  if (!cards || !currentPlayer || !players || !game || swap === undefined) {
     return <Loading />;
   }
 

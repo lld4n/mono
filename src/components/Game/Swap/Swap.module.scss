@@ -3,7 +3,7 @@
   display: flex;
   gap: 10px;
   flex-direction: column;
-  background: rgba(26, 26, 28, 1);
+  background: #1a1a1c;
   padding: 10px;
   border-radius: 5px;
 }
@@ -23,13 +23,14 @@
   gap: 10px;
 }
 
-
-.sender, .recipient {
-  width: 259px;
-  border-radius: 5px;
+.inventory {
+  flex: 1;
+  border-radius: 10px;
+  height: 100%;
   padding: 10px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 10px;
   background: #000000;
 }
@@ -47,8 +48,9 @@
 
 .choose {
   display: flex;
-  gap: 20px;
+  gap: 10px;
   align-items: center;
+  font-size: 12px;
 }
 
 .top {
@@ -62,7 +64,7 @@
   -webkit-appearance: none; // Yeah, yeah everybody write about it
 }
 
-.input[type='number'],
+.input[type="number"],
 .input[type="number"]:hover,
 .input[type="number"]:focus {
   appearance: none;
@@ -78,7 +80,7 @@
 
   &::placeholder {
     font-weight: 500;
-    color: rgba(106, 106, 106, 1)
+    color: rgba(106, 106, 106, 1);
   }
 }
 
@@ -86,16 +88,27 @@
   align-self: flex-end;
 }
 
-.chooseText {
-  font-size: 12px;
-}
-
 .chosenCard {
-  background: #858585;
+  background: white;
+  &:hover {
+    background-color: white;
+  }
 }
 
 .disabled {
   align-self: flex-end;
   cursor: not-allowed;
   color: #cccccc;
+}
+.figure {
+  border-radius: 5px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.figureBlock {
+  width: 40px;
+  height: 10px;
+  border-radius: 5px;
 }
