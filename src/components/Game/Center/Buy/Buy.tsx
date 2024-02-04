@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./Buy.module.scss";
 import { Doc } from "../../../../../convex/_generated/dataModel";
 import Money from "@/components/Game/Money/Money";
+import MiniButton from "@/components/Buttons/MiniButton/MiniButton";
 
 export default function Buy({
   onBuy,
@@ -19,21 +20,18 @@ export default function Buy({
   return (
     <div className={styles.wrapper}>
       {generalBalance >= money && (
-        <button
-          className={styles.btn}
-          disabled={currentPlayer.balance < money}
+        <MiniButton
           onClick={() => {
             if (currentPlayer.balance >= money) {
               onBuy(money);
             }
           }}
+          disabled={currentPlayer.balance < money}
         >
           Купить за <Money value={money} />
-        </button>
+        </MiniButton>
       )}
-      <button className={styles.btn} onClick={onAuction}>
-        Выставить на аукцион
-      </button>
+      <MiniButton onClick={onAuction}>Выставить на аукцион</MiniButton>
     </div>
   );
 }
