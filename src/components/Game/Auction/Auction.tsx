@@ -18,7 +18,7 @@ type PropsType = {
 };
 
 export default function Auction({ auction, currentPlayer, cards, players }: PropsType) {
-  const { toastCreateAuction, toastUpdate } = useAuctions();
+  const { toastUpdate } = useAuctions();
 
   return (
     <div className={styles.wrapper}>

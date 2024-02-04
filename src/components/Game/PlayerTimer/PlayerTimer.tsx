@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import styles from "./PlayerTimer.module.scss";
-import { Doc } from "../../../../convex/_generated/dataModel";
 import { Timer } from "lucide-react";
 
 const REFRESH_INTERVAL = 1000 / 30;

@@ -33,7 +33,7 @@ export const update = mutation({
     await ctx.db.patch(auction._id, {
       players_id: player._id,
       money: auction.money + 100,
-      timer: auction.timer + 10000,
+      timer: Date.now() + 10000,
     });
 
     const sch = await ctx.db.system.query("_scheduled_functions").collect();
