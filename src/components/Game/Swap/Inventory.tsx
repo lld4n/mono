@@ -65,7 +65,7 @@ export default function Inventory({
               }
             }
           })}
-        {money && <Money value={money} />}
+        {money > 0 && !functionalComponent && <Money value={money} />}
       </div>
       {functionalComponent && (
         <input
