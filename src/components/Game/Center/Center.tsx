@@ -204,7 +204,8 @@ export default function Center({
         buyState === 0 &&
         payState === 0 &&
         !luckyState &&
-        natureState === 0 && <RollDice rolling={baseRoll} />}
+        natureState === 0 &&
+        swap?.sender !== currentPlayer._id && <RollDice rolling={baseRoll} />}
       {game.current === currentPlayer._id &&
         currentPlayer.jail &&
         !tryState &&
