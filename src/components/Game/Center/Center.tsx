@@ -14,7 +14,10 @@ import { cardsList } from "@/constants/cards";
 import { useCards } from "@/hooks/useCards";
 import { usePlayers } from "@/hooks/usePlayers";
 import { useGames } from "@/hooks/useGames";
+
 import Jail from "@/components/Game/Center/Jail/Jail";
+import SwapRecipient from "@/components/Game/Swap/SwapRecipient";
+import SwapSender from "@/components/Game/Swap/SwapSender";
 
 type PropsType = {
   players: PlayersGetType[];
@@ -23,6 +26,9 @@ type PropsType = {
   game: Doc<"games">;
   setOpenIndex: React.Dispatch<React.SetStateAction<number>>;
   openIndex: number;
+  swap: Doc<"swaps"> | null;
+  openSwap: boolean;
+  setOpenSwap: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function Center({
@@ -32,6 +38,9 @@ export default function Center({
   game,
   setOpenIndex,
   openIndex,
+  swap,
+  openSwap,
+  setOpenSwap,
 }: PropsType) {
   const [finishActions, setFinishActions] = React.useState(false);
   const [convexCard, setConvexCard] = React.useState<CardsGetType>();
@@ -173,6 +182,22 @@ export default function Center({
 
   return (
     <div className={styles.center}>
+      {swap && currentPlayer._id === swap.recipient && (
+        <SwapRecipient
+          swap={swap}
+          players={players}
+          cards={cards}
+          currentPlayer={currentPlayer}
+        />
+      )}
+      {openSwap && (
+        <SwapSender
+          players={players}
+          cards={cards}
+          currentPlayer={currentPlayer}
+          setOpenSwap={setOpenSwap}
+        />
+      )}
       {game.current === currentPlayer._id &&
         !finishActions &&
         !currentPlayer.jail &&
@@ -201,7 +226,7 @@ export default function Center({
           onAuction={baseAuction}
         />
       )}
-      {payState !== 0 && (
+      {payState !== 0 && !swap && (
         <Pay
           onPay={basePay}
           money={payState}

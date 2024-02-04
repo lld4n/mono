@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import styles from "./page.module.scss";
 
 import { Id } from "../../../../convex/_generated/dataModel";
@@ -30,6 +30,12 @@ export default function Game({ params }: { params: { games_id: Id<"games"> } }) 
   const cards = useQuery(api.cards.getByGames, {
     games_id: params.games_id,
   });
+
+  const swap = useQuery(api.swaps.getByGames, {
+    games_id: params.games_id,
+  });
+  const [openSwap, setOpenSwap] = useState(false);
+
   const router = useRouter();
 
   // console.log("players", players);
@@ -49,7 +55,7 @@ export default function Game({ params }: { params: { games_id: Id<"games"> } }) 
     }
   }, [currentPlayer]);
 
-  if (!cards || !currentPlayer || !players || !game) {
+  if (!cards || !currentPlayer || !players || !game || swap === undefined) {
     return <Loading />;
   }
 
@@ -60,10 +66,18 @@ export default function Game({ params }: { params: { games_id: Id<"games"> } }) 
         players={players}
         game={game}
         currentPlayer={currentPlayer}
+        swap={swap}
+        openSwap={openSwap}
+        setOpenSwap={setOpenSwap}
       />
       <System game={game} players={players} />
       <PlayersList players={players} game={game} currentPlayer={currentPlayer} />
-      <Footer currentPlayer={currentPlayer} game={game} />
+      <Footer
+        currentPlayer={currentPlayer}
+        game={game}
+        swap={swap}
+        setOpenSwap={setOpenSwap}
+      />
     </div>
   );
 }

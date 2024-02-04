@@ -4,7 +4,7 @@ import { Doc } from "../../../../convex/_generated/dataModel";
 import { CardsGetType } from "@/types/CardsGetType";
 import CardItem from "@/components/Game/CardItem/CardItem";
 import Center from "@/components/Game/Center/Center";
-import { useState } from "react";
+import React, { useState } from "react";
 import RenderFigures from "@/components/Game/RenderFigures/RenderFigures";
 import RenderFigures2 from "@/components/Game/RenderFigures2/RenderFigures2";
 
@@ -13,8 +13,19 @@ type PropsType = {
   game: Doc<"games">;
   cards: CardsGetType[];
   currentPlayer: Doc<"players">;
+  swap: Doc<"swaps"> | null;
+  openSwap: boolean;
+  setOpenSwap: React.Dispatch<React.SetStateAction<boolean>>;
 };
-export default function Board({ cards, players, game, currentPlayer }: PropsType) {
+export default function Board({
+  cards,
+  players,
+  game,
+  currentPlayer,
+  swap,
+  openSwap,
+  setOpenSwap,
+}: PropsType) {
   const [openIndex, setOpenIndex] = useState<number>(-1);
 
   const indexes = [
@@ -34,6 +45,9 @@ export default function Board({ cards, players, game, currentPlayer }: PropsType
               openIndex={openIndex}
               setOpenIndex={setOpenIndex}
               key={cardIndex}
+              swap={swap}
+              openSwap={openSwap}
+              setOpenSwap={setOpenSwap}
             />
           );
         return (
