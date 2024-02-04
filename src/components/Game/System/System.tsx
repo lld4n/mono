@@ -8,6 +8,7 @@ import { figuresList } from "@/constants/figures";
 import { ReformatDate } from "@/utils/ReformatDate";
 import { PlayersGetType } from "@/types/PlayersGetType";
 import IconButton from "@/components/Buttons/IconButton/IconButton";
+import Money from "@/components/Game/Money/Money";
 
 type PropsType = {
   game: Doc<"games">;
@@ -41,16 +42,16 @@ export default function System({ game, players }: PropsType) {
                         className={styles.figure}
                         style={{
                           backgroundColor: figuresList[player.selected].bg,
-                          width: 40,
-                          height: 10,
                         }}
                         key={player._id}
-                      ></div>
+                      />
                     );
                   }
                 })}
-                {message.money && <span className={styles.money}>{message.money}</span>}
-                <span>{ReformatDate(message._creationTime)}</span>
+                {message.money && <Money value={message.money} />}
+                <span className={styles.date}>
+                  {ReformatDate(message._creationTime)}
+                </span>
               </div>
               <div className={styles.infoBottom}>{message.message}</div>
             </div>
