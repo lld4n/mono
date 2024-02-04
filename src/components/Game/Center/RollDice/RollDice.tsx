@@ -2,6 +2,7 @@
 import Dice from "@/components/Game/Center/RollDice/Dice";
 import styles from "./RollDice.module.scss";
 import { useEffect, useRef, useState } from "react";
+import MiniButton from "@/components/Buttons/MiniButton/MiniButton";
 
 export type RollDiceType = [number, number];
 
@@ -63,9 +64,9 @@ export default function RollDice({ rolling }: { rolling: (r: RollDiceType) => vo
         </div>
       </div>
       {!isRolling && (
-        <button className={styles.button} onClick={() => roll()}>
-          Бросить кубики
-        </button>
+        <div className={styles.block}>
+          <MiniButton onClick={() => roll()}>Бросить кубики</MiniButton>
+        </div>
       )}
     </div>
   );

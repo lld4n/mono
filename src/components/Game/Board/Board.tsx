@@ -6,6 +6,7 @@ import CardItem from "@/components/Game/CardItem/CardItem";
 import Center from "@/components/Game/Center/Center";
 import React, { useState } from "react";
 import RenderFigures from "@/components/Game/RenderFigures/RenderFigures";
+import RenderFigures2 from "@/components/Game/RenderFigures2/RenderFigures2";
 
 type PropsType = {
   players: PlayersGetType[];
@@ -59,7 +60,8 @@ export default function Board({
           />
         );
       })}
-      <RenderFigures players={players} />
+      {/*<RenderFigures players={players} />*/}
+      <RenderFigures2 players={players} />
     </div>
   );
 }
