@@ -104,7 +104,7 @@ export default function CardInfo({
       if (
         currentPlayer.balance < currentCard.build &&
         bdCard.status > 0 &&
-        bdCard.status < 4 &&
+        bdCard.status <= 4 &&
         GetOwnerGroupCards(cards, currentCard)
       ) {
         return (
