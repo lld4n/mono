@@ -35,6 +35,8 @@ export const add = mutation({
         loser: false,
         user: user._id,
         games_id: args.games_id,
+        jail: false,
+        tries: 0,
       });
       await ctx.db.patch(args.games_id, {
         players_count: game.players_count + 1,
@@ -344,6 +346,36 @@ export const updatePosition = mutation({
 
     await ctx.db.patch(args.players_id, {
       position: args.position,
+    });
+  },
+});
+
+export const goJail = mutation({
+  args: { players_id: v.id("players") },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.players_id, {
+      jail: true,
+      position: 10,
+    });
+  },
+});
+
+export const updateTries = mutation({
+  args: { players_id: v.id("players") },
+  handler: async (ctx, args) => {
+    const player = await ctx.db.get(args.players_id);
+    if (player === null) throw new Error("Игрок не найден");
+    await ctx.db.patch(args.players_id, {
+      tries: player.tries + 1,
+    });
+  },
+});
+export const exitJail = mutation({
+  args: { players_id: v.id("players") },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.players_id, {
+      jail: false,
+      tries: 0,
     });
   },
 });
