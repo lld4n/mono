@@ -34,6 +34,11 @@ export default function Game({ params }: { params: { games_id: Id<"games"> } }) 
   const swap = useQuery(api.swaps.getByGames, {
     games_id: params.games_id,
   });
+
+  const auction = useQuery(api.auctions.getByGames, {
+    games_id: params.games_id,
+  });
+
   const [openSwap, setOpenSwap] = useState(false);
 
   const router = useRouter();
@@ -55,7 +60,14 @@ export default function Game({ params }: { params: { games_id: Id<"games"> } }) 
     }
   }, [currentPlayer]);
 
-  if (!cards || !currentPlayer || !players || !game || swap === undefined) {
+  if (
+    !cards ||
+    !currentPlayer ||
+    !players ||
+    !game ||
+    swap === undefined ||
+    auction === undefined
+  ) {
     return <Loading />;
   }
 
@@ -69,6 +81,7 @@ export default function Game({ params }: { params: { games_id: Id<"games"> } }) 
         swap={swap}
         openSwap={openSwap}
         setOpenSwap={setOpenSwap}
+        auction={auction}
       />
       <System game={game} players={players} />
       <PlayersList players={players} game={game} currentPlayer={currentPlayer} />
