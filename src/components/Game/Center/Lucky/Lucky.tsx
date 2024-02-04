@@ -2,6 +2,7 @@ import React from "react";
 import clover from "@/assets/emojis/clover.svg";
 import styles from "./Lucky.module.scss";
 import Image from "next/image";
+import IconButton from "@/components/Buttons/IconButton/IconButton";
 export type choiceType = {
   type: "pay" | "get";
   value: number;
@@ -10,7 +11,7 @@ export type choiceType = {
 const choiceList: choiceType[] = [
   {
     type: "pay",
-    value: 50,
+    value: 100,
   },
   {
     type: "get",
@@ -30,18 +31,18 @@ export default function Lucky({
     <div className={styles.wrapper}>
       Выберите карточку
       <div className={styles.list}>
-        <button className={styles.btn} onClick={() => handle()}>
+        <IconButton onClick={() => handle()}>
           <Image src={clover} alt="clover" />
-        </button>
-        <button className={styles.btn} onClick={() => handle()}>
+        </IconButton>
+        <IconButton onClick={() => handle()}>
           <Image src={clover} alt="clover" />
-        </button>
-        <button className={styles.btn} onClick={() => handle()}>
+        </IconButton>
+        <IconButton onClick={() => handle()}>
           <Image src={clover} alt="clover" />
-        </button>
-        <button className={styles.btn} onClick={() => handle()}>
+        </IconButton>
+        <IconButton onClick={() => handle()}>
           <Image src={clover} alt="clover" />
-        </button>
+        </IconButton>
       </div>
     </div>
   );
