@@ -15,6 +15,7 @@ type PropsType = {
   swap: Doc<"swaps"> | null;
   openSwap: boolean;
   setOpenSwap: React.Dispatch<React.SetStateAction<boolean>>;
+  auction: Doc<"auctions"> | null;
 };
 export default function Board({
   cards,
@@ -24,6 +25,7 @@ export default function Board({
   swap,
   openSwap,
   setOpenSwap,
+  auction,
 }: PropsType) {
   const [openIndex, setOpenIndex] = useState<number>(-1);
 
@@ -47,6 +49,7 @@ export default function Board({
               swap={swap}
               openSwap={openSwap}
               setOpenSwap={setOpenSwap}
+              auction={auction}
             />
           );
         return (
