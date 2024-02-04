@@ -66,7 +66,7 @@ export default function SwapSender({
           {players
             .filter((player) => !player.loser && player._id !== currentPlayer._id)
             .map((player) => (
-              <IconButton onClick={() => setRecipient(player)}>
+              <IconButton key={player._id} onClick={() => setRecipient(player)}>
                 <div
                   key={player._id}
                   className={styles.figure}

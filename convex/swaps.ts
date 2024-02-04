@@ -90,28 +90,43 @@ export const concur = mutation({
       balance: recipient.balance + swap.sender_money - swap.recipient_money,
     });
 
-    const senderCards = await ctx.db
+    for (let cardId of swap.sender_cards) {
+      await ctx.db.patch(cardId, {
+        owner: recipient._id,
+      });
+    }
+    for (let cardId of swap.recipient_cards) {
+      await ctx.db.patch(cardId, {
+        owner: sender._id,
+      });
+    }
+
+    const trainCards = await ctx.db
       .query("cards")
       .withIndex("by_games", (q) => q.eq("games_id", swap.games_id))
-      .filter((q) => q.eq(q.field("owner"), swap.sender))
-      .collect();
-    const recipientCards = await ctx.db
-      .query("cards")
-      .withIndex("by_games", (q) => q.eq("games_id", swap.games_id))
-      .filter((q) => q.eq(q.field("owner"), swap.recipient))
+      .filter((q) => q.eq(q.mod(q.field("index"), 5), 0))
       .collect();
 
-    for (let card of senderCards) {
-      if (swap.sender_cards.includes(card._id)) {
+    for (let card of trainCards) {
+      if (card.owner) {
+        const count = trainCards.filter((item) => item.owner === card.owner).length;
         await ctx.db.patch(card._id, {
-          owner: recipient._id,
+          status: count - 1,
         });
       }
     }
-    for (let card of recipientCards) {
-      if (swap.recipient_cards.includes(card._id)) {
+
+    const natureCards = await ctx.db
+      .query("cards")
+      .withIndex("by_games", (q) => q.eq("games_id", swap.games_id))
+      .filter((q) => q.or(q.eq(q.field("index"), 12), q.eq(q.field("index"), 28)))
+      .collect();
+
+    for (let card of natureCards) {
+      if (card.owner) {
+        const count = natureCards.filter((item) => item.owner === card.owner).length;
         await ctx.db.patch(card._id, {
-          owner: sender._id,
+          status: count - 1,
         });
       }
     }

@@ -59,7 +59,9 @@ export default function Inventory({
                   </IconButton>
                 );
               } else {
-                return <Image src={cardsList[card.index].svg} alt={"card"} />;
+                return (
+                  <Image key={card._id} src={cardsList[card.index].svg} alt={"card"} />
+                );
               }
             }
           })}
