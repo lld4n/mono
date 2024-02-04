@@ -29,6 +29,8 @@ export default defineSchema({
     next: v.optional(v.id("players")),
     user: v.id("users"),
     games_id: v.id("games"),
+    jail: v.boolean(),
+    tries: v.number(),
   }).index("by_games", ["games_id"]),
   messages: defineTable({
     message: v.string(),

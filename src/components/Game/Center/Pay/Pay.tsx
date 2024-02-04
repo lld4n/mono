@@ -1,10 +1,8 @@
-"use client";
 import React from "react";
 import styles from "./Pay.module.scss";
 import { Doc } from "../../../../../convex/_generated/dataModel";
 import Money from "@/components/Game/Money/Money";
-import { useMutation } from "convex/react";
-import { api } from "../../../../../convex/_generated/api";
+import MiniButton from "@/components/Buttons/MiniButton/MiniButton";
 
 export default function Pay({
   onPay,
@@ -19,12 +17,10 @@ export default function Pay({
   generalBalance: number;
   onLose: () => void;
 }) {
-  const lose = useMutation(api.players.lose);
   return (
     <div className={styles.wrapper}>
       {generalBalance >= money && (
-        <button
-          className={styles.btn}
+        <MiniButton
           disabled={currentPlayer.balance < money}
           onClick={() => {
             if (currentPlayer.balance >= money) {
@@ -33,12 +29,12 @@ export default function Pay({
           }}
         >
           Заплатить <Money value={money} />
-        </button>
+        </MiniButton>
       )}
 
-      <button className={styles.lose} onClick={onLose}>
+      <MiniButton danger onClick={onLose}>
         Сдаться
-      </button>
+      </MiniButton>
     </div>
   );
 }

@@ -10,6 +10,47 @@ export function usePlayers() {
   const select = useMutation(api.players.select);
   const add = useMutation(api.players.add);
   const remove = useMutation(api.players.remove);
+  const exitJail = useMutation(api.players.exitJail);
+  const goJail = useMutation(api.players.goJail);
+  const updateTries = useMutation(api.players.updateTries);
+
+  const toastUpdateTries = (players_id: Id<"players">) => {
+    toast.promise(
+      updateTries({
+        players_id,
+      }),
+      {
+        loading: "Обновляем количество попыток",
+        success: "Количество попыток обновлено",
+        error: (error) => error,
+      },
+    );
+  };
+
+  const toastGoJail = (players_id: Id<"players">) => {
+    toast.promise(
+      goJail({
+        players_id,
+      }),
+      {
+        loading: "Отправляемся в тюрьму",
+        success: "Вы в тюрьме",
+        error: (error) => error,
+      },
+    );
+  };
+  const toastExitJail = (players_id: Id<"players">) => {
+    toast.promise(
+      exitJail({
+        players_id,
+      }),
+      {
+        loading: "Выходим из тюрьмы",
+        success: "Вышли из тюрьмы",
+        error: (error) => error,
+      },
+    );
+  };
 
   const toastUpdateBalance = (players_id: Id<"players">, money: number) => {
     toast.promise(
@@ -99,5 +140,8 @@ export function usePlayers() {
     toastSelect,
     toastAdd,
     toastRemove,
+    toastExitJail,
+    toastGoJail,
+    toastUpdateTries,
   };
 }
