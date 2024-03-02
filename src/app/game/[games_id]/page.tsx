@@ -13,6 +13,7 @@ import Footer from "@/components/Game/Footer/Footer";
 import Loading from "@/components/Loading/Loading/Loading";
 
 import { useRouter } from "next/navigation";
+import System from "@/components/Game/System/System";
 
 export default function Game({ params }: { params: { games_id: Id<"games"> } }) {
   const game = useQuery(api.games.get, {
@@ -41,6 +42,9 @@ export default function Game({ params }: { params: { games_id: Id<"games"> } }) 
   const [openSwap, setOpenSwap] = useState(false);
 
   const router = useRouter();
+
+  // console.log("players", players);
+  // console.log("game", game);
 
   // useEffect, если победитель определен
   React.useEffect(() => {

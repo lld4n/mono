@@ -24,13 +24,12 @@
 }
 
 .inventory {
-  flex: 1;
+  flex: 1 1 50%;
   border-radius: 10px;
   height: 100%;
   padding: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   gap: 10px;
   background: #000000;
 }
@@ -38,6 +37,7 @@
 .info {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .swap {
@@ -77,6 +77,7 @@
   width: 75px;
   height: 25px;
   font-size: 12px;
+  cursor: text;
 
   &::placeholder {
     font-weight: 500;
@@ -90,6 +91,7 @@
 
 .chosenCard {
   background: white;
+
   &:hover {
     background-color: white;
   }
@@ -100,6 +102,7 @@
   cursor: not-allowed;
   color: #cccccc;
 }
+
 .figure {
   border-radius: 5px;
   width: 20px;

@@ -1,6 +1,6 @@
-import { action, mutation, query } from "./_generated/server";
-import { v } from "convex/values";
-import { api, internal } from "./_generated/api";
+import {action, mutation, query} from "./_generated/server";
+import {v} from "convex/values";
+import {api, internal} from "./_generated/api";
 
 const cardsIndexList = [
   1, 3, 6, 8, 9, 11, 13, 14, 16, 18, 19, 21, 23, 24, 26, 27, 29, 31, 32, 34, 37, 39, 5,
@@ -27,14 +27,14 @@ export const create = mutation({
 });
 
 export const get = query({
-  args: { games_id: v.id("games") },
+  args: {games_id: v.id("games")},
   handler: async (ctx, args) => {
     return await ctx.db.get(args.games_id);
   },
 });
 
 export const open = mutation({
-  args: { games_id: v.id("games") },
+  args: {games_id: v.id("games")},
   handler: async (ctx, args) => {
     const game = await ctx.db.get(args.games_id);
     if (game === null) throw new Error("Игра не найдена");
@@ -122,11 +122,8 @@ export const start = mutation({
 });
 
 export const updateTimer = mutation({
-  args: { games_id: v.id("games") },
+  args: {games_id: v.id("games"), players_current: v.id("players")},
   handler: async (ctx, args) => {
-    const game = await ctx.db.get(args.games_id);
-    if (!game) throw new Error("Игра не найдена");
-    if (!game.current) throw new Error("Текущий игрок не найден");
 
     const sch = await ctx.db.system.query("_scheduled_functions").collect();
     for (const s of sch) await ctx.scheduler.cancel(s._id);
@@ -135,20 +132,16 @@ export const updateTimer = mutation({
       timer: Date.now() + 90 * 1000,
     });
     await ctx.scheduler.runAfter(90000, internal.players.internalLose, {
-      players_id: game.current,
+      players_id: args.players_current,
     });
   },
 });
 
 export const updateCurrent = mutation({
-  args: { games_id: v.id("games") },
+  args: {games_id: v.id("games"), players_current: v.id('players')},
   handler: async (ctx, args) => {
-    const game = await ctx.db.get(args.games_id);
 
-    if (!game) throw new Error("Игра не найдена");
-    if (!game.current) throw new Error("Текущий игрок не найден");
-
-    const currentPlayer = await ctx.db.get(game.current);
+    const currentPlayer = await ctx.db.get(args.players_current);
 
     if (!currentPlayer) throw new Error("Такого игрока не существует");
     if (!currentPlayer.next) throw new Error("Следующего игрока не существует");
@@ -156,12 +149,12 @@ export const updateCurrent = mutation({
     const sch = await ctx.db.system.query("_scheduled_functions").collect();
     for (const s of sch) await ctx.scheduler.cancel(s._id);
 
-    await ctx.db.patch(game._id, {
+    await ctx.db.patch(args.games_id, {
       current: currentPlayer.next,
       timer: Date.now() + 90 * 1000,
     });
     await ctx.scheduler.runAfter(90000, internal.players.internalLose, {
-      players_id: game.current,
+      players_id: args.players_current,
     });
   },
 });
@@ -189,7 +182,7 @@ export const remove = action({
 });
 
 export const removePlayers = mutation({
-  args: { games_id: v.id("games") },
+  args: {games_id: v.id("games")},
   handler: async (ctx, args) => {
     const players = await ctx.db
       .query("players")
@@ -205,7 +198,7 @@ export const removePlayers = mutation({
 });
 
 export const removeMessages = mutation({
-  args: { games_id: v.id("games") },
+  args: {games_id: v.id("games")},
   handler: async (ctx, args) => {
     const messages = await ctx.db
       .query("messages")
@@ -218,7 +211,7 @@ export const removeMessages = mutation({
 });
 
 export const removeCards = mutation({
-  args: { games_id: v.id("games") },
+  args: {games_id: v.id("games")},
   handler: async (ctx, args) => {
     const cards = await ctx.db
       .query("cards")
@@ -231,7 +224,7 @@ export const removeCards = mutation({
 });
 
 export const del = mutation({
-  args: { games_id: v.id("games") },
+  args: {games_id: v.id("games")},
   handler: async (ctx, args) => {
     const game = await ctx.db.get(args.games_id);
     if (game && !game.winner) {
