@@ -83,7 +83,6 @@ export default function Game({ params }: { params: { games_id: Id<"games"> } }) 
         setOpenSwap={setOpenSwap}
         auction={auction}
       />
-      <System game={game} players={players} />
       <PlayersList players={players} game={game} currentPlayer={currentPlayer} />
       <Footer
         currentPlayer={currentPlayer}

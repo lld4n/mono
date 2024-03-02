@@ -1,26 +1,25 @@
 import styles from "./Center.module.scss";
 import Chat from "@/components/Chat/Chat";
-import {Doc, Id} from "../../../../convex/_generated/dataModel";
-import {PlayersGetType} from "@/types/PlayersGetType";
-import {CardsGetType} from "@/types/CardsGetType";
+import { Doc, Id } from "../../../../convex/_generated/dataModel";
+import { PlayersGetType } from "@/types/PlayersGetType";
+import { CardsGetType } from "@/types/CardsGetType";
 import React from "react";
 import CardInfo from "@/components/Game/Center/CardInfo/CardInfo";
 import Pay from "@/components/Game/Center/Pay/Pay";
-import {GetGeneralBalance} from "@/utils/GetGeneralBalance";
+import { GetGeneralBalance } from "@/utils/GetGeneralBalance";
 import Buy from "@/components/Game/Center/Buy/Buy";
-import Lucky, {choiceType} from "@/components/Game/Center/Lucky/Lucky";
-import RollDice, {RollDiceType} from "@/components/Game/Center/RollDice/RollDice";
-import {cardsList} from "@/constants/cards";
-import {useCards} from "@/hooks/useCards";
-import {usePlayers} from "@/hooks/usePlayers";
-import {useGames} from "@/hooks/useGames";
-import {useAuctions} from "@/hooks/useAuctions";
+import Lucky, { choiceType } from "@/components/Game/Center/Lucky/Lucky";
+import RollDice, { RollDiceType } from "@/components/Game/Center/RollDice/RollDice";
+import { cardsList } from "@/constants/cards";
+import { useCards } from "@/hooks/useCards";
+import { usePlayers } from "@/hooks/usePlayers";
+import { useGames } from "@/hooks/useGames";
+import { useAuctions } from "@/hooks/useAuctions";
 
 import Jail from "@/components/Game/Center/Jail/Jail";
 import SwapRecipient from "@/components/Game/Swap/SwapRecipient";
 import SwapSender from "@/components/Game/Swap/SwapSender";
 import Auction from "@/components/Game/Auction/Auction";
-
 
 type PropsType = {
   players: PlayersGetType[];
@@ -36,17 +35,17 @@ type PropsType = {
 };
 
 export default function Center({
-                                 players,
-                                 currentPlayer,
-                                 cards,
-                                 game,
-                                 setOpenIndex,
-                                 openIndex,
-                                 swap,
-                                 openSwap,
-                                 setOpenSwap,
-                                 auction,
-                               }: PropsType) {
+  players,
+  currentPlayer,
+  cards,
+  game,
+  setOpenIndex,
+  openIndex,
+  swap,
+  openSwap,
+  setOpenSwap,
+  auction,
+}: PropsType) {
   const [finishActions, setFinishActions] = React.useState(false);
   const [convexCard, setConvexCard] = React.useState<CardsGetType>();
   const [getMoneyPlayer, setGetMoneyPlayer] = React.useState<Id<"players">>();
@@ -65,10 +64,10 @@ export default function Center({
     toastGoJail,
     toastUpdateTries,
   } = usePlayers();
-  const {toastUpdateCurrent, toastUpdateTimer} = useGames();
-  const {toastBuy} = useCards();
+  const { toastUpdateCurrent, toastUpdateTimer } = useGames();
+  const { toastBuy } = useCards();
 
-  const {toastCreateAuction} = useAuctions();
+  const { toastCreateAuction } = useAuctions();
 
   React.useEffect(() => {
     if (game.current !== currentPlayer._id && finishActions) {
@@ -220,7 +219,7 @@ export default function Center({
         !luckyState &&
         !auction &&
         natureState === 0 &&
-        swap?.sender !== currentPlayer._id && <RollDice rolling={baseRoll}/>}
+        swap?.sender !== currentPlayer._id && <RollDice rolling={baseRoll} />}
       {game.current === currentPlayer._id &&
         currentPlayer.jail &&
         !tryState &&
@@ -232,7 +231,7 @@ export default function Center({
             currentPlayer={currentPlayer}
           />
         )}
-      {tryState && <RollDice rolling={baseTry}/>}
+      {tryState && <RollDice rolling={baseTry} />}
 
       {buyState !== 0 && !currentPlayer.jail && !auction && (
         <Buy
@@ -252,9 +251,9 @@ export default function Center({
           onLose={baseLose}
         />
       )}
-      {luckyState && !currentPlayer.jail && !auction && <Lucky onChoice={baseLucky}/>}
+      {luckyState && !currentPlayer.jail && !auction && <Lucky onChoice={baseLucky} />}
       {natureState !== 0 && !currentPlayer.jail && !auction && (
-        <RollDice rolling={baseNature}/>
+        <RollDice rolling={baseNature} />
       )}
       {openIndex !== -1 && (
         <CardInfo
@@ -266,7 +265,7 @@ export default function Center({
           game={game}
         />
       )}
-      <Chat players={players} games_id={game._id} playerId={currentPlayer._id}/>
+      <Chat players={players} games_id={game._id} playerId={currentPlayer._id} />
     </div>
   );
 }
