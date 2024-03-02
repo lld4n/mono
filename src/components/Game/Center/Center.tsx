@@ -1,20 +1,20 @@
 import styles from "./Center.module.scss";
 import Chat from "@/components/Chat/Chat";
-import { Doc, Id } from "../../../../convex/_generated/dataModel";
-import { PlayersGetType } from "@/types/PlayersGetType";
-import { CardsGetType } from "@/types/CardsGetType";
+import {Doc, Id} from "../../../../convex/_generated/dataModel";
+import {PlayersGetType} from "@/types/PlayersGetType";
+import {CardsGetType} from "@/types/CardsGetType";
 import React from "react";
 import CardInfo from "@/components/Game/Center/CardInfo/CardInfo";
 import Pay from "@/components/Game/Center/Pay/Pay";
-import { GetGeneralBalance } from "@/utils/GetGeneralBalance";
+import {GetGeneralBalance} from "@/utils/GetGeneralBalance";
 import Buy from "@/components/Game/Center/Buy/Buy";
-import Lucky, { choiceType } from "@/components/Game/Center/Lucky/Lucky";
-import RollDice, { RollDiceType } from "@/components/Game/Center/RollDice/RollDice";
-import { cardsList } from "@/constants/cards";
-import { useCards } from "@/hooks/useCards";
-import { usePlayers } from "@/hooks/usePlayers";
-import { useGames } from "@/hooks/useGames";
-import { useAuctions } from "@/hooks/useAuctions";
+import Lucky, {choiceType} from "@/components/Game/Center/Lucky/Lucky";
+import RollDice, {RollDiceType} from "@/components/Game/Center/RollDice/RollDice";
+import {cardsList} from "@/constants/cards";
+import {useCards} from "@/hooks/useCards";
+import {usePlayers} from "@/hooks/usePlayers";
+import {useGames} from "@/hooks/useGames";
+import {useAuctions} from "@/hooks/useAuctions";
 
 import Jail from "@/components/Game/Center/Jail/Jail";
 import SwapRecipient from "@/components/Game/Swap/SwapRecipient";
@@ -36,17 +36,17 @@ type PropsType = {
 };
 
 export default function Center({
-  players,
-  currentPlayer,
-  cards,
-  game,
-  setOpenIndex,
-  openIndex,
-  swap,
-  openSwap,
-  setOpenSwap,
-  auction,
-}: PropsType) {
+                                 players,
+                                 currentPlayer,
+                                 cards,
+                                 game,
+                                 setOpenIndex,
+                                 openIndex,
+                                 swap,
+                                 openSwap,
+                                 setOpenSwap,
+                                 auction,
+                               }: PropsType) {
   const [finishActions, setFinishActions] = React.useState(false);
   const [convexCard, setConvexCard] = React.useState<CardsGetType>();
   const [getMoneyPlayer, setGetMoneyPlayer] = React.useState<Id<"players">>();
@@ -65,10 +65,10 @@ export default function Center({
     toastGoJail,
     toastUpdateTries,
   } = usePlayers();
-  const { toastUpdateCurrent, toastUpdateTimer } = useGames();
-  const { toastBuy } = useCards();
+  const {toastUpdateCurrent, toastUpdateTimer} = useGames();
+  const {toastBuy} = useCards();
 
-  const { toastCreateAuction } = useAuctions();
+  const {toastCreateAuction} = useAuctions();
 
   React.useEffect(() => {
     if (game.current !== currentPlayer._id && finishActions) {
@@ -77,7 +77,7 @@ export default function Center({
   }, [game]);
 
   const baseTry = (r: RollDiceType) => {
-    toastUpdateCurrent(game._id);
+    toastUpdateCurrent(game._id, currentPlayer._id);
     if (r[0] === r[1]) {
       toastExitJail(currentPlayer._id);
     } else {
@@ -87,7 +87,7 @@ export default function Center({
   };
 
   const basePayJail = () => {
-    toastUpdateTimer(game._id);
+    toastUpdateTimer(game._id, currentPlayer._id);
     setPayState(500);
   };
   const baseLose = () => {
@@ -112,7 +112,7 @@ export default function Center({
     setBuyState(0);
     if (!convexCard) return;
     toastBuy(convexCard._id, currentPlayer._id, m);
-    toastUpdateCurrent(game._id);
+    toastUpdateCurrent(game._id, currentPlayer._id);
     setConvexCard(undefined);
   };
 
@@ -122,24 +122,24 @@ export default function Center({
     toastUpdateBalance(currentPlayer._id, -m);
     if (getMoneyPlayer) toastUpdateBalance(getMoneyPlayer, m);
     if (currentPlayer.jail) toastExitJail(currentPlayer._id);
-    toastUpdateCurrent(game._id);
+    toastUpdateCurrent(game._id, currentPlayer._id);
     setGetMoneyPlayer(undefined);
   };
 
   const baseLucky = (choice: choiceType) => {
     setLuckyState(false);
     setConvexCard(undefined);
-    toastUpdateTimer(game._id);
+    toastUpdateTimer(game._id, currentPlayer._id);
     if (choice.type === "pay") {
       setPayState(choice.value);
     } else if (choice.type === "get") {
       toastUpdateBalance(currentPlayer._id, choice.value);
-      toastUpdateCurrent(game._id);
+      toastUpdateCurrent(game._id, currentPlayer._id);
     }
   };
 
   const baseNature = (r: RollDiceType) => {
-    toastUpdateTimer(game._id);
+    toastUpdateTimer(game._id, currentPlayer._id);
     setPayState((r[0] + r[1]) * natureState);
     setGetMoneyPlayer(convexCard?.owner);
     setNatureState(0);
@@ -150,7 +150,7 @@ export default function Center({
     const curPosition = currentPlayer.position + r[0] + r[1];
     if (curPosition > 39) toastUpdateBalance(currentPlayer._id, 1000);
     toastUpdatePosition(currentPlayer._id, curPosition % 40);
-    toastUpdateTimer(game._id);
+    toastUpdateTimer(game._id, currentPlayer._id);
 
     setFinishActions(true);
 
@@ -159,7 +159,7 @@ export default function Center({
     const currentCard = cardsList[curPosition % 40];
     if (currentCard.class === "street" || currentCard.class === "train") {
       if (bdCard!.mortgage || bdCard!.owner === currentPlayer._id) {
-        toastUpdateCurrent(game._id);
+        toastUpdateCurrent(game._id, currentPlayer._id);
       } else if (bdCard!.owner === undefined) {
         setBuyState(currentCard.buy);
       } else {
@@ -168,7 +168,7 @@ export default function Center({
       }
     } else if (currentCard.class === "nature") {
       if (bdCard!.mortgage || bdCard!.owner === currentPlayer._id) {
-        toastUpdateCurrent(game._id);
+        toastUpdateCurrent(game._id, currentPlayer._id);
       } else if (bdCard!.owner === undefined) {
         setBuyState(currentCard.buy);
       } else {
@@ -179,10 +179,10 @@ export default function Center({
     } else if (currentCard.class === "tax") {
       setPayState(currentCard.pay);
     } else if (currentCard.class === "empty") {
-      toastUpdateCurrent(game._id);
+      toastUpdateCurrent(game._id, currentPlayer._id);
     } else {
       toastGoJail(currentPlayer._id);
-      toastUpdateCurrent(game._id);
+      toastUpdateCurrent(game._id, currentPlayer._id);
     }
   };
 
@@ -220,7 +220,7 @@ export default function Center({
         !luckyState &&
         !auction &&
         natureState === 0 &&
-        swap?.sender !== currentPlayer._id && <RollDice rolling={baseRoll} />}
+        swap?.sender !== currentPlayer._id && <RollDice rolling={baseRoll}/>}
       {game.current === currentPlayer._id &&
         currentPlayer.jail &&
         !tryState &&
@@ -232,7 +232,7 @@ export default function Center({
             currentPlayer={currentPlayer}
           />
         )}
-      {tryState && <RollDice rolling={baseTry} />}
+      {tryState && <RollDice rolling={baseTry}/>}
 
       {buyState !== 0 && !currentPlayer.jail && !auction && (
         <Buy
@@ -252,9 +252,9 @@ export default function Center({
           onLose={baseLose}
         />
       )}
-      {luckyState && !currentPlayer.jail && !auction && <Lucky onChoice={baseLucky} />}
+      {luckyState && !currentPlayer.jail && !auction && <Lucky onChoice={baseLucky}/>}
       {natureState !== 0 && !currentPlayer.jail && !auction && (
-        <RollDice rolling={baseNature} />
+        <RollDice rolling={baseNature}/>
       )}
       {openIndex !== -1 && (
         <CardInfo
@@ -266,7 +266,7 @@ export default function Center({
           game={game}
         />
       )}
-      <Chat players={players} games_id={game._id} playerId={currentPlayer._id} />
+      <Chat players={players} games_id={game._id} playerId={currentPlayer._id}/>
     </div>
   );
 }
