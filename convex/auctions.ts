@@ -1,6 +1,6 @@
-import { action, mutation, query } from "./_generated/server";
-import { ConvexError, v } from "convex/values";
-import { api } from "./_generated/api";
+import {action, mutation, query} from "./_generated/server";
+import {ConvexError, v} from "convex/values";
+import {api} from "./_generated/api";
 
 export const getByGames = query({
   args: {
@@ -54,6 +54,7 @@ export const internalFinal = action({
       auctions_id: args.auctions_id,
     });
     if (!auction) throw new ConvexError("Аукцион не найден");
+    if (!auction.players_id) throw new ConvexError("Текущий игрок не найден")
     if (auction.players_id) {
       await ctx.runMutation(api.cards.buy, {
         players_id: auction.players_id,
@@ -63,6 +64,7 @@ export const internalFinal = action({
     }
     await ctx.runMutation(api.games.updateCurrent, {
       games_id: auction.games_id,
+      players_current: auction.players_id
     });
     await ctx.runMutation(api.auctions.deleteAuction, {
       auctions_id: auction._id,

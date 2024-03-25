@@ -1,7 +1,7 @@
-import { useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
-import { toast } from "sonner";
-import { Id } from "../../convex/_generated/dataModel";
+import {useMutation} from "convex/react";
+import {api} from "../../convex/_generated/api";
+import {toast} from "sonner";
+import {Id} from "../../convex/_generated/dataModel";
 
 export function useGames() {
   const open = useMutation(api.games.open);
@@ -33,10 +33,11 @@ export function useGames() {
       },
     );
   };
-  const toastUpdateTimer = (games_id: Id<"games">) => {
+  const toastUpdateTimer = (games_id: Id<"games">, players_current: Id<"players">) => {
     toast.promise(
       updateTimer({
         games_id,
+        players_current
       }),
       {
         loading: "Обновляем таймер",
@@ -45,10 +46,11 @@ export function useGames() {
       },
     );
   };
-  const toastUpdateCurrent = (games_id: Id<"games">) => {
+  const toastUpdateCurrent = (games_id: Id<"games">, players_current: Id<"players">) => {
     toast.promise(
       updateCurrent({
         games_id,
+        players_current
       }),
       {
         loading: "Определяем следующего игрока",
@@ -58,5 +60,5 @@ export function useGames() {
     );
   };
 
-  return { toastOpen, toastStart, toastUpdateCurrent, toastUpdateTimer };
+  return {toastOpen, toastStart, toastUpdateCurrent, toastUpdateTimer};
 }
