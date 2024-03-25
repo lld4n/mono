@@ -8,11 +8,7 @@ import mini_logo from "@/assets/mini-logo.svg";
 
 const MIN_HEIGHT = 848;
 const MIN_WIDTH = 1500;
-export default function SizeOverlay({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function SizeOverlay({ children }: { children: React.ReactNode }) {
   const [view, setView] = React.useState(true);
   const [width, setWidth] = React.useState(0);
   const [height, setHeight] = React.useState(0);
@@ -53,14 +49,12 @@ export default function SizeOverlay({
                   </div>
                   <div>пока это сообщение не пропадет</div>
                 </>
-              ) : parser.getDevice().type === "desktop" ? (
+              ) : (
                 <>
                   <div>Используйте сочетание</div>
                   <div className={styles.command}>CTRL -</div>
                   <div>пока это сообщение не пропадет</div>
                 </>
-              ) : (
-                <>Играйте в монополию на компьютере</>
               )}
             </div>
           </div>
